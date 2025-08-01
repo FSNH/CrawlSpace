@@ -1,6 +1,19 @@
 # CrawlSpace
 CrawlSpace爬虫管理系统(博客介绍)
 http://zhaomeng.net.cn/articles/s45.html
+## 本地调试运行
+
+```
+# 创建虚拟环境
+conda create-n crawlsapce python=3.7
+conda activate crawlspace  # 进入环境
+pip install -r requirements.txt  # 安装依赖库
+python manage.py runserver 0.0.0.0:8000
+
+```
+浏览器输入：127.0.0.1:8000/accounts/或者127.0.0.1:8000
+
+初始账号：admin01 密码：admin01
 ## CrawlSpace爬虫部署框架介绍
 
 CrawlSpace全新的爬虫部署框架，为了适应工作的爬虫部署的使用，需要自己开发一个在线编写爬虫及部署爬虫的框架，框架采用的是Django2.2+bootstap依赖scrapyd开发的全新通用爬虫在线编辑部署及scrapy项目的部署框架。项目实现的五大块的功能及许多在维护爬虫的过程中用的许多实用的操作功能。
