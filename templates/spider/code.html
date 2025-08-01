@@ -1,0 +1,179 @@
+{% extends "base.html" %}
+{% load static %}
+{% block style%}
+<!--        toastr消息通知-->
+<link rel="stylesheet" href='{% static "css/toastr.min.css"%}'>
+<link rel="stylesheet" href="{% static 'js/style.min.css'%}" />
+
+<script src='{% static "/jquery-3.2.1.min.js"%}'></script>
+<script src='{% static "js/toastr.min.js" %}'></script>
+<!--属性图往左侧移35px-->
+<style>
+    #frmt{
+        margin-left: -30px;
+    }
+</style>
+{% endblock %}
+
+
+{% block info %}
+<!--    标题-->
+<div class="page-header">
+    <h4>
+        在线编辑项目代码<small> 支持在线编辑项目文件</small>
+        <button class="btn btn-warning" type="button" style="float:right">
+<!--            信息提示-->
+            当前项目 <span class="badge" id="project_name"></span>
+            正在编辑 <span class="badge" id="filename"></span>
+        </button>
+
+    </h4>
+</div>
+<div class="span12">
+<!--    项目树形结构-->
+    <div class="span2" style="padding:1px;">
+      <div class="panel panel-default">
+          <div class="panel-body">
+            <div id="frmt" class="demo"></div>
+          </div>
+      </div>
+    </div>
+<!--    部署-->
+    <div id="content" style="padding:10px;" class="span10">
+        <!--选中显示代码-->
+        <!--ace在线编辑-->
+        <pre id="code" style="height:600px">
+            <textarea style="min-height:270px" id="python" placeholder="编辑python3"></textarea>
+        </pre>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
+<script>
+<!--    获取导航栏的练级以便获取项目名称,作为参数获取树形结构-->
+    href_list=(location.href).split('/')
+    console.log(href_list)
+    cpath = href_list[href_list.length-3]
+    project_name= cpath+"/"+href_list[href_list.length-2]
+    console.log(project_name)
+    $("#project_name").text(project_name)
+<!--    console.log(project_name)-->
+    $('#frmt').jstree({
+        'core' : {
+<!--        主题显示的树结构比较大-->
+            "themes" : {
+              "variant" : "large"
+            },
+<!--            数据请求返回的是json:https://www.jstree.com/docs/json/-->
+            'data' : {
+                "url":"/spider/project/tree/"+project_name+"/",
+            }
+        }
+    });
+<!--    项目路径的全局变量-->
+    project_path=""
+    currentfile = ""
+<!--    树结构添加事件改变的监听,获取当前的文件路径及文件名,并请求返回源代码-->
+    $('#frmt').on("changed.jstree", function (e, data) {
+<!--			console.log(e);-->
+<!--			console.log(data);-->
+<!--			console.log(data.node.original.path);-->
+<!--项目路径赋值全局变量-->
+            project_path=data.node.original.path
+			filename = data.node.text
+			currentfile = filename
+			$("#filename").text(filename)
+			$.post('/spider/edit/tree/'+cpath+'/'+filename+"/",{"path":data.node.original.path,"mode":"get"},function(result){
+<!--			    console.log(result.code)-->
+			    console.log(result.status)
+			    if(result.status==200){
+                    toastr.success("正在加载......")
+                    editor.session.setValue(result.code)
+			    }else{
+			        toastr.error(result.msg)
+			    }
+			})
+		});
+<!--保存修改后的代码到文件方法-->
+    function savefile(){
+        if(project_path!="" && currentfile!=""){
+            source_code=editor.session.getValue()
+<!--            console.log(source_code)-->
+            $.post('/spider/edit/tree/'+cpath+'/'+currentfile+"/",{"path":project_path,"mode":"save","source_code":source_code},function(result){
+<!--			    console.log(result.code)-->
+			    console.log(result.status)
+			    if(result.status==200){
+                    toastr.success("保存成功......")
+			    }else{
+			        toastr.error(result.msg)
+			    }
+			})
+        }
+    }
+</script>
+
+<script src="{% static '/ace-editor/js/ace.js' %}"></script>
+<script src="{% static '/ace-editor/js/ext-beautify.js' %}"></script>
+<script src="{% static '/ace-editor/js/ext-language_tools.js' %}"></script>
+<script src="{% static '/ace-editor/js/mode-python.js' %}"></script>
+<script src="{% static '/ace-editor/js/theme-monokai.js' %}"></script>
+<script src="{% static '/ace-editor/js/ext-searchbox.js' %}"></script>
+<script src="{% static '/ace-editor/js/mode-json.js' %}"></script>
+<script src="{% static '/ace-editor/js/snippets/python.js' %}"></script>
+{% endblock %}
+
+{% block script %}
+<!--toastr设置-->
+ var toastr;
+ toastr.options = {
+    closeButton: true,//显示关闭按钮
+    debug: false,
+    progressBar: true,//显示进度条
+    positionClass: "toast-top-center",//位置
+    onclick: null,//点击消息框自定义事件
+    showDuration: "300",//显示动作时间
+    hideDuration: "1000",//隐藏动作时间
+    timeOut: "2000",//显示时间,0为永久显示
+    extendedTimeOut: "1000",//鼠标移动过后显示显示时间
+    showEasing: "swing",
+    hideEasing: "linear",
+    showMethod: "fadeIn",//显示方式
+    hideMethod: "fadeOut"//隐藏方式
+ };
+
+<!--配置ace在线编辑器-->
+        editor = ace.edit('code');// 这个地方就是id是editor的div
+        editor.setTheme('ace/theme/monokai'); //主题
+        var jsMode = ace.require('ace/mode/python').Mode; //支持语言
+        editor.session.setMode(new jsMode());    //引入
+        editor.setFontSize(18);    //设置默认标签大小
+        editor.setReadOnly(false);        //false为可编辑
+        editor.setOption("wrap", "free");   //换行
+        ace.require("ace/ext/language_tools");
+        editor.setOptions({
+            enableBasicAutocompletion: true, //启用基本自动完成
+            enableSnippets: true,             //启用代码段
+            enableLiveAutocompletion: true    //启用实时自动完成
+        });
+
+    <!--   撤销：-->
+        editor.undo();
+    <!--    查找替换：-->
+        editor.execCommand('replace');
+    <!--    编辑内容搜索-->
+        editor.execCommand('find');//与ctrl+f功能一致
+    <!--    自动换行 关闭时free换成off-->
+        editor.setOption("wrap", "free");
+<!--ace编辑器绑定快捷键，实现保存的功能-->
+        editor.commands.addCommand({
+<!--绑定的名称-->
+            name: "savefile",
+<!--用于命令的组合键。-->
+            bindKey: {win: 'Ctrl-S', mac: 'Command-S'},
+            exec: function(editor) {
+                    savefile();
+            }
+        });
+
+{% endblock %}

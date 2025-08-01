@@ -1,0 +1,52 @@
+{
+  "spider": "rediscurrency",
+  "type": "麦克林网站",
+  "name": "mck",
+  "home": "http://www.macklin.cn/",
+  "settings": {
+    "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.64 Safari/537.36",
+    "SCHEDULER": "scrapy_redis.scheduler.Scheduler",
+    "DUPEFILTER_CLASS": "scrapy_redis.dupefilter.RFPDupeFilter",
+    "SCHEDULER_PERSIST": true,
+    "REDIS_START_URLS_AS_ZSET": true,
+    "REDIS_START_URLS_KEY": "mcks:start_urls",
+    "STATS_CLASS": "scrapy_redis.stats.RedisStatsCollector",
+    "SCHEDULER_DUPEFILTER_KEY": "currency:mck:dupefilter",
+    "SCHEDULER_QUEUE_KEY": "currency:mck:requests"
+  },
+  "start_urls": ["http://www.macklin.cn/"],
+  "allowed_domains": ["macklin.cn"],
+  "srules": "mck_rules",
+
+  "rules": [
+    {
+      "link_extractor": {
+        "restrict_css":"a.colorGray1"
+      },
+      "follow": true,
+      "callback": "parse_item"
+    }
+  ],
+  "item": {
+    "class": "QuoteItem",
+    "loader": "ItemLoader",
+    "nextpage": true,
+    "next_xpath": false,
+    "next_rule": "#pagination_next a::attr(\"href\")",
+    "attrs": {
+      "source": [
+        {
+          "method": "value",
+          "arg": "mck"
+        }
+      ],
+      "urls": [
+        {
+          "method": "css",
+          "arg": ".product-list .table tr td:nth-child(1) a::attr(\"href\")"
+        }
+      ]
+
+    }
+  }
+}

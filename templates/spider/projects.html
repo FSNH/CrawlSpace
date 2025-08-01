@@ -1,0 +1,67 @@
+<!--任务调度页面-->
+{% extends "base.html" %}
+{% load static %}
+{% block style%}
+<!--        toastr消息通知-->
+<script src='{% static "/jquery-3.2.1.min.js"%}'></script>
+<style>
+    article{background-color: white; padding:5px;margin-bottom:10px;border-radius: 5px;border-top: solid 2px #03b5c3;}
+    .row-fluid .span12 {
+        width: 100%;
+        margin-left: 0;
+    }
+
+</style>
+{% endblock %}
+
+
+{% block info %}
+
+<!--    页面表头-->
+    <div class="page-header">
+        <h4>查看仓库项目爬虫<small> 支持在线编辑项目</small>
+            <button class="btn btn-warning" type="button" style="float:right">
+    <!--            信息提示-->
+                当前项目数 <span class="badge" id="project_count">{{count}}</span>
+            </button>
+        </h4>
+    </div>
+
+<div class="span12" style="margin-left: 0;">
+<!--    项目区-->
+    <div class="sche" style="margin:10px 0 10px 0;">
+    {% for s in data %}
+        <article>
+            <div class="post-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>编号</th>
+                                <th>项目名</th>
+                                <th>所属仓库</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td><h5><a style="font-size: large;">{{forloop.counter }}</a></h5></td>
+                            <td><h5><a style="font-size: large;">{{s.name}}</a></h5></td>
+                            <td><h5><button class="btn-info btn-sm"  style="border-radius:3px;line-height: 14px;">{{s.cname}}</button></h5></td>
+                            <td><h5><button class="btn-danger btn-sm"  style="border-radius:5px;line-height: 14px;" value="{{s.package}}/{{s.name}}" onclick="sourcecode(this)">查看源码</button></h5></td>
+                        </tr>
+                        </tbody>
+                    </table>
+            </div>
+        </article>
+    {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<!--查看项目的源码-->
+function sourcecode(arg){
+    name = $(arg).val()
+    window.location.href="/spider/edit/tree/"+name+"/"
+}
+{% endblock %}

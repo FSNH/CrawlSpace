@@ -1,0 +1,50 @@
+{
+  "spider": "currency",
+  "type": "laa网站",
+  "home": "http://www.laajoo.com/",
+  "settings": {
+"user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.64 Safari/537.36",
+    "SCHEDULER": "scrapy_redis.scheduler.Scheduler",
+    "DUPEFILTER_CLASS": "scrapy_redis.dupefilter.RFPDupeFilter",
+    "SCHEDULER_PERSIST": true,
+    "REDIS_START_URLS_AS_ZSET": true,
+    "REDIS_START_URLS_KEY": "laas:start_urls",
+    "SCHEDULER_DUPEFILTER_KEY": "currency:laa:dupefilter",
+    "SCHEDULER_QUEUE_KEY": "currency:laa:requests"  },
+  "start_urls": ["http://www.laajoo.com/"],
+  "allowed_domains": ["laajoo.com"],
+  "ssrules": "laa_rules",
+
+  "rules": [
+    {
+      "link_extractor": {
+        "restrict_css": "ul.kj_pc_list1"
+      },
+      "follow": true,
+      "callback": "parse_item"
+    }
+
+
+  ],
+  "item": {
+    "class": "LaaItem",
+    "loader": "ItemLoader",
+    "nextpage": true,
+    "next_rule": "nav.text-center.kj_product_page .padding span:nth-child(4)>a::attr('href')",
+    "attrs": {
+      "source": [
+        {
+          "method": "value",
+          "arg": "laa"
+        }
+      ],
+      "urls": [
+        {
+          "method": "css",
+          "arg": "h3.sk1>a::attr(\"href\")"
+        }
+      ]
+
+    }
+  }
+}

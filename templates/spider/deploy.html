@@ -1,0 +1,409 @@
+{% extends "base.html" %}
+{% load static %}
+{% block style%}
+<!--        toastr消息通知-->
+<link rel="stylesheet" href='{% static "css/toastr.min.css"%}'>
+<script src='{% static "/jquery-3.2.1.min.js"%}'></script>
+<script src='{% static "js/toastr.min.js" %}'></script>
+<!--模态框去除表格的边框-->
+<!--下拉多选框的自定义样式-->
+<style>
+    .table td {
+    width:0px;
+    border:none;
+    border-redius:3px;
+    }
+
+    .host_box .dropdown{position:relative;width:220px;height:30px;}
+    .host_box .dropdown .caret{position:absolute;right:6px;top:6px;}
+    .select_box{border:1px solid #ccc;border-radius:4px;width:220px;padding:4px 6px;box-sizing: border-box;margin-top:1px;display:none;}
+    .select_box label{display:flex;align-items:center;font-size:14px;color:#333;transition:all 0.2s linear 0s;}
+    .select_box label input{margin:0;margin-right:5px;}
+    .select_box label:hover{color:#08c}
+
+    .row-fluid .span12 {
+        width: 100%;
+        margin-left: 0;
+    }
+    .proegg{
+        list-style:none;
+        padding: 0; /* 去除默认的 padding */
+        margin: 0; /* 去除默认的 margin */
+        display: flex; /* 使用 Flexbox 实现水平排列 */
+    }
+    .proegg li {
+      margin: 15px; /* 可选：设置 li 之间的间距 */
+      padding:10px;
+      display: inline-block; /* 将 a 标签设置为块级元素，方便设置宽度和边框 */
+      padding: 10px 20px; /* 内边距 */
+      text-decoration: none; /* 去除默认的下划线 */
+      border: 2px solid #eff1f3; /* 边框样式 */
+      border-radius: 5px; /* 边框圆角 */
+      transition: all 0.3s ease; /* 添加过渡效果 */
+      box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+      font-size:small;
+    }
+
+
+</style>
+{% endblock %}
+
+{% block info %}
+<!--    标题-->
+<div class="page-header">
+    <h4>
+        自动打包项目并部署 <small>支持多节点部署</small>
+        <button class="btn btn-info" type="button" style="float:right">
+            仓库数 <span class="badge">{{project_count}}</span>
+            主机数 <span class="badge">{{client_count}}</span>
+        </button>
+    </h4>
+</div>
+<div class="span12">
+<!--    打包信息-->
+    <div class="span6">
+        <div class="info">
+            <table class="table">
+                <tr>
+                    <td>名称:</td>
+                    <td>
+                        <input type="text" name="project" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>打包名称:</td>
+<!--                    <td><input type="text" name="egg" readonly></td>-->
+                    <td>
+                        <select name="select1" class="version">
+
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>打包时间:</td>
+                    <td><input type="text" name="create_time" readonly></td>
+
+                </tr>
+                <tr>
+                    <td>部署主机:</td>
+                    <td><input type="text" name="hosts" readonly></td>
+                </tr>
+                <tr>
+                    <td>版本:</td>
+                    <td><input type="text" name="version" required value="1.1"></td>
+                </tr>
+                <tr>
+                    <td>描述:</td>
+                    <td><input type="text" name="description" required></td>
+                </tr>
+
+                <tr>
+                    <td></td>
+                    <td><button type="button" class="btn btn-danger" id="build" style="border: none;border-radius:3px;">打包项目</button></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+<!--    部署-->
+    <div class="span6">
+        <!--打包及部署-->
+            <div class="deploy">
+                <form method="post">
+                    <table class="table">
+                         <tr>
+                            <td>选择仓库:</td>
+                            <td>
+                                <select name="select_c">
+                                    <option value="">请选择一个仓库</option>
+                                        {% for pack in packs %}
+                                            <option value={{pack.path}}>{{pack.name}}</option>
+                                        {% endfor %}
+
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>选择项目:</td>
+                            <td>
+                                <select name="select">
+
+                                </select>
+                            </td>
+                        </tr>
+                         <tr>
+                            <td>部署主机:</td>
+                            <td>
+                                <div class="host_box" onclick="selectToggle(this)">
+                                    <div class="dropdown">
+                                        <input type="text" value="选择主机"/>
+                                        <span class="caret"></span>
+                                    </div>
+                                    <div class="select_box" >
+                                        {% for client in clients %}
+                                        <label><input type="checkbox" value="{{client.host}}"/>{{client.host}}</label>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </td>
+                         </tr>
+                        <tr>
+                            <td></td>
+                            <td><button type="button" class="btn btn-danger btn" id="deploy" style="border: none;border-radius:3px">部署主机</button></td>
+                         </tr>
+                    </table>
+                </form>
+            </div>
+        </div>
+
+</div>
+<!--# 历史打包版本-->
+    <hr>
+<div class="page-header">
+    <h5>
+        项目打包的历史记录 <small>可以选择删除</small>
+    </h5>
+</div>
+<div class="span12" id="egg_list">
+    <ul class="proegg"></ul>
+</div>
+
+{% endblock %}
+
+{% block script %}
+<!-- 提交的数据不为空-->
+
+<!--toastr设置-->
+ var toastr;
+ toastr.options = {
+    closeButton: true,//显示关闭按钮
+    debug: false,
+    progressBar: true,//显示进度条
+    positionClass: "toast-top-center",//位置
+    onclick: null,//点击消息框自定义事件
+    showDuration: "300",//显示动作时间
+    hideDuration: "1000",//隐藏动作时间
+    timeOut: "2000",//显示时间,0为永久显示
+    extendedTimeOut: "1000",//鼠标移动过后显示显示时间
+    showEasing: "swing",
+    hideEasing: "linear",
+    showMethod: "fadeIn",//显示方式
+    hideMethod: "fadeOut"//隐藏方式
+ };
+
+
+$(document).ready(function(){
+<!--打包项目-->
+    $("#build").click(function(){
+<!--        name = $("select[name='select'] option:selected").text()-->
+        name = $("input[name='project']").val()
+        description = $("input[name='description']").val()
+        version = $("input[name='version']").val()
+        egg = $("select[name='select1'] option:selected").text()
+        propath = $("select[name='select_c'] option:selected").val()
+        console.log(propath)
+        console.log(egg)
+        console.log(name)
+        console.log(description)
+        console.log(version)
+<!--2024年4月10号更新打包-->
+        if(name!=" "&&description!=" " && version){
+            if(egg){
+                let reg = /\d+.\d+/gi;
+                v = egg.match(reg)[0]
+                if (confirm("确认版本号是否一致！")==true){
+                      $.post("/spider/build/"+name+"/"+propath+"/",{"data":JSON.stringify({"description":description,"version":version})},function(result){
+                        if(result.status==200){
+                            toastr.success("打包成功！")
+                            toastr.info("请选择最新版本部署！")
+                        }else{
+                              toastr.error("打包失败！"+result.msg);
+                        }
+                      })
+
+                }else{
+                    toastr.warning("取消当前操作！")
+                }
+            }else{
+
+              $.post("/spider/build/"+name+"/"+propath+"/",{"data":JSON.stringify({"description":description,"version":version})},function(result){
+                if(result.status==200){
+                    toastr.success("打包成功！")
+                    toastr.info("请选择最新版本部署！")
+                }else{
+                      toastr.error("打包失败！"+result.msg);
+                }
+              })
+            }
+
+        }else{
+            toastr.warning("选择有效的项目！")
+        }
+    })
+<!--根据仓库选择所属的项目 20250122-->
+    $("select[name='select_c']").change(function(){
+
+        path = $("select[name='select_c'] option:selected").val()
+        console.log(path)
+        if(path!=""){
+            $.get("/spider/pros/"+path+"/",function(result){
+                console.log(result)
+                if(result.status==200){
+                    options = '<option value="">请选择一个项目</option>'
+                    for(pp of result.projects){
+                        console.log(pp.name)
+                        options +='<option value='+pp.name+'>'+pp.name+'</option>'
+                     }
+                    $("select[name='select']").html(options)
+                }
+            })
+        }else{
+            toastr.warning("请选择一个的仓库！");
+        }
+
+    })
+
+<!--获取选中的项目并获取打包信息-->
+    $("select[name='select']").change(function(){
+        name = $("select[name='select'] option:selected").text()
+        path = $("select[name='select_c'] option:selected").val()
+
+        console.log(name)
+        if(name!="" && name!="请选择一个项目"){
+            $.get("/spider/build/"+name+"/"+path+"/",function(result){
+                console.log(result)
+                if(result.name!=null){
+                    options = ""
+                    lis=""
+                    if(result.egg){
+                        for(egg of result.egg){
+                            options +='<option value='+egg+'>'+egg+'</option>'
+                            inf = name+':'+egg
+                            console.log(inf)
+                            lis +='<li style="list-style-type:none;margin:5px">'+egg  +"<button id='rmegg' style='border: none;border-radius:3px' class='btn-danger btn-sm'  value="+inf+" onclick='rmegg(this)'> 删除</button></li>"
+                        }
+                    }
+                    $("input[name='project']").val(result.name)
+<!--                    $("input[name='egg']").val(result.egg)-->
+                    $("select.version").html(options)
+                    $("input[name='create_time']").val(result.built_at)
+                    $("input[name='hosts']").val(result.clients)
+                    $("input[name='description']").val(result.description)
+                    $("#egg_list>ul").html(lis)
+                    if(result.egg && result.egg.length==1){
+                        v = result.egg[0]
+                        let reg = /\d+.\d+/gi;
+                        version = v.match(reg)[0]
+                        console.log(version)
+                        $("input[name='version']").val(version)
+                    }else{
+                        console.log(result.version)
+                        $("input[name='version']").val(result.version)
+                    }
+                }
+            })
+        }else{
+            toastr.warning("请选择有效的项目名称！");
+        }
+    })
+<!--根据egg包更新打包的显示版本-->
+$("select[name='select1']").change(function(){
+    name = $("select[name='select1'] option:selected").text()
+    let reg = /\d+.\d+/gi;
+    version = name.match(reg)[0]
+    $("input[name='version']").val(version)
+})
+<!--验证是否为浮点数-->
+function isFloat(input) {
+console.log(input)
+    return /\d+.\d+$/.test(input);
+}
+
+<!--// 当input失去焦点时触发验证版本号-->
+$("input[name='version']").blur(function(kk){
+    console.log(this.value)
+    console.log(isFloat(this.value))
+    if (!isFloat(this.value)) {
+        alert('请输入有效的浮点数作为版本号！');
+        this.focus();
+    }
+});
+<!--部署项目到多个主机-->
+    $("#deploy").click(function(){
+        name = $("select[name='select'] option:selected").text()
+        egg = $("select[name='select1'] option:selected").text()
+        description = $("input[name='description']").val()
+        path = $("select[name='select_c'] option:selected").val()
+
+<!--        获取被选中的复选框的值-->
+        hosts=[]
+        $("input[type='checkbox']:checked").each(function(){
+            check_val = $(this).val()
+<!--            正则获取主机的编号id-->
+            let reg = /\[(.+?)\]/gi;
+            hosts.push(eval(check_val.match(reg)[0])[0])
+        });
+        console.log(hosts)
+        console.log(name)
+        console.log(description)
+        if(name!=" "&&description!=" "){
+            if(hosts.length>0){
+                for(var i=0;i<hosts.length;i++){
+                    $.post("/spider/deploy/"+hosts[i]+"/"+name+"/"+path+'/',{"data":JSON.stringify({"egg":egg})},function(result){
+                        console.log(result)
+                        if(result.status==200){
+                            toastr.success("主机"+result.client+"部署成功！")
+                        }else{
+                              toastr.error("部署失败！"+result.msg);
+                        }
+                    })
+                }
+            }else{
+                toastr.warning("请至少选择一个有效的主机！")
+            }
+        }else{
+            toastr.warning("选择有效的项目！")
+        }
+    })
+});
+<!--刷新页面-->
+function reload(){
+    location.reload();
+}
+<!--下拉多选框的显示及隐藏-->
+function selectToggle(e){
+    $(e).find(".select_box").toggle();
+}
+<!--删除打包的egg文件-->
+function rmegg(value){
+    console.log(value)
+    path = $("select[name='select_c'] option:selected").val()
+    value = $(value).attr('value')
+    var flag=confirm("确实收否要删除："+value.split(":")[1])
+    if(flag){
+        $.get("/spider/rmegg/"+value.split(":")[0]+"/"+path+"/"+value.split(":")[1]+"/",function(result){
+            if(result.status==200){
+                toastr.info("删除成功!")
+    <!--            成功之后重新加载-->
+                $.get("/spider/build/"+name+"/"+path+"/",function(result){
+                    lis=""
+                    options=""
+                    if(result.egg){
+                        for(egg of result.egg){
+                            options +='<option value='+egg+'>'+egg+'</option>'
+                            inf = name+':'+egg
+                            console.log(inf)
+                            lis +='<li style="list-style-type:none;margin:5px">'+egg  +"<button id='rmegg' style='border: none;border-radius:3px' class='btn-danger btn-sm' value="+inf+" onclick='rmegg(this)'> 删除</button></li>"
+                        }
+                    }
+                    $("select.version").html(options)
+                    $("#egg_list>ul").html(lis)
+                })
+            }else{
+                toastr.info(result.message)
+            }
+        })
+    }
+
+}
+{% endblock %}
+

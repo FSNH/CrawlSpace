@@ -1,0 +1,210 @@
+{% extends "base.html" %}
+{% load static %}
+{% block style%}
+<!--        toastr消息通知-->
+<link rel="stylesheet" href='{% static "css/toastr.min.css"%}'>
+<script src='{% static "/jquery-3.2.1.min.js"%}'></script>
+<script src='{% static "js/toastr.min.js" %}'></script>
+<!--模态框去除表格的边框-->
+<!--下拉多选框的自定义样式-->
+<style>
+    .table{
+        margin-top: 50px;
+    }
+    .table td {
+        width:0px;
+        border:none;
+        border-redius:3px;
+    }
+    .row-fluid .span12 {
+        width: 100%;
+        margin-left: 0;
+    }
+    .packge{
+        list-style:none;
+        padding: 0; /* 去除默认的 padding */
+        margin: 0; /* 去除默认的 margin */
+        display: flex; /* 使用 Flexbox 实现水平排列 */
+    }
+    .packge li {
+      margin: 15px; /* 可选：设置 li 之间的间距 */
+      padding:10px;
+      display: inline-block; /* 将 a 标签设置为块级元素，方便设置宽度和边框 */
+      padding: 10px 20px; /* 内边距 */
+      text-decoration: none; /* 去除默认的下划线 */
+      border: 2px solid #eff1f3; /* 边框样式 */
+      border-radius: 5px; /* 边框圆角 */
+      transition: all 0.3s ease; /* 添加过渡效果 */
+      box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+      font-size:small;
+    }
+    .packge li a {
+      color: black; /* 将链接文字颜色改为黑色 */
+        text-decoration: none; /* 去除默认的下划线 */
+    }
+    .desc {
+      width: 300px; /* 设置宽度 */
+      white-space: nowrap; /* 禁止换行 */
+      overflow: hidden; /* 隐藏溢出内容 */
+      text-overflow: ellipsis; /* 显示省略号 */
+    }
+    .desc:hover {
+      white-space: normal; /* 允许换行 */
+      overflow: visible; /* 显示全部内容 */
+      word-break: break-all; /* 强制换行 */
+    }
+
+</style>
+{% endblock %}
+
+{% block info %}
+<!--    标题-->
+<div class="page-header">
+
+    <h4>
+        项目仓库 <small>支持创建自定义项目仓库</small>
+    </h4>
+     <button type="button" class="btn-sm btn-danger" id="create" style="border: none;border-radius:3px;">创建仓库</button>
+</div>
+<div class="span12">
+         {% for pack in packs %}
+    <ul class="packge">
+            <li><a class="item" name={{pack.path}}>
+                    <h5>
+                        <a class="btn-sm btn-info" data-value={{pack.path}} style="border: none;border-radius:3px;color:white;padding:2px;padding:3px">{{pack.name}}</a>
+                        <a class="btn-sm btn-warning" style="border: none;border-radius:3px;color:white;padding:2px;padding:3px">{{pack.path}}</a>
+                    </h5>
+                    <p class="desc">简介：{{pack.description}}</p>
+                    <p>创建时间：{{pack.created_at}}</p>
+                </a>
+            </li>
+       {% endfor %}
+    </ul>
+</div>
+<!--post请求跳转到新的页面-->
+<form action="" id="formboxx" target="_blank" method="post">
+ <input type="hidden" name="formdata" id="formdata" value="">
+</form>
+
+{% endblock %}
+
+{% block script %}
+ var toastr;
+ toastr.options = {
+    closeButton: true,//显示关闭按钮
+    debug: false,
+    progressBar: true,//显示进度条
+    positionClass: "toast-top-center",//位置
+    onclick: null,//点击消息框自定义事件
+    showDuration: "300",//显示动作时间
+    hideDuration: "1000",//隐藏动作时间
+    timeOut: "2000",//显示时间,0为永久显示
+    extendedTimeOut: "1000",//鼠标移动过后显示显示时间
+    showEasing: "swing",
+    hideEasing: "linear",
+    showMethod: "fadeIn",//显示方式
+    hideMethod: "fadeOut"//隐藏方式
+ };
+
+<!--弹出创建主机设置窗口-->
+    $("#create").click(function(){
+        $('#myModal').modal('show');
+    })
+$(document).ready(function(){
+<!--创建项目仓库-->
+    $("#create_package").click(function(){
+        path = $("form table input[name='path']").val()
+        name = $("form table input[name='name']").val()
+        description = $("form table textarea[name='description']").val()
+
+        $.post("/spider/client_package/",{"path":path,"name":name,"description":description},function(result){
+            if(result.status==200){
+                toastr.success("创建成功！")
+                setTimeout(() => {
+                  reload();
+                }, 3000);
+            }else if(result.status==300){
+                toastr.success("更新成功！")
+<!--创建及更新成功后三秒刷新页面-->
+                setTimeout(() => {
+                  reload();
+                }, 3000);
+            }else{
+                  toastr.error("创建失败！"+result.msg);
+            }
+        })
+
+    })
+
+});
+<!--跳转到项目页面-->
+$('a.btn-sm.btn-info[data-value]').click(function() {
+    var value = $(this).attr('data-value'); // 直接获取 data-value 属性值
+    packages(value); // 调用 packages 函数
+});
+
+function packages(pk){
+<!--    pk = $(this).attr('data-value')-->
+<!--   var pk = $('.btn-sm.btn-info[data-value]').attr('data-value');-->
+
+    console.log(pk)
+    if(pk!=""){
+        var projects=[];
+        projects.push(pk)
+<!--    console.log(projects)-->
+        if(projects.length>0){
+            $("#formboxx").attr("action",'/spider/projects.html'+'?name='+pk);
+            $("#formboxx>#formdata").val(JSON.stringify(projects));
+            $("#formboxx").eq(0).submit();
+        }else{
+            $("#formboxx").attr("action",'/spider/projects.html'+'?name='+pk);
+            $("#formboxx").eq(0).submit();
+        }
+    }else{
+        toastr.warning('请选择仓库项目！')
+    }
+}
+<!--刷新页面-->
+function reload(){
+    location.reload();
+}
+{% endblock %}
+
+
+{% block footer %}
+ <!--模态框设置定时任务-->
+<div class="modal fade hide" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">创建项目仓库</h4>
+        </div>
+        <div class="modal-body">
+            <form method="post">
+                <table class="table">
+                    <tr>
+                        <td>地址:</td>
+                        <td><input type="text" name="path" placeholder="输入项目纯英文名称:ChemPro" required></td>
+                    </tr>
+                    <tr>
+                        <td>项目名:</td>
+                        <td><input type="text" name="name" placeholder="输入项目中文名称:化合物项目" required></td>
+                    </tr>
+                    <tr>
+                        <td>描述:</td>
+                        <td><textarea id="description" name="description" placeholder="输入有关项目描述" rows="4" cols="50"  required></textarea></td>
+                    </tr>
+
+                </table>
+            </form>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            <button type="button" class="btn btn-danger" id="create_package">创建</button>
+        </div>
+    </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+{% endblock  %}

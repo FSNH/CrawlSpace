@@ -1,0 +1,414 @@
+{% extends "base.html" %}
+{% load static %}
+{% block style %}
+<!--        toastr消息通知-->
+<link rel="stylesheet" href='{% static "css/toastr.min.css"%}'>
+<script src='{% static "/jquery-3.2.1.min.js"%}'></script>
+<script src='{% static "js/toastr.min.js" %}'></script>
+<!--模态框去除表格的边框-->
+<style>
+    .table td {
+    border:none;
+    border-radius:3px;
+    }
+
+    @media only screen and (max-width: 1020px) {
+                .btn-group .btn#create{font-size:12px !important;padding:4px !important;}
+                .btn-group .btn#remove{font-size:12px !important;padding:4px !important;}
+                .btn-group .btn#review{font-size:12px !important;padding:4px !important;}
+                .btn-group .btn#edit{font-size:12px !important;padding:4px !important;}
+                .btn-group .btn#ok{font-size:12px !important;padding:4px !important;}
+                .btn-group .btn#run{font-size:12px !important;padding:4px !important;}
+                .btn-group .btn#check{font-size:12px !important;padding:4px !important;}
+                .btn-group .btn#cron{font-size:12px !important;padding:4px !important;}
+                .btn-group .btn#cron_task{font-size:12px !important;padding:4px !important;}
+                .btn-group .btn#server{font-size:12px !important;padding:4px !important;}
+                .btn-group .btn#deploy{font-size:12px !important;padding:4px !important;}
+            }
+
+    .row-fluid .span12 {
+        width: 100%;
+        margin-left: 20px;
+    }
+
+</style>
+{% endblock %}
+
+{% block info %}
+<div class="page-header">
+    <h4>
+        通用爬虫在线编辑规则 <small> 支持创建多规则及可视化配置</small>
+        <button class="btn btn-info" type="button" style="display:none;">
+            正在编辑规则 <span class="badge" id="rulefile"></span>
+        </button>
+        <button class="btn btn-danger btn-lg" id="visual_editor" style="background-image:linear-gradient(to bottom,#ee5f5b,#ee5f5b);background-color:#ee5f5b;color:white;float:right;margin-right:5px">可视化配置爬虫</button>
+    </h4>
+</div>
+<div class="span12">
+    <!--左侧选择区-->
+    <div class="span2" style="overflow:hidden;">
+        <select class="btn" name='select' style="height: 35px;width: 100%;border-bottom-left-radius: 5px;border-top-left-radius: 5px;margin: 5px 0;">
+            <option style="width:50px" value="选择查看规则" selected="selected">选择查看规则</option>
+            {% for file in files%}
+                <option style="width:50px" value="quote:rediscurrency">{{file}}</option>
+            {% endfor %}
+        </select>
+    <!--    创建新规则文件-->
+        <div class="file">
+             <label>创建文件类型</label>
+            <label><input  type="radio" name="ftype" value="json" checked style="width: 14px;border-bottom-left-radius: 5px;border-top-left-radius: 5px;float: left;margin-right: 5px">json</label>
+            <label><input  type="radio" name="ftype" value="py" style="width: 14px;border-bottom-left-radius: 5px;border-top-left-radius: 5px;float: left;margin-right: 5px">python3</label>
+            <input type="text" class="form-control" style="box-sizing: border-box;height: 25px;width: 100%;border-bottom-left-radius: 5px;border-top-left-radius: 5px;float: left;margin: 5px 0" placeholder="请选择文件类型及输入名称">{% csrf_token %}
+            <div class="btn-group" role="group" aria-label="..." >
+            <button class="btn btn-success btn-lg" id="create" style="background-image:linear-gradient(to bottom,#25759d,#5784df);background-color:#5784df;color:white;">创建规则</button>
+            <button class="btn btn-danger btn-lg" id="remove" style="background-image:linear-gradient(to bottom,#ee5f5b,#ee5f5b);background-color:#ee5f5b;color:white;">删除规则</button>
+        </div>
+        </div>
+
+    </div>
+
+    <div id="content" style="padding:5px;" class="span10">
+        <!--ace在线编辑-->
+        <pre id="code" style="height:500px">
+            <textarea style="min-height:270px" id="python" placeholder="编辑python3"></textarea>
+        </pre>
+  <!--    按钮菜单组-->
+        <div class="btn-group" role="group" aria-label="...">
+            <button class="btn btn-info btn-lg" id="review">规则预览</button>
+            <button class="btn btn-warning btn-lg" id="edit">规则编辑</button>
+            <button class="btn btn-success btn-lg" id="ok">保存编辑</button>
+            <button class="btn btn-danger btn-lg" id="run">挖掘数据</button>
+            <button class="btn btn-primary btn-lg" id="check" style="background-image:linear-gradient(to bottom,#25759d,#5784df);background-color:#5784df;color:white;">查看爬虫任务</button>
+            <button class="btn btn-primary btn-lg" id="cron" style="background-image:linear-gradient(to bottom,#b5a51b,#f9b507);background-color:#f9b507;color:white;">设置定时任务</button>
+            <button class="btn btn-primary btn-lg" id="cron_task" style="background-image:linear-gradient(to bottom,#25759d,#6fd3c3);background-color:#6fd3c3;color:white;">查看定时任务</button>
+            <button class="btn btn-info btn-lg" id="server" style="background-image:linear-gradient(to bottom,#a3a97c,#82d945);background-color:#82d945;color:white;">查看主机信息</button>
+            <button class="btn btn-info btn-lg" id="deploy" style="background-image:linear-gradient(to bottom,#a4a7d9,#845bcf);background-color:#845bcf;color:white;">部署爬虫项目</button>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.bootcss.com/ace/1.4.6/ace.js"></script>
+<script src="https://cdn.bootcss.com/ace/1.4.6/ext-beautify.js"></script>
+<script src="https://cdn.bootcss.com/ace/1.4.6/ext-language_tools.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/ace/1.9.6/mode-python.js"></script>
+<script src="https://cdn.bootcss.com/ace/1.4.6/theme-monokai.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/ace/1.9.6/ext-searchbox.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/ace/1.9.6/ext-searchbox.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/ace/1.9.6/mode-json.js"></script>
+{% endblock %}
+
+{% block script %}
+<!--配置toastr消息通知-->
+ var toastr;
+ toastr.options = {
+    closeButton: true,//显示关闭按钮
+    debug: false,
+    progressBar: true,//显示进度条
+    positionClass: "toast-top-center",//位置
+    onclick: null,//点击消息框自定义事件
+    showDuration: "300",//显示动作时间
+    hideDuration: "1000",//隐藏动作时间
+    timeOut: "2000",//显示时间,0为永久显示
+    extendedTimeOut: "1000",//鼠标移动过后显示显示时间
+    showEasing: "swing",
+    hideEasing: "linear",
+    showMethod: "fadeIn",//显示方式
+    hideMethod: "fadeOut"//隐藏方式
+ };
+<!--配置ace在线编辑器-->
+        editor = ace.edit('code');// 这个地方就是id是editor的div
+        editor.setTheme('ace/theme/xcode'); //主题
+        var jsMode = ace.require('ace/mode/json').Mode; //支持语言
+        editor.session.setMode(new jsMode());    //引入
+        editor.setFontSize(18);    //设置默认标签大小
+<!--        editor.setReadOnly(true);        //false为可编辑-->
+        editor.setOption("wrap", "free");   //换行
+        ace.require("ace/ext/language_tools");
+        editor.setOptions({
+            enableBasicAutocompletion: true, //启用基本自动完成
+            enableSnippets: true,             //启用代码段
+            enableLiveAutocompletion: true    //启用实时自动完成
+        });
+
+    <!--   撤销：-->
+        editor.undo();
+    <!--    查找替换：-->
+        editor.execCommand('replace');
+    <!--    编辑内容搜索-->
+        editor.execCommand('find');//与ctrl+f功能一致
+    <!--    自动换行 关闭时free换成off-->
+        editor.setOption("wrap", "free");
+
+<!--ace编辑器绑定快捷键，实现保存的功能-->
+        editor.commands.addCommand({
+<!--绑定的名称-->
+            name: "savefile",
+<!--用于命令的组合键。-->
+            bindKey: {win: 'Ctrl-S', mac: 'Command-S'},
+            exec: function(editor) {
+                    savefile();
+            }
+        });
+<!--保存文件的方法-->
+function savefile(){
+    morecode = editor.session.getValue()
+    flag = $("option:selected").text()
+    console.log(flag)
+    if(flag!="选择查看规则"){
+        if(morecode.trim()!=""){
+            $.post("/spider/updatecode/",{"data":morecode,"filename":flag}, function(result){
+                if(result.status==200){
+                    toastr.success("保存成功！")
+                }else{
+                    toastr.error("保存失败:"+result.msg)
+                }
+            });
+        }else{
+            toastr.warning("规则为空")
+        }
+    }else{
+        toastr.warning("请至少选中一个规则保存")
+    }
+}
+$(document).ready(function(){
+<!--    编辑代码-->
+<!--    $("input.form-control").attr("display":none)-->
+    $("#edit").click(function(){
+        editor.setReadOnly(false);        //false为可编辑
+        $.getJSON("/spider/code/",{"filename":$("option:selected").text() },function(result){
+<!--            console.log(result.code)-->
+            if(result.status!=1){
+                $("#edit").attr("value","")
+                if(result.code){
+                    toastr.success("正在加载......")
+<!-- JSON自动格式化-->
+<!--                    code_format=JSON.stringify(JSON.parse(result.code),null,2);-->
+                    editor.session.setValue(result.code)
+                }else{
+                    toastr.warning("规则为空")
+                }
+
+            }else{
+                toastr.warning("请至少选中一个规则编辑！")
+            }
+        });
+    })
+    <!--    保存代码-->
+    $("#ok").click(function(){
+<!--        console.log(editor.session.getValue())-->
+        savefile();
+    });
+<!--    选中文件立马预览代码-->
+    $("select[name='select']").change(function(){
+        editor.setReadOnly(true);        //false为可编辑
+<!--        console.log(editor.session.getValue())-->
+        $.getJSON("/spider/code/",{"filename":$("option:selected").text() },function(result){
+            console.log(result.code)
+            if(result.status!=1){
+                $("#edit").attr("value","")
+                if(result.code!=""){
+                    toastr.success("正在加载......")
+<!-- JSON自动格式化-->
+<!--                    code_format=JSON.stringify(JSON.parse(result.code),null,2);-->
+                    editor.session.setValue(result.code)
+                }else{
+                    toastr.warning("规则为空")
+                }
+            }else{
+                toastr.warning("请至少选中一个规则预览！")
+            }
+        });
+    });
+
+<!--    创建新的文件-->
+    $("#create").click(function(){
+        if($(".form-control").val()!=""){
+            $.post("/spider/file/",{"ftype":$('input[name="ftype"]:checked').val(),"newfile":$(".form-control").val() }, function(result){
+            if(result.status==200){
+                toastr.success("创建文件:"+$(".form-control").val()+"."+$('input[name="ftype"]:checked').val()+"成功！")
+                setTimeout(() => {
+                  window.location.href="{% url 'spider:spiderindex' %}"
+                }, 500);
+            }else{
+                toastr.error("保存失败:"+result.msg)
+            }
+        });
+        }else{
+            toastr.warning("文件名称不能为空！")
+        }
+
+    })
+<!--    删除规则文件-->
+    $("#remove").click(function(){
+        flag = $("option:selected").text()
+        console.log(flag)
+        if(flag!="选择查看规则"){
+            var b = confirm("确定删除");
+            if(b==true){
+                $.get("/spider/remove/"+flag+"/", function(result){
+                    if(result.status==200){
+                        toastr.success("删除规则:"+flag+"成功！")
+                        setTimeout(() => {
+                          window.location.href="{% url 'spider:spiderindex' %}"
+                        }, 500);
+                    }else{
+                        toastr.error("删除失败:"+result.msg)
+                    }
+                });
+            }
+        }else{
+            toastr.warning("请至少选择一个规则！")
+        }
+    })
+<!--    运行规则爬虫-->
+    $("#run").click(function(){
+        morecode = editor.session.getValue()
+<!--        console.log(morecode.trim())-->
+        if(morecode.trim()!=""){
+            $.post("/spider/run/",{"data":JSON.stringify(morecode)}, function(result){
+                console.log(result)
+                if(result.status==200){
+                    toastr.success("运行爬虫:"+$(".form-control").val()+"成功！"+"\n"+"任务ID号为："+result.jobid)
+                }else{
+                    toastr.error("运行失败:"+result.msg)
+                }
+            });
+        }else{
+            toastr.warning("请选择一个有效的运行规则并编辑运行！")
+        }
+    })
+<!--    查看爬虫运行状态-->
+    $("#check").click(function(){
+        location.href="/spider/list.html"
+    })
+<!--弹出定时任务设置窗口-->
+    $("#cron").click(function(){
+        $('#myModal').modal('show');
+<!--设置默认值-->
+        client_id = 1
+        $('input[name="host_id"]').val(client_id)
+        flag = $("option:selected").text()
+        if(flag!="选择查看规则"){
+            prj = $("option:selected").val()
+            $("input[name='project']").attr("value",prj.split(':')[0])
+            $("input[name='rulefile']").attr("value",flag)
+        }else{
+            toastr.warning("请选择一个有效的规则名！")
+        }
+    })
+<!--创建定时任务-->
+    $("#task").click(function(){
+        args=[]
+        $("form input").each(function(){
+            args.push($(this).val())
+        })
+        console.log(args)
+        flag = $("option:selected").text()
+        prj = $("option:selected").val()
+        if(args.length>0 && flag!="选择查看规则"){
+            name = $("option:selected").text().split('.')[0]
+            console.log(name)
+            client_id = args[0]
+            $.post("/task/create/",{"data":JSON.stringify(args),"reluefile":name,'taskfun':'excute_task','cron_kwargs':JSON.stringify({"name":$("option:selected").text(),'client_id':client_id}),"prj":JSON.stringify({"project":prj.split(':')[0],"spidername":prj.split(':')[1]})},function(result){
+                if(result.status==200){
+                    toastr.success("创建成功！")
+                }else{
+                      toastr.error("创建失败！:"+result.message);
+                }
+            })
+        }else{
+            toastr.warning("请选择一个有效的运行规则！")
+        }
+    })
+<!--查看定时任务-->
+    $("#cron_task").click(function(){
+        window.location.href="/task/list.html"
+    })
+<!--查看主机信息-->
+    $("#server").click(function(){
+        window.location.href="/spider/server.html"
+    })
+<!--项目部署-->
+    $("#deploy").click(function(){
+        window.location.href="/spider/deploy.html"
+    })
+<!--当前正在编辑规则名称赋值信息-->
+    $('select.btn').change(function(){
+        $("#rulefile").parent("button").attr({"style":"display:show;background-image:linear-gradient(to bottom,#9abfef,#92baed);background-color:#92baed;color:white;float:right"})
+        $("#rulefile").text($("option:selected").text())
+    })
+<!--编辑可视化配置爬虫-->
+    $("#visual_editor").click(function(){
+        location.href = '/spider/editor.html'
+    })
+
+});
+
+{% endblock %}
+
+{% block footer %}
+ <!--模态框设置定时任务-->
+<div class="modal fade hide" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="p">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">定时任务设置</h4>
+        </div>
+        <div class="modal-body">
+            <form method="post">
+                <table class="table">
+                    <tr>
+                        <td>主机号:</td>
+                        <td><input type="text" name="host_id" required></td>
+                    </tr>
+                    <tr>
+                        <td>项目名:</td>
+                        <td><input type="text" name="project" required></td>
+                    </tr>
+                    <tr>
+                        <td>规则名:</td>
+                        <td><input type="text" name="rulefile" required></td>
+                    </tr>
+                    <tr>
+                        <td>年:</td>
+                        <td><input type="text" name="year"></td>
+                    </tr>
+                    <tr>
+                        <td>月:</td>
+                        <td><input type="text" name="month"></td>
+                    </tr>
+                     <tr>
+                        <td>日:</td>
+                        <td><input type="text" name="day"></td>
+                    </tr>
+                     <tr>
+                        <td>周:</td>
+                        <td><input type="text" name="week"></td>
+                    </tr>
+                     <tr>
+                        <td>每周几:</td>
+                        <td><input type="text" name="dayofweek"></td>
+                    </tr>
+                    <tr>
+                        <td>时:</td>
+                        <td><input type="text" name="hour"></td>
+                    </tr>
+                    <tr>
+                        <td>分:</td>
+                        <td><input type="text" name="minutes"></td>
+                    </tr>
+                    <tr>
+                        <td>秒:</td>
+                        <td><input type="text" name="second"></td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            <button type="button" class="btn btn-danger" id="task">创建任务</button>
+        </div>
+    </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+{% endblock  %}

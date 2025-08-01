@@ -1,0 +1,427 @@
+{% extends "base.html" %}
+{% load static %}
+{% block style%}
+
+<link rel="stylesheet" id="theme-link" href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css">
+<link rel="stylesheet" id="iconlib-link" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+<!--        toastr消息通知-->
+<link rel="stylesheet" href='{% static "css/toastr.min.css"%}'>
+<script src='{% static "/jquery-3.2.1.min.js"%}'></script>
+<script src='{% static "js/toastr.min.js" %}'></script>
+<style>
+    .row-fluid .span12 {
+        width: 100%;
+        margin-left: 0;
+    }
+    #editor_holder {
+    padding: 10px;
+    }
+</style>
+{% endblock %}
+{% block info %}
+<script src="https://cdn.jsdelivr.net/npm/@json-editor/json-editor@latest/dist/jsoneditor.min.js"></script>
+
+<div id="editor_holder" class="span12"></div>
+<div class="menu">
+    <table class="table">
+        <tr>
+            <td>
+             <button class="btn btn-danger btn-lg" id="visual_editor" style="background-image:linear-gradient(to bottom,#ee5f5b,#ee5f5b);background-color:#ee5f5b;color:white;float:right;margin-right:5px">保存</button>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<script>
+
+const element = document.getElementById('editor_holder');
+
+<!--JSONEditor.defaults.options.theme = 'bootstrap4';-->
+
+schema={
+  "title": "通用爬虫在线配置信息",
+  "type": "object",
+  "format": "grid-strict",
+  "required": [
+    "spider",
+    "type",
+    "name",
+    "home",
+    "settings",
+    "class",
+    "loader",
+    "start_urls",
+    "allowed_domains",
+    "rules",
+    "nextpage_info",
+    "item"
+  ],
+  "properties": {
+    "spider": {
+      "type": "string",
+      "description": "项目名称",
+      "minLength": 4,
+      "default": "rediscurrency",
+      "options": {
+        "grid_columns": 3
+      }
+    },
+    "type": {
+      "type": "string",
+      "description": "网站标注",
+      "minLength": 4,
+      "default": "研峰网站",
+      "options": {
+        "grid_columns": 3
+      }
+    },
+    "name": {
+      "type": "string",
+      "description": "爬虫的名称",
+      "default": "infsc",
+      "options": {
+        "grid_columns": 3
+      }
+    },
+    "home": {
+      "type": "string",
+      "description": "网站首页",
+      "default": "http://www.infsci.com/",
+      "options": {
+        "grid_columns": 3
+      }
+    },
+    "start_urls": {
+      "type": "string",
+      "description": "初始网址",
+      "default": "http://www.infsci.com/",
+       "options": {
+        "grid_columns": 3
+      }
+    },
+    "allowed_domains": {
+      "type": "string",
+      "description": "网站域名",
+      "default": "infsci.com",
+       "options": {
+        "grid_columns": 3
+      }
+    },
+    "class":{
+        "type": "string",
+        "description": "默认值不用修改",
+        "default": "QuoteItem",
+        "options": {
+        "grid_columns": 3
+      }
+    },
+    "loader":{
+        "type": "string",
+        "description": "默认值不用修改",
+        "default": "ItemLoader",
+        "options": {
+        "grid_columns": 3
+      }
+    },
+    "settings": {
+      "type": "array",
+      "description": "项目配置信息",
+      "format": "table",
+      "default": [{
+          "header": "user-agent",
+          "value": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.64 Safari/537.36"
+          },
+          {
+              "header": "SCHEDULER",
+              "value": "scrapy_redis.scheduler.Scheduler"
+          },
+          {
+              "header": "DUPEFILTER_CLASS",
+              "value": "scrapy_redis.dupefilter.RFPDupeFilter"
+          },
+          {
+              "header": "STATS_CLASS",
+              "value": "scrapy_redis.stats.RedisStatsCollector"
+          },
+          {
+              "header": "SCHEDULER_PERSIST",
+              "value": "true"
+          },
+          {
+              "header": "REDIS_START_URLS_AS_ZSET",
+              "value": "true"
+          },
+          {
+              "header": "REDIS_START_URLS_KEY",
+              "value": "{{name}}s:start_urls"
+          },
+          {
+              "header": "SCHEDULER_DUPEFILTER_KEY",
+              "value": "currency:{{name}}:dupefilter"
+          },
+          {
+              "header": "SCHEDULER_QUEUE_KEY",
+              "value": "currency:{{name}}:requests"
+          }],
+
+      "items": {
+        "type": "object",
+        "title": "添加配置",
+        "description": "爬虫settings配置",
+        "properties": {
+          "header":{
+            "type": "string",
+            "enum": [
+                "user-agent",
+                "SCHEDULER",
+                "DUPEFILTER_CLASS",
+                "SCHEDULER_PERSIST",
+                "REDIS_START_URLS_AS_ZSET",
+                "REDIS_START_URLS_KEY",
+                "STATS_CLASS",
+                "SCHEDULER_DUPEFILTER_KEY",
+                "SCHEDULER_QUEUE_KEY",
+                "Cookie",
+                "Host",
+                "Referer"
+            ]
+          },
+          "value":{
+            "type": "string"
+          }
+        },
+        "default": {
+          "header": "user-agent",
+          "value": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.64 Safari/537.36"
+      }
+      }
+    },
+    "rules": {
+      "type": "array",
+      "format": "table",
+      "description": "页面目标链接提取的规则编写",
+      "title": "编辑规则",
+      "items": {
+        "type": "object",
+        "title": "添加规则",
+        "properties": {
+          "link_extractor_method": {
+            "type": "string",
+            "enum": [
+              "restrict_css",
+              "restrict_xpaths"
+            ],
+            "default": "restrict_css"
+          },
+          "allow":{
+            "type": "string"
+          },
+          "deny":{
+            "type": "string"
+          },
+          "link_extractor_arg": {
+            "type": "string",
+            "default":".abc_column>p:nth-child(2)>a"
+          },
+          "follow": {
+            "type": "string",
+            "enum": [
+              "true",
+              "false"
+            ],
+            "default":false,
+          },
+          "callback": {
+            "type": "string",
+            "enum": [
+              "true",
+              "false"
+            ],
+            "default": "true"
+          }
+        }
+      }
+    },
+    "nextpage_info": {
+      "type": "array",
+      "description": "页面提取的翻页的规则",
+      "title": "翻页处理",
+      "format": "table",
+      "items": {
+        "type": "object",
+        "title": "是否存在翻页",
+        "properties": {
+          "next_method": {
+            "type": "string",
+            "enum": [
+              "nextpage",
+              "next_xpath"
+            ]
+          },
+          "nextpage": {
+            "type": "string",
+            "enum": [
+              "true",
+              "false"
+            ],
+            "default": "false"
+          },
+          "next_rule": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "item": {
+      "type": "array",
+      "description": "页面提取的字段规则编写",
+      "format": "table",
+      "title": "字段编辑",
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "title": "添加字段",
+        "properties": {
+          "itemname": {
+            "type": "string",
+            "default": "urls"
+          },
+          "method": {
+            "type": "string",
+            "enum": [
+              "css",
+              "xpath",
+              "value",
+            ],
+            "default": "css"
+          },
+          "re":{
+            "type": "string"
+          },
+          "arg": {
+            "type": "string",
+            "default": ".abc_column_cas.dd a::text"
+          }
+        }
+      }
+    }
+  }
+}
+
+const editor = new JSONEditor(element,{
+  schema: schema,
+  theme: 'tailwind',
+  iconlib: "fontawesome5",
+  array_controls_top:"true"
+});
+
+
+</script>
+{% endblock %}
+
+{% block script %}
+<!--toastr设置-->
+ var toastr;
+ toastr.options = {
+    closeButton: true,//显示关闭按钮
+    debug: false,
+    progressBar: true,//显示进度条
+    positionClass: "toast-top-center",//位置
+    onclick: null,//点击消息框自定义事件
+    showDuration: "300",//显示动作时间
+    hideDuration: "1000",//隐藏动作时间
+    timeOut: "2000",//显示时间,0为永久显示
+    extendedTimeOut: "1000",//鼠标移动过后显示显示时间
+    showEasing: "swing",
+    hideEasing: "linear",
+    showMethod: "fadeIn",//显示方式
+    hideMethod: "fadeOut"//隐藏方式
+ };
+
+<!--watch监控schema字段并修改,设置爬虫的的默认值-->
+editor.watch('root.name',function(xxx) {
+  var name = editor.getEditor('root.name');
+    var namevalue=name.getValue();
+    var v=editor.getValue();
+<!--      console.log(namevalue);-->
+     v.settings.forEach(function(xv){
+        if(xv.header=='SCHEDULER_DUPEFILTER_KEY'){
+            xv.value="currency:"+namevalue+":dupefilter";
+        }else if(xv.header=='SCHEDULER_QUEUE_KEY'){
+            xv.value="currency:"+namevalue+":requests";
+        }else if(xv.header=='REDIS_START_URLS_KEY'){
+            xv.value = namevalue+"s:start_urls"
+        }
+    });
+
+   editor.setValue({name:namevalue,"settings":v.settings});
+
+});
+$("#visual_editor").click(function(){
+    resu =  JSON.parse(JSON.stringify(editor.getValue()));
+    console.log(resu)
+<!--设置起始链接及域名[]-->
+    resu.start_urls=[resu.start_urls]
+    resu.allowed_domains=[resu.allowed_domains]
+<!--设置settings-->
+    setting={}
+    resu.settings.forEach(function(key){
+    setting[key["header"]]=key["value"]
+})
+resu.settings=setting
+<!--设置规则-->
+    rules=[]
+    resu.rules.forEach(function(key){
+        extra={}
+<!--{"allow":key["allow"],"deny":key["deny"]}-->
+        extractor = {}
+        key["deny"]?extractor["deny"] = key["deny"]:""
+        key["allow"]?extractor["allow"] = key["allow"]:""
+        extractor[key["link_extractor_method"]] = key["link_extractor_arg"]
+        extra["link_extractor"]=extractor
+        extra["follow"] = key["follow"]
+        extra["callback"] = key["callback"]?"parse_item":""
+<!--        console.log(extra)-->
+        rules.push(extra)
+    })
+    resu.rules=rules
+<!--设置item-->
+    item={}
+    attr={}
+    item["class"]=resu["class"]
+    item["loader"]=resu["loader"]
+    if(resu.nextpage_info!=null && resu.nextpage_info.length>0){
+        item[resu.nextpage_info[0].next_method]=resu.nextpage_info[0].nextpage
+        item["next_rule"] = resu.nextpage_info[0].next_rule
+    }
+    resu.item.forEach(function(key){
+<!--,"re":key["re"]-->
+        rule_attr={"method":key["method"],"arg":key["arg"]}
+        key["re"]?rule_attr["re"]=key["re"]:""
+        attr[key["itemname"]]=[rule_attr]
+    })
+    item["attrs"]=attr
+    resu.item=item
+<!--获取最终的schema-->
+result = resu
+console.log(result)
+<!--删除对象不需要的属性-->
+Reflect.deleteProperty(result,'nextpage_info')
+Reflect.deleteProperty(result,'loader')
+Reflect.deleteProperty(result,'class')
+console.log(result)
+if(result["item"]["attrs"] !=null && result["rules"].length>0){
+    $.post('/spider/create_save_file/',{"data": JSON.stringify(result,null,2)},function(response){
+        if(response.status==200){
+            toastr.success(response.msg)
+        }else{
+            toastr.error("保存失败！-"+response.msg)
+        }
+    })
+
+}else{
+    toastr.warning("数据为空,检查规则和字段！")
+}
+})
+
+{% endblock %}

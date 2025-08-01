@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html class="no-js">
+    <head>
+         {% load staticfiles %}
+        <title>CrawlSpace：爬虫探索空间</title>
+        <meta name="description" content="CrawlSpace：爬虫探索空间，支持在线创建、编辑、运行基于crawlspider的分布式爬虫规则;支持在线创建爬虫的定时任务;支持在线打包、部署、批量运行scrapy爬虫、查看Scrapy日志、查看Scrapy项目源码的框架项目管理系统;"  />
+        <!-- Bootstrap -->
+        <link href='{% static "bootstrap/css/bootstrap.min.css" %}' rel="stylesheet" media="screen">
+        <link href='{% static "bootstrap/css/bootstrap-responsive.min.css" %}' rel="stylesheet" media="screen">
+        <link href='{% static "assets/styles.css" %}' rel="stylesheet" media="screen">
+        <link href='{% static "fonts/iconfont.css" %}' rel="stylesheet" media="screen">
+        <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+        <!--[if lt IE 9]>
+        <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+<!--            手机端响应式布局-->
+<!--            全局样式-->
+        <style>
+            #sidebar ul li a{font:normal 14px/22px 宋体;color:black}
+            .bs-docs-sidenav{margin-top:0;}
+            .bs-docs-sidenav > li > a i{margin-right:10px !important;}
+            .navbar{margin-bottom:0;}
+            .page-header{padding:15px;margin:0;}
+            .row-fluid .span12{width:100%}
+            .status button{width:50px !important;padding:0 3px !important;}
+            #log_body{max-height:auto;overflow-y:inherit;}
+            #crawl_log .info{max-height:300px;overflow-y:auto}
+            #myModal_log{width:60%;}
+            .back {
+                    position: fixed;
+                    width: 50px;
+                    height: 50px;
+                    right: 0px;
+                    bottom: 100px;
+                    display: none;
+                }
+            .bs-docs-sidenav > li > a {
+              display: flex;
+              width: 190px \9;
+              margin: 0 0 -1px;
+              padding: 8px 14px;
+              border: 1px solid #e5e5e5;
+              align-items: center;
+             }
+/**       在手机和平板下的显示**/
+           @media only screen and (max-width: 1020px) {
+              .jobid > div{width:100px;overflow:hidden;text-overflow: ellipsis;white-space: nowrap;height:24px;line-height:24px;}
+                #myModal_log{width:80%;}
+                #myModal_corninfo{height: 350px;overflow-y: auto;}
+
+            }
+
+            .notes_tips{float:right;position:relative}
+            .notes_box{position:absolute;top:100%;right:0;background:#fff;box-shadow:0 5px 10px rgba(0,0,0,0.2);display:none;width:400px;max-height:800px;overflow:auto;border-radius:0 0 5px 5px;}
+            .notes_box .title{text-align:center;background:#f1f1f1;font-size:15px;color:#333;font-weight:bold;line-height:38px;}
+            .notes_box a{display:block;border-top:1px solid #dedede;line-height:28px;padding:5px;font-size:14px;color:#333;text-align:justify;}
+            .notes_box a:hover{color:blue}
+
+        </style>
+        {% block style %}
+
+        {% endblock %}
+
+    </head>
+    <body >
+        <div class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container-fluid" >
+                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                     <span class="icon-bar"></span>
+                     <span class="icon-bar"></span>
+                     <span class="icon-bar"></span>
+                    </a>
+                    <a class="brand" href="#">CrawlSpace</a>
+<!--                    顶部开始-->
+<!--通知消息-->
+                    <div class="nav-collapse collapse" style="float:right;">
+                        <!--    页面表头-->
+                        <ul class="nav pull-right">
+                            <li class="dropdown">
+                                <a href="#" role="button" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-user"></i> {{request.user}}<i class="caret"></i></a>
+                                <ul class="dropdown-menu">
+                                    <li class="divider"></li>
+                                    <li>
+                                        <a tabindex="-1" href="{% url 'users:logout' %}"><i class="icon-off"></i> Logout</a>
+                                    </li>
+                                    <li class="divider"></li>
+                                    <li>
+                                        <a tabindex="-1" href="/admin/" target="_blank"><i class="icon-th-large"></i> Admin</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                     <div style="" class="notes_tips">
+                        <a id="element" class="btn btn-mini btn-warning"><i class="icon-bell"></i><span class="badge badge-warning" id="message_count">0</span></a>
+                         <div class="notes_box">
+                             <h5 class="title" style="text-align:center">主机节点任务通知<button  style="float:right;background-color:#fff;border:none"><span class="label label-info" id="readall" style="display:block">一键已读</span></button></h5>
+                             <div class="notes_btn">
+                                 <!--消息通知-->
+                             </div>
+                             <div id="demo" class="collapse">
+                                 <div class="notes_btn">
+                                     <!--大于5消息通知-->
+                                 </div>
+                             </div>
+                             <button type="button" class="btn" data-toggle="collapse" data-target="#demo"  id="extra" style="background-color:#fff;border:none;display:none">
+                              展开所有
+                            </button>
+                         </div>
+                    </div>
+                    <!--/.nav-collapse -->
+<!--                    顶部结束-->
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid" >
+            <div class="row-fluid">
+<!--                span3侧边栏开始-->
+                <div class="span2" id="sidebar">
+                    <ul class="nav nav-list bs-docs-sidenav nav-collapse collapse">
+                        <li class="active">
+                            <a href="{% url 'spider:nodeindex' %}" style="background-color:#5e889d;">CrawlSpace</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'spider:spiderindex' %}"><i class="iconfont icon-pachongguize"></i>规则爬虫</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'spider:visual_editor' %}"><i><svg t="1698378020183" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="9605" width="16" height="16"><path d="M511.846105 512.153895c-54.596918 0-102.369221-40.947688-102.369221-85.307684s47.772303-85.307684 102.369221-85.307684 102.369221 37.535381 102.369221 85.307684c0 44.359996-47.772303 85.307684-102.369221 85.307684z m0-136.492295c-37.535381 0-68.246147 23.886152-68.246147 51.184611 0 23.886152 30.710766 51.18461 68.246147 51.18461s68.246147-27.298459 68.246147-51.18461c0-27.298459-30.710766-51.18461-68.246147-51.184611zM426.538421 989.876926h-6.824615c-3.412307 0-34.123074-17.061537-40.947688-47.772303-3.412307-20.473844 0-40.947688 17.061536-64.83384 6.824615-6.824615 17.061537-10.236922 23.886152-3.412307 6.824615 6.824615 10.236922 17.061537 3.412307 23.886151-10.236922 13.649229-13.649229 23.886152-13.649229 34.123074 3.412307 13.649229 17.061537 23.886152 23.886152 23.886152 6.824615 3.412307 13.649229 13.649229 6.824614 23.886151 0 6.824615-6.824615 10.236922-13.649229 10.236922zM443.599958 324.47699c-3.412307 0-10.236922 0-13.64923-3.412307l-10.236922-10.236923C402.652269 297.178531 375.35381 280.116994 375.35381 239.169306c0-51.18461 68.246147-95.544606 75.070762-98.956914 6.824615-3.412307 17.061537-3.412307 23.886152 6.824615 3.412307 6.824615 3.412307 17.061537-6.824615 23.886151-20.473844 13.649229-58.009225 44.359996-58.009225 68.246148s13.649229 34.123074 30.710766 44.359996c6.824615 3.412307 13.649229 10.236922 17.061537 13.649229 6.824615 6.824615 6.824615 17.061537 0 23.886152-3.412307 3.412307-10.236922 3.412307-13.649229 3.412307z" fill="" p-id="9606"></path><path d="M426.538421 426.846211h-6.824615L266.159975 375.6616c-3.412307 0-6.824615-3.412307-10.236923-10.236922L170.615368 194.80931c0-3.412307 0-10.236922 3.412308-17.061537l102.369221-170.615368c3.412307-6.824615 13.649229-10.236922 23.886151-3.412308 6.824615 3.412307 10.236922 13.649229 3.412308 23.886152L208.150749 187.984695l78.48307 156.966139 146.729217 47.772303c10.236922 3.412307 13.649229 13.649229 10.236922 20.473844-3.412307 10.236922-10.236922 13.649229-17.061537 13.64923z" fill="" p-id="9607"></path><path d="M170.615368 478.030821c-3.412307 0-6.824615 0-10.236922-3.412307l-153.553831-102.369221c-3.412307-3.412307-6.824615-10.236922-6.824615-17.061537l34.123074-272.984589c0-6.824615 10.236922-13.649229 20.473844-13.64923 6.824615 0 13.649229 10.236922 13.649229 20.473845l-34.123073 262.747667L174.027676 443.907748l249.098437-34.123074c10.236922 0 17.061537 6.824615 20.473845 13.64923s-6.824615 20.473844-13.64923 20.473844L170.615368 478.030821z" fill="" p-id="9608"></path><path d="M51.18461 887.507705c-10.236922 0-17.061537-6.824615-17.061536-17.061536v-170.615369c0-3.412307 0-6.824615 3.412307-10.236922l102.369221-136.492295 6.824615-6.824614 249.098437-116.018451c10.236922-3.412307 17.061537 0 23.886152 6.824615 3.412307 10.236922 0 17.061537-6.824615 23.886152l-245.68613 112.606143L68.246147 706.655415v163.790754c0 10.236922-6.824615 17.061537-17.061537 17.061536z" fill="" p-id="9609"></path><path d="M324.1692 1024c-6.824615 0-10.236922-3.412307-13.64923-6.824615l-102.369221-136.492294c-3.412307-3.412307-3.412307-6.824615-3.412307-10.236922v-204.738442c0-3.412307 3.412307-10.236922 6.824615-13.64923l204.738442-197.913827c6.824615-6.824615 17.061537-6.824615 23.886151 0 6.824615 6.824615 6.824615 17.061537 0 23.886151L238.861516 672.532341v191.089213l98.956913 133.079987c6.824615 6.824615 3.412307 17.061537-3.412307 23.886152-3.412307 3.412307-6.824615 3.412307-10.236922 3.412307z" fill="" p-id="9610"></path><path d="M511.846105 955.753853c-105.781528 0-204.738442-143.316909-204.738442-255.923053 0-109.193836 78.483069-221.799979 129.66768-238.861515 10.236922-3.412307 17.061537 3.412307 20.473844 10.236922 3.412307 10.236922-3.412307 17.061537-10.236922 20.473844-37.535381 13.649229-109.193836 109.193836-109.193836 204.738442 0 102.369221 92.132299 221.799979 170.615369 221.799979s170.615368-119.430758 170.615368-221.799979c0-98.956914-71.658455-194.50152-109.193836-204.738442-10.236922-3.412307-13.649229-13.649229-10.236922-20.473844 3.412307-10.236922 13.649229-13.649229 20.473844-10.236922 51.18461 17.061537 129.66768 126.255373 129.66768 238.861515C716.584547 812.436943 617.627633 955.753853 511.846105 955.753853z" fill="" p-id="9611"></path><path d="M597.153789 989.876926c-6.824615 0-13.649229-6.824615-17.061537-13.649229-3.412307-10.236922 3.412307-17.061537 13.64923-20.473844 0 0 13.649229-3.412307 17.061537-13.64923 3.412307-10.236922 0-27.298459-10.236923-44.359996-3.412307-6.824615-3.412307-17.061537 6.824615-23.886151 6.824615-3.412307 17.061537-3.412307 23.886152 6.824615 17.061537 30.710766 23.886152 54.596918 13.649229 75.070762-10.236922 27.298459-37.535381 34.123074-40.947688 34.123073h-6.824615zM580.092252 392.723137c-3.412307 0-3.412307 0-6.824614-3.412307-6.824615-3.412307-10.236922-13.649229-6.824615-23.886152 6.824615-13.649229 6.824615-23.886152 0-34.123073-10.236922-13.649229-34.123074-23.886152-54.596918-23.886152s-44.359996 10.236922-51.184611 27.298459c-6.824615 10.236922-6.824615 20.473844 0 34.123074 3.412307 6.824615 0 17.061537-6.824614 23.886151-6.824615 3.412307-17.061537 0-23.886152-6.824614-10.236922-23.886152-10.236922-47.772303 3.412308-68.246148C447.012265 290.353916 477.723031 273.292379 511.846105 273.292379s64.83384 17.061537 81.895377 40.947689c13.649229 20.473844 13.649229 44.359996 3.412307 68.246147-3.412307 6.824615-10.236922 10.236922-17.061537 10.236922z" fill="" p-id="9612"></path><path d="M563.030715 324.47699c-3.412307 0-10.236922 0-13.649229-3.412307-6.824615-6.824615-6.824615-17.061537 0-23.886152 6.824615-6.824615 13.649229-10.236922 23.886152-17.061537 23.886152-13.649229 40.947688-23.886152 40.947688-40.947688 0-23.886152-40.947688-58.009225-61.421533-71.658455-6.824615-3.412307-10.236922-17.061537-6.824614-23.886151 3.412307-6.824615 17.061537-10.236922 23.886151-6.824615 10.236922 6.824615 78.483069 51.18461 78.48307 102.369221 0 40.947688-34.123074 58.009225-58.009226 71.658454-6.824615 3.412307-13.649229 6.824615-17.061536 10.236923 0 3.412307-6.824615 3.412307-10.236923 3.412307z" fill="" p-id="9613"></path><path d="M614.215326 426.846211c-6.824615 0-13.649229-3.412307-17.061537-10.236922-3.412307-10.236922 0-17.061537 10.236922-20.473844l129.66768-47.772304 78.48307-156.966138L716.584547 27.606249c-3.412307-6.824615-3.412307-17.061537 6.824615-23.886152 6.824615-3.412307 17.061537-3.412307 23.886151 6.824615l102.369221 170.615369c3.412307 3.412307 3.412307 10.236922 0 17.061536l-85.307684 170.615369c-3.412307 3.412307-6.824615 6.824615-10.236922 6.824614l-136.492295 51.184611H614.215326z" fill="" p-id="9614"></path><path d="M853.076842 478.030821l-242.273823-34.123073c-10.236922 0-17.061537-10.236922-13.64923-20.473844s10.236922-17.061537 20.473844-13.64923l232.036901 34.123074 139.904602-92.132299-34.123073-228.624594c0-10.236922 6.824615-20.473844 13.649229-20.473844 10.236922 0 20.473844 6.824615 20.473844 13.64923l34.123074 238.861515c0 6.824615-3.412307 13.649229-6.824615 17.061537l-153.553831 102.369221c-3.412307 3.412307-6.824615 3.412307-10.236922 3.412307z" fill="" p-id="9615"></path><path d="M972.507599 887.507705c-10.236922 0-17.061537-6.824615-17.061536-17.061536v-163.790754l-95.544607-129.66768-245.68613-112.606143c-10.236922-3.412307-13.649229-13.649229-6.824615-23.886152 3.412307-10.236922 13.649229-13.649229 23.886152-6.824614l249.098437 116.01845c3.412307 0 3.412307 3.412307 6.824615 6.824615l102.369221 136.492294c3.412307 3.412307 3.412307 6.824615 3.412308 10.236923v170.615368c-3.412307 6.824615-10.236922 13.649229-20.473845 13.649229z" fill="" p-id="9616"></path><path d="M699.52301 1024c-3.412307 0-6.824615 0-10.236922-3.412307-6.824615-6.824615-10.236922-17.061537-3.412307-23.886152l98.956913-133.079987v-191.089213l-197.913827-191.089212c-6.824615-6.824615-6.824615-17.061537 0-23.886152 6.824615-6.824615 17.061537-6.824615 23.886152 0l204.738442 197.913827c3.412307 3.412307 6.824615 6.824615 6.824614 13.64923v204.738442c0 3.412307 0 6.824615-3.412307 10.236922l-102.369221 136.492295c-6.824615 0-10.236922 3.412307-17.061537 3.412307z" fill="" p-id="9617"></path></svg></i>配置爬虫</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'spider:tasklist' %}"><i class="iconfont icon-renwuliebiao"></i>运行任务</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'cron:cronindex' %}"><i class="iconfont icon-dingshirenwu "></i>定时任务</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'spider:server' %}"><i class="iconfont icon-zhujiguanli"></i>主机配置</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'spider:deploy' %}"><i class="iconfont icon-bushu"></i>项目部署</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'spider:upload' %}"><i><svg t="1698376831762" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5723" width="16" height="16"><path d="M808.192 262.592a320.16 320.16 0 0 0-592.352 0A238.592 238.592 0 0 0 32 496C32 628.352 139.648 736 272 736h91.488a32 32 0 1 0 0-64H272A176.192 176.192 0 0 1 96 496a175.04 175.04 0 0 1 148.48-173.888l19.04-2.976 6.24-18.24C305.248 197.472 402.592 128 512 128a256 256 0 0 1 242.208 172.896l6.272 18.24 19.04 2.976A175.04 175.04 0 0 1 928 496c0 97.024-78.976 176-176 176h-97.28a32 32 0 1 0 0 64h97.28c132.352 0 240-107.648 240-240a238.592 238.592 0 0 0-183.808-233.408z" p-id="5724"></path><path d="M649.792 570.048a32 32 0 1 0 40.544-49.536l-158.048-129.408a32 32 0 0 0-40.576 0l-159.04 130.24a32.032 32.032 0 0 0 20.256 56.768 31.744 31.744 0 0 0 20.256-7.264L480 483.456V912a32 32 0 0 0 64 0V483.456l105.792 86.592z" p-id="5725"></path></svg></i>项目上传</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'spider:nodeindex' %}"><i class="iconfont icon-jiedianlianjie"></i>节点统计</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'monitor:index' %}"><i><svg t="1698376204107" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4232" width="16" height="16"><path d="M853.333333 847.36H170.666667a74.666667 74.666667 0 0 1-74.666667-74.666667V270.08A75.093333 75.093333 0 0 1 170.666667 195.413333h682.666666a75.093333 75.093333 0 0 1 74.666667 74.666667v502.613333A74.666667 74.666667 0 0 1 853.333333 847.36zM170.666667 259.413333a10.666667 10.666667 0 0 0-10.666667 10.666667v502.613333a10.666667 10.666667 0 0 0 10.666667 10.666667h682.666666a10.666667 10.666667 0 0 0 10.666667-10.666667V270.08a10.666667 10.666667 0 0 0-10.666667-10.666667z" p-id="4233"></path><path d="M514.133333 526.506667a74.24 74.24 0 0 1-42.666666-13.226667L120.32 268.373333l36.693333-52.48 351.146667 244.906667a11.093333 11.093333 0 0 0 12.373333 0l346.453334-244.906667 36.693333 52.48L557.226667 512a71.68 71.68 0 0 1-43.093334 14.506667z" p-id="4234"></path></svg></i>邮箱配置</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'spider:package' %}"><i><svg t="1737598120299" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4236" width="16" height="16"><path d="M896 896l-45.44-45.12A63.808 63.808 0 0 1 896 832a64 64 0 0 0 64-64V128a64 64 0 0 0-64-64H256a64 64 0 0 0-64 64v5.44c0 17.6-7.04 33.536-18.56 45.12L128 133.44V128a128 128 0 0 1 128-128h640a128 128 0 0 1 128 128v640a128 128 0 0 1-128 128zM64 256v640a64 64 0 0 0 64 64h640a64 64 0 0 0 64-64V256a64 64 0 0 0-64-64H128a64 64 0 0 0-64 64z m704-128a128 128 0 0 1 128 128v640a128 128 0 0 1-128 128H128a128 128 0 0 1-128-128V256a128 128 0 0 1 128-128h640z" fill="#5A5A5A" p-id="4237"></path><path d="M160 256h384a32 32 0 0 1 0 64h-384a32 32 0 0 1 0-64z m576 64a32 32 0 1 1 0-64 32 32 0 0 1 0 64zM64 384h768v64H64V384z" fill="#5A5A5A" p-id="4238"></path></svg></i>项目仓库</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'analysis:index' %}"><i class="iconfont icon-tubiaozhizuomoban-27"></i>数据统计</a>
+                        </li>
+
+                    </ul>
+                </div>
+                <!--/span-->
+<!--                span3侧边栏结束-->
+<!--                span9主体开始-->
+                <div class="span10" id="content">
+                    <div class="row-fluid">
+                        <div class="navbar">
+                            <div class="navbar-inner">
+                                <ul class="breadcrumb">
+                                    <i class="icon-chevron-left hide-sidebar"><a href='#' title="Hide Sidebar" rel='tooltip'>&nbsp;</a></i>
+                                    <i class="icon-chevron-right show-sidebar" style="display:none;"><a href='#' title="Show Sidebar" rel='tooltip'>&nbsp;</a></i>
+                                    <li class="goback" onclick="goback(this)">返回上一级</li>
+                                </ul>
+                            </div>
+                    	</div>
+                    </div>
+                    <div class="row-fluid">
+                        <div class="span12">
+                            <!-- block -->
+                            <div class="block" style="margin-top:0;">
+                                <div class="block-content collapse in" style="margin:0;">
+<!--                                    highchart js-->
+                                    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<!--                                    <script src="http://cdn.highcharts.com.cn/highcharts/10.0.0/highcharts.js"></script> 报错HighCharts未定义错误-->
+                                    <script src="http://cdn.hcharts.cn/highcharts/highcharts.js"></script>
+                                    {% block info %}
+
+                                    {% endblock %}
+
+                                </div>
+                            </div>
+                            <!-- /block -->
+                        </div>
+                    </div>
+
+                </div>
+
+<!--                返回顶部区域-->
+                <div class="back"><svg t="1665298764472" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5405" width="40" height="40"><path d="M511.5 102.5c-225.3 0-409.6 184.3-409.6 409.6s184.3 409.6 409.6 409.6 409.6-184.3 409.6-409.6-184.3-409.6-409.6-409.6z m-56.3 716.8h-30.7v-30.7h30.7v30.7z m0-51.2h-30.7v-30.7h30.7v30.7z m76.8 87.1h-46.1v-41h41v41h5.1z m0-61.5h-46.1v-41h41v41h5.1z m56.3 25.6h-30.7v-30.7h30.7v30.7z m0-51.2h-30.7v-30.7h30.7v30.7z m0-302.1v240.6H424.4V466H306.7l204.8-245.8L716.3 466h-128z m0 0" fill="#83CDD9" p-id="5406"></path></svg>
+                </div>
+<!--                span9主体结束-->
+            </div>
+            <hr>
+<!--            底部开始-->
+            <footer>
+                <p>&copy;Sparrow 爬虫探索空间</p>
+            </footer>
+<!--            底部结束-->
+        </div>
+        <!--/.fluid-container-->
+        <script src='{% static "bootstrap/js/bootstrap.min.js" %}'></script>
+        <script src='{% static "assets/scripts.js"%}'></script>
+
+        <script>
+<!--        返回上一个链接-->
+            function goback(e){
+                window.history.go(-1);
+            }
+<!--            添加当前的访问标签-->
+            url = window.location.pathname;
+            console.log(url)
+            function addtab(){
+                if(url=='/spider/index.html'){
+                    $("ul.breadcrumb i:last()").after('<li>规则爬虫 <span class="divider">/</span></li>')
+                }
+                else if(url=='/spider/list.html'){
+                    $("ul.breadcrumb i:last()").after('<li>爬虫任务 <span class="divider">/</span></li>')
+                }
+                else if(url=='/task/list.html'){
+                    $("ul.breadcrumb i:last()").after('<li>定时任务 <span class="divider">/</span></li>')
+                }
+                else if(url=='/spider/server.html'){
+                    $("ul.breadcrumb i:last()").after('<li>主机信息 <span class="divider">/</span></li>')
+                }
+                else if(url=='/spider/deploy.html'){
+                    $("ul.breadcrumb i:last()").after('<li>项目部署 <span class="divider">/</span></li>')
+                }
+                else if(url=='/spider/states.html'){
+                    $("ul.breadcrumb i:last()").after('<li>节点统计 <span class="divider">/</span></li>')
+                }
+                else if(url=='/analysis/index.html'){
+                    $("ul.breadcrumb i:last()").after('<li>数据统计 <span class="divider">/</span></li>')
+                }else{
+                    console.log("1")
+                }
+            }
+            addtab()
+<!--消息通知-->
+        $('#element').click(function(){
+            $(this).next().toggle();
+        })
+<!--        一键批量已读-->
+        $("#readall").click(function(){
+            if($(".notes_btn a").length>0){
+                var taskids_count=0
+                $(".notes_btn a").each(function(index){
+                    jobid = $(this).attr("name")
+                    $.get("/spider/task_unable/"+jobid+"/2/", function(result){
+                        if(result.status==200){
+                            taskids_count=taskids_count+1
+                            $(this).css("class","badge badge-success")
+                        }else{
+                            toastr.error(result.message)
+                        }
+                    });
+<!--                    console.log(taskids_count)-->
+                });
+                toastr.info("全部消息已读完成！")
+            }else{
+                toastr.warning("没有消息未读！")
+            }
+
+        })
+
+<!--定时获取任务的完成通知-->
+    extra_html='<button type="button" class="btn" data-toggle="collapse" data-target="#demo" style="background-color:#fff;border:none;">展开所有</button>'
+
+    function setIntervalTask(delay) {
+      setInterval(function(){
+      $.get("/spider/tasks/", function(result){
+            message_box=[]
+            message_box_extra=[]
+            $(".notes_btn").html(message_box.join(""))
+            $("#demo>.notes_btn").html(message_box_extra.join(""))
+            $("#message_count").html(0)
+            if(result.status==200 && result.result.length>0){
+                $("#message_count").html(result.task_count)
+                for(var l=0;l<5;l++){
+                    if(result.result[l]){
+                    console.log(result.result[l].status)
+                       var bage=""
+                        if(result.result[l].status!="1"){
+                            bage="badge-important"
+                        }else{
+                            bage="badge-success"
+                        }
+                        mess = '<a href="javascript:void(0)" style="text-decoration: none;" name='+result.result[l].jobid+'>'+'<span class="label label-success">'+result.result[l].client_id+'</span> '+result.result[l].project+'-'+result.result[l].jobid+'运行结束 <span class="badge '+bage+'">1</span></a>'
+                        message_box.push(mess)
+                    }
+                }
+
+                for(var k=5;k<result.task_count;k++){
+                    var bage=""
+                    if(result.result[k].status!="1"){
+                        bage="badge-important"
+                    }else{
+                        bage="badge-success"
+                    }
+                    mess = '<a href="javascript:void(0)" style="text-decoration: none;" name='+result.result[k].jobid+'>'+'<span class="label label-success">'+result.result[k].client_id+'</span> '+result.result[k].project+'-'+result.result[k].jobid+'运行结束 <span class="badge '+bage+'">1</span></a>'
+                    message_box_extra.push(mess)
+                }
+                $(".notes_btn").html(message_box.join(""))
+                $("#demo>.notes_btn").html(message_box_extra.join(""))
+                if(message_box_extra.length>0){
+                    $("#extra").css("display","block")
+                }
+            }
+      });
+      }, delay);
+    }
+<!--定时获取消息通知-->
+    setIntervalTask(2000)
+
+<!--       设置全局的返回顶部-->
+        $(function () {
+            $(window).scroll(function () {
+<!--                //检测滚走的高度-->
+                var scrollT = $(document).scrollTop();
+<!--                //当滚走的高度>=100，-->
+<!--                //显示返回顶部(.back)，否则隐藏返回顶部-->
+                if (scrollT >= 100) {
+                    $(".back").show()
+                } else {
+                    $(".back").hide()
+                }
+            })
+
+<!--            //点击返回顶部，页面滚走的距离设置为0-->
+            $(".back").click(function(){
+<!--                //动感的返回-->
+<!--                //animate({键:值},时间) 属性：scrollTop-&#45;&#45;必须是被元素调用-->
+                $("html,body").animate({
+                    scrollTop:0
+                },1000)
+            })
+        })
+<!--        翻页全局设置-->
+        $('a[aria-label="Previous"]').parent('button').parent('span').attr({'style':'float: left;margin: 0px 0px 10px 5px'})
+        $('a[aria-label="Next"]').parent('button').parent('span').attr({'style':'float: right;margin:0px 5px 10px 0px'})
+<!--        button样式-->
+        $('a[aria-label="Next"]').parent('button').attr({'class':'btn btn-sm','style':'height:30px'})
+        $('a[aria-label="Previous"]').parent('button').attr({'class':'btn btn-sm','style':'height:30px'})
+<!--        svg图标-->
+        $('a[aria-label="Next"]>span').html('<svg t="1665300316722" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="10814" width="20" height="20"><path d="M554.250462 512 286.863924 61.745273 737.1371 512 286.863924 962.254727Z" p-id="10815"></path></svg>')
+        $('a[aria-label="Previous"]>span').html('<svg t="1665300339795" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="10954" width="20" height="20"><path d="M469.749538 512 737.1371 962.254727 286.863924 512 737.1371 61.745273Z" p-id="10955"></path></svg>')
+
+        {% block script %}
+
+        {% endblock %}
+    </script>
+
+<!--        底部-->
+    {% block footer %}
+
+    {% endblock %}
+
+
+
+
+    </body>
+
+</html>

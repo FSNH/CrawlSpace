@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% load static %}
+{% block style%}
+
+<link href='{% static "dist/styles.imageuploader.css"%}' rel="stylesheet" type="text/css">
+
+
+
+<!--模态框去除表格的边框-->
+<!--下拉多选框的自定义样式-->
+<style>
+    .table{
+        margin-top: 50px;
+    }
+    .table td {
+        width:0px;
+        border:none;
+        border-redius:3px;
+    }
+    .row-fluid .span12 {
+        width: 100%;
+        margin-left: 0;
+    }
+</style>
+{% endblock %}
+
+{% block info %}
+<!--    标题-->
+<div class="page-header">
+    <h4>
+        项目上传 <small>支持zip格式的压缩包</small>
+
+    </h4>
+	<div class="paths" style="margin-top:10px;">
+			<select class="sele" name='select' style="height: 35px;width: 100%;margin: 5px 0;backgroun-color:white;font-size:small">
+				<option style="width:50px" value="选择项目仓库" selected="selected">选择项目上传仓库</option>
+				{% for pack in packs %}
+					<option value={{pack.path}}>{{pack.name}}</option>
+				{% endfor %}
+        	</select>
+		</div>
+</div>
+<div class="span12">
+	<div class="span2">
+
+	</div>
+    <div class="span6">
+    <div class="jq22-container">
+		<section role="main" class="l-main" style="margin-top:20px;margin-bottom:50px;">
+		      <div class="uploader__box js-uploader__box l-center-box">
+		          <form action="#" method="POST">
+		              <div class="uploader__contents">
+		                  <label class="button button--secondary" for="fileinput">请选择文件</label>
+		                  <input id="fileinput" class="uploader__file-input" type="file" multiple value="Select Files">
+		              </div>
+		              <input class="button button--big-bottom" type="submit" value="Upload Selected Files">
+		          </form>
+		      </div>
+		  </section>
+	</div>
+
+	<script src='{% static "js/jquery-1.11.0.min.js" %}'></script>
+	<script src='{% static "dist/jquery.imageuploader.js" %}'></script>
+	<script type="text/javascript">
+		(function(){
+	            var options = {};
+	            $('.js-uploader__box').uploader({
+	            	'selectButtonCopy':'请选择或拖拽文件',
+	            	'instructionsCopy':'你可以选择或拖拽多个文件',
+	            	'submitButtonCopy':'上传选择的文件',
+	            	'furtherInstructionsCopy':'你可以选择或拖拽更多的文件',
+	            	'secondarySelectButtonCopy':'选择更多的文件'
+	            });
+	        }());
+	</script>
+    </div>
+<!--上传项目文件夹-->
+    <div class="span3">
+        <table class="table"><tr><td><p class="msg" style="color:red"></p><p class="path"></p></td></tr></table>
+    </div>
+</div>
+
+{% endblock %}
+
+

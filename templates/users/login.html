@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load staticfiles %}
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="x-ua-compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+<!--  <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" media="screen">-->
+  <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+
+  <title>login</title>
+    <style>
+        body{
+            margin: 0px;
+            padding: 0px;
+            font-family: 'Open Sans', sans-serif;
+           background-color:#5e889d;
+        }
+        .row{ margin:0 auto; width:480px; height:100px;}
+        h1 { color: #fff; text-shadow: 0 0 10px rgba(0,0,0,0.3); letter-spacing:1px; text-align:center; }
+        input[name="username"]{width:60%;height:40px;box-sizing: border-box;}
+        input[name="pwd"]{width:60%;height:40px;box-sizing: border-box;}
+        button[type="submit"]{width:60%;height:40px;border:0;text-shadow:none;font-size:18px;}
+    </style>
+</head>
+<body>
+<div class="container" style='margin-top: 200px;'>
+  <div class="row">
+    <div class='form' style="text-align:center;">
+      <form action="{% url 'users:login' %}" method="post" novalidate class="form-horizontal" style="margin-top: 20px">
+          <h1 style="padding-bottom: 20px">CrawlSpace</h1>
+          {% csrf_token %}
+          <div class="form-group">
+            <label for="{{ form_obj.username.id_for_label }}" class="col-md-2 control-label" style="color: white;display:none;">{{ form_obj.username.label }}</label>
+            <div class="col-md-10">
+              {{ form_obj.username }}
+              <span class="help-block"></span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="{{ form_obj.pwd.id_for_label }}" class="col-md-2 control-label" style="color: white;display:none;">{{ form_obj.pwd.label }}</label>
+            <div class="col-md-10">
+              {{ form_obj.pwd }}
+               <span class="help-block"></span>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-10">
+              <!--<button type="reset" value="重置按钮"class="btn btn-default">重置</button>-->
+              <button type="submit" class="btn btn-lg btn-primary">登录</button>
+            </div>
+          </div>
+      </form>
+    </div>
+  </div>
+</div>
+<script src='{% static "jquery-3.2.1.min.js" %}'></script>
+<script src='{% static "bootstrap/js/bootstrap.min.js" %}'></script>
+</body>
+</html>

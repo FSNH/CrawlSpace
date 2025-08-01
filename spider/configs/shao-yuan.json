@@ -1,0 +1,52 @@
+{
+  "spider": "rediscurrency",
+  "type": "韶远网站",
+  "name":"sy",
+  "home": "http://www.shao-yuan.com/",
+  "settings": {
+    "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.64 Safari/537.36",
+    "SCHEDULER": "scrapy_redis.scheduler.Scheduler",
+    "DUPEFILTER_CLASS": "scrapy_redis.dupefilter.RFPDupeFilter",
+    "SCHEDULER_PERSIST": true,
+    "REDIS_START_URLS_AS_ZSET": true,
+    "REDIS_START_URLS_KEY": "sys:start_urls",
+    "STATS_CLASS": "scrapy_redis.stats.RedisStatsCollector",
+    "SCHEDULER_DUPEFILTER_KEY": "currency:sy:dupefilter",
+    "SCHEDULER_QUEUE_KEY": "currency:sy:requests"
+  },
+  "start_urls": ["http://www.shao-yuan.com/"],
+  "allowed_domains": ["shao-yuan.com"],
+  "srules": "shaoyuan_rules",
+
+  "rules": [
+    {
+      "link_extractor": {
+        "allow":"/cn/productlist_catalogid_\\d+.html"
+      },
+      "follow": true,
+      "callback": "parse_item"
+    }
+  ],
+  "item": {
+    "class": "SyItem",
+    "loader": "ItemLoader",
+    "nextpage": true,
+    "next_xpath": true,
+    "next_rule": "//a[contains(text(),'下一页')]//@href",
+    "attrs": {
+      "source": [
+        {
+          "method": "value",
+          "arg": "sy"
+        }
+      ],
+      "urls": [
+        {
+          "method": "css",
+          "arg": ".r_a_b ul li div>a:nth-child(1)::attr(\"href\")"
+        }
+      ]
+
+    }
+  }
+}

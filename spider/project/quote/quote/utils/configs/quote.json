@@ -1,0 +1,39 @@
+{
+  "settings": {
+    "USER_AGENT":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36"
+  },
+
+  "spider":"currency",
+  "allowed_domains": ["quotes.toscrape.com"],
+  "start_urls": ["http://quotes.toscrape.com/"],
+  "ruless": "quotes_rule",
+  "rules": [
+    {
+    "link_extractor":{
+      "allow":"/author/\\w+",
+      "restrict_xpaths":"/html/body/div[1]/div[2]/div[1]"
+    },
+    "callback":"parse_item"
+  },{
+      "link_extractor":{
+        "allow":"/page/\\d+",
+        "restrict_xpaths":"//li[@class='next']"
+      },
+      "follow": true
+    }
+  ],
+   "item": {
+    "class": "QuoteItem",
+    "loader": "ItemLoader",
+    "attrs": {
+      "name": [
+        {
+          "method": "xpath",
+          "arg": [
+            "/html/body/div[1]/div[2]/h3/text()"
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,257 @@
+{% extends "base.html" %}
+{% load static %}
+{% block style %}
+<!--        toastr消息通知-->
+<link rel="stylesheet" href='{% static "css/toastr.min.css"%}'>
+<script src='{% static "/jquery-3.2.1.min.js"%}'></script>
+<script src='{% static "js/toastr.min.js" %}'></script>
+<!--模态框去除表格的边框-->
+<style>
+    .table td {
+    border:none;
+    border-radius:3px;
+    }
+
+    @media only screen and (max-width: 1020px) {
+                .btn-group .btn#create{font-size:12px !important;padding:4px !important;}
+                .btn-group .btn#edit{font-size:12px !important;padding:4px !important;}
+            }
+
+    .row-fluid .span12 {
+        width: 100%;
+        margin-left: 20px;
+    }
+
+</style>
+{% endblock %}
+
+{% block info %}
+<div class="page-header">
+    <h4>
+        通知邮箱在线配置 <small> 仅支持创建QQ邮箱配置</small>
+        <button class="btn btn-info" type="button" style="display:none;">
+            正在编辑邮箱配置 <span class="badge" id="rulefile"></span>
+        </button>
+    </h4>
+</div>
+<div class="span12">
+    <!--左侧选择区-->
+    <div class="span5" style="overflow:hidden;">
+    <!--    创建新规则文件-->
+        <div class="file">
+            <label>基本邮箱配置信息：</label>
+            <input type="text" class="form-control" name="qq" style="box-sizing: border-box;height: 25px;width: 100%;border-bottom-left-radius: 5px;border-top-left-radius: 5px;float: left;margin: 5px 0" required placeholder="发送服务器用户名:xx@qq.com">{% csrf_token %}
+            <input type="text" class="form-control" name="EMAIL_PORT" required style="box-sizing: border-box;height: 25px;width: 100%;border-bottom-left-radius: 5px;border-top-left-radius: 5px;float: left;margin: 5px 0" placeholder="默认邮箱端口号：25">{% csrf_token %}
+            <input type="text" class="form-control" name="EMAIL_HOST_PASSWORD" required style="box-sizing: border-box;height: 25px;width: 100%;border-bottom-left-radius: 5px;border-top-left-radius: 5px;float: left;margin: 5px 0" placeholder="授权码">{% csrf_token %}
+            <input type="text" class="form-control" name="DEFAULT_FROM_EMAIL" required style="box-sizing: border-box;height: 25px;width: 100%;border-bottom-left-radius: 5px;border-top-left-radius: 5px;float: left;margin: 5px 0" placeholder="默认发件人：xx@qq.com">{% csrf_token %}
+        </div>
+        <div>
+            <label>邮件内容配置信息：</label>
+            <input type="text" class="form-control" name="SUBJECT" required style="box-sizing: border-box;height: 25px;width: 100%;border-bottom-left-radius: 5px;border-top-left-radius: 5px;float: left;margin: 5px 0" placeholder="主题:">{% csrf_token %}
+            <input type="text" class="form-control" name="FROM_EMAIL" required style="box-sizing: border-box;height: 25px;width: 100%;border-bottom-left-radius: 5px;border-top-left-radius: 5px;float: left;margin: 5px 0" placeholder="发件人:xx@qq.com">{% csrf_token %}
+            <input type="text" class="form-control" name="RECIPIENT_LIST" required style="box-sizing: border-box;height: 25px;width: 100%;border-bottom-left-radius: 5px;border-top-left-radius: 5px;float: left;margin: 5px 0" placeholder="收件人列表:xx@qq.com,yyxx@qq.com">{% csrf_token %}
+        </div>
+        <div>
+            <label>邮件发送间隔配置信息:</label>
+            <label><input  type="radio" name="ftype" value="hour" style="width: 14px;border-bottom-left-radius: 5px;border-top-left-radius: 5px;float: left;margin-right: 5px">hour</label>
+            <label><input  type="radio" name="ftype" value="minutes" style="width: 14px;border-bottom-left-radius: 5px;border-top-left-radius: 5px;float: left;margin-right: 5px">minutes</label>
+            <label><input  type="radio" name="ftype" value="days" style="width: 14px;border-bottom-left-radius: 5px;border-top-left-radius: 5px;float: left;margin-right: 5px">days</label>
+            <input type="text" class="form-control" name="INTERVAL_SEND_EMAIL" value="3" style="box-sizing: border-box;height: 25px;width: 100%;border-bottom-left-radius: 5px;border-top-left-radius: 5px;float: left;margin: 5px 0" placeholder="默认间隔发送:">{% csrf_token %}
+
+        </div>
+        <div>
+            <label>设置服务器域名或IP:</label>
+            <input type="text" class="form-control" name="notification_ip" value="" style="box-sizing: border-box;height: 25px;width: 100%;border-bottom-left-radius: 5px;border-top-left-radius: 5px;float: left;margin: 5px 0" placeholder="默认域名:http://127.0.0.1:8000">{% csrf_token %}
+        </div>
+        <div class="btn-group" role="group" aria-label="..." >
+            <label><input  type="checkbox" name="enable" value="True" checked style="width: 14px;border-bottom-left-radius: 5px;border-top-left-radius: 5px;float: left;margin-right: 5px">启用邮箱</label>
+            <label><input  type="checkbox" name="TLS" value="False" style="width: 14px;border-bottom-left-radius: 5px;border-top-left-radius: 5px;float: left;margin-right: 5px">启动TLS链接</label>
+            <button class="btn btn-info btn-lg" id="create">保存配置</button>
+        </div>
+
+    </div>
+
+    <div id="content" style="padding:5px;" class="span7">
+        <!--ace在线编辑-->
+        <label>编辑邮箱发送模板:</label>
+        <pre id="code" style="height:500px">
+            <textarea style="min-height:270px" id="python" placeholder="编辑邮箱模板"></textarea>
+        </pre>
+  <!--    按钮菜单组-->
+        <div class="btn-group" role="group" aria-label="...">
+            <button class="btn btn-warning btn-lg" id="edit">邮箱模板编辑</button>
+        </div>
+    </div>
+</div>
+
+<script src="{% static '/ace-editor/js/ace.js' %}"></script>
+<script src="{% static '/ace-editor/js/ext-beautify.js' %}"></script>
+<script src="{% static '/ace-editor/js/ext-language_tools.js' %}"></script>
+<script src="{% static '/ace-editor/js/mode-python.js' %}"></script>
+<script src="{% static '/ace-editor/js/theme-monokai.js' %}"></script>
+<script src="{% static '/ace-editor/js/ext-searchbox.js' %}"></script>
+<script src="{% static '/ace-editor/js/mode-json.js' %}"></script>
+<script src="{% static '/ace-editor/js/worker-json.js' %}"></script>
+<script src="{% static '/ace-editor/js/theme-xcode.js' %}"></script>
+<script src="{% static '/ace-editor/js/snippets/python.js' %}"></script>
+{% endblock %}
+
+{% block script %}
+<!--配置toastr消息通知-->
+ var toastr;
+ toastr.options = {
+    closeButton: true,//显示关闭按钮
+    debug: false,
+    progressBar: true,//显示进度条
+    positionClass: "toast-top-center",//位置
+    onclick: null,//点击消息框自定义事件
+    showDuration: "300",//显示动作时间
+    hideDuration: "1000",//隐藏动作时间
+    timeOut: "2000",//显示时间,0为永久显示
+    extendedTimeOut: "1000",//鼠标移动过后显示显示时间
+    showEasing: "swing",
+    hideEasing: "linear",
+    showMethod: "fadeIn",//显示方式
+    hideMethod: "fadeOut"//隐藏方式
+ };
+<!--配置ace在线编辑器-->
+        editor = ace.edit('code');// 这个地方就是id是editor的div
+        editor.setTheme('ace/theme/xcode'); //主题
+        var jsMode = ace.require('ace/mode/json').Mode; //支持语言
+        editor.session.setMode(new jsMode());    //引入
+        editor.setFontSize(18);    //设置默认标签大小
+<!--        editor.setReadOnly(true);        //false为可编辑-->
+        editor.setOption("wrap", "free");   //换行
+        ace.require("ace/ext/language_tools");
+        editor.setOptions({
+            enableBasicAutocompletion: true, //启用基本自动完成
+            enableSnippets: true,             //启用代码段
+            enableLiveAutocompletion: true    //启用实时自动完成
+        });
+<!--        默认模板-->
+
+    <!--   撤销：-->
+        editor.undo();
+    <!--    查找替换：-->
+        editor.execCommand('replace');
+    <!--    编辑内容搜索-->
+        editor.execCommand('find');//与ctrl+f功能一致
+    <!--    自动换行 关闭时free换成off-->
+        editor.setOption("wrap", "free");
+
+$(document).ready(function(){
+<!--    加载数据-->
+        editor.setReadOnly(true);        //false为可编辑
+        $.getJSON("/monitor/configs/",function(result){
+            if(result.status==200){
+                toastr.success("正在加载......")
+                console.log(result)
+                if(result){
+<!--                    表单赋值-->
+                    $('input[name="qq"]').val(result.email_host)
+                    $('input[name="EMAIL_PORT"]').val(result.email_port)
+                    $('input[name="EMAIL_HOST_PASSWORD"]').val(result.email_host_pwd)
+                    $('input[name="DEFAULT_FROM_EMAIL"]').val(result.default_from_email)
+                    editor.session.setValue(result.email_content)
+                    $('input[name="SUBJECT"]').val(result.subject)
+                    $('input[name="FROM_EMAIL"]').val(result.from_email)
+                    $('input[name="RECIPIENT_LIST"]').val(result.recipient_list)
+<!--                    设置间隔时间默认为hour-->
+                    if(result.unit){
+                        $('input[name="ftype"]').each(function(){
+                            if($(this).val()==result.unit){
+                                $(this).prop("checked", true);
+                            }
+                        })
+                    }else{
+                        $('input[value="hour"]').prop("checked", true);
+                    }
+                    $('input[name="INTERVAL_SEND_EMAIL"]').val(result.interval_send_email)
+                    $('input[name="notification_ip"]').val(result.host)
+                    if(result.email_enable){
+                        $('input[name="enable"]').prop("checked", true);
+                    }else{
+                        $('input[name="enable"]').prop("checked", false);
+                    }
+                    if(result.tls){
+                        $('input[name="TLS"]').prop("checked", true);
+                    }else{
+                        $('input[name="TLS"]').prop("checked", false);
+                    }
+                }else{
+                    toastr.warning("配置信息为空")
+                }
+
+            }else{
+                toastr.info("请填写邮箱配置信息！")
+            }
+        });
+        <!--    可编辑-->
+        $("#edit").click(function(){
+            editor.setReadOnly(false);        //false为可编辑
+        });
+<!--提交邮箱配置-->
+        $("#create").click(function(){
+            email_host = $('input[name="qq"]').val()
+            email_port = $('input[name="EMAIL_PORT"]').val()
+            email_host_pwd = $('input[name="EMAIL_HOST_PASSWORD"]').val()
+            default_from_email = $('input[name="DEFAULT_FROM_EMAIL"]').val()
+            email_content = editor.session.getValue()
+            subject = $('input[name="SUBJECT"]').val()
+            from_email = $('input[name="FROM_EMAIL"]').val()
+            recipient_list = $('input[name="RECIPIENT_LIST"]').val()
+            var unit=""
+            $('input[name="ftype"]').each(function(){
+                if($(this).is(":checked")){
+                    unit = $(this).val()
+                }
+            })
+            interval_send_email = $('input[name="INTERVAL_SEND_EMAIL"]').val()
+            host = $('input[name="notification_ip"]').val()
+            email_enable = $('input[name="enable"]').is(":checked")
+            tls = $('input[name="TLS"]').is(":checked")
+            data={
+                email_host:email_host,
+                email_port:email_port,
+                email_host_pwd:email_host_pwd,
+                default_from_email:default_from_email,
+                email_content:email_content,
+                subject:subject,
+                from_email:from_email,
+                recipient_list:recipient_list,
+                unit:unit,
+                interval_send_email:interval_send_email,
+                host:host,
+                email_enable:email_enable,
+                tls:tls
+            }
+<!--必填项检查-->
+            required_list=[]
+            $("input[required]").each(function(){
+                value = $(this).val()
+                if(!value){
+                    required_list.push("required")
+                }else{
+
+                }
+            })
+            if(!required_list.length){
+                if(email_enable){
+                    $.post("/monitor/configs/",{data:JSON.stringify(data)},function(result){
+                        if(result.status==200){
+                            toastr.success("配置成功！")
+                        }else{
+                            toastr.warning(result.meaasge)
+                        }
+                    })
+                }else{
+                    toastr.warning("未启用邮箱！")
+                }
+            }else{
+                toastr.warning("检查"+required_list.length+"个必填项！")
+            }
+
+        });
+});
+
+{% endblock %}

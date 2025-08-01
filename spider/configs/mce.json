@@ -1,0 +1,58 @@
+{
+  "spider": "rediscurrency",
+  "type": "mce网站",
+  "name":"mce",
+  "home": "https://www.medchemexpress.cn/",
+  "settings": {
+    "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.64 Safari/537.36",
+    "SCHEDULER": "scrapy_redis.scheduler.Scheduler",
+    "DUPEFILTER_CLASS": "scrapy_redis.dupefilter.RFPDupeFilter",
+    "SCHEDULER_PERSIST": true,
+    "REDIS_START_URLS_AS_ZSET": true,
+    "REDIS_START_URLS_KEY": "mces:start_urls",
+    "STATS_CLASS": "scrapy_redis.stats.RedisStatsCollector",
+    "SCHEDULER_DUPEFILTER_KEY": "currency:mce:dupefilter",
+    "SCHEDULER_QUEUE_KEY": "currency:mce:requests"
+  },
+  "start_urls": ["https://www.medchemexpress.cn/"],
+  "allowed_domains": ["medchemexpress.cn"],
+  "srules": "mce_rules",
+
+  "rules": [
+    {
+      "link_extractor": {
+        "allow": "/Pathways/\\w+.htm"
+      },
+      "follow": true
+    },
+    {
+      "link_extractor": {
+        "restrict_css":"ul#target_list"
+      },
+      "follow": true,
+      "callback": "parse_item"
+    }
+
+  ],
+  "item": {
+    "class": "MceItem",
+    "loader": "ItemLoader",
+    "nextpage": true,
+    "next_rule": "link[rel='next']::attr('href')",
+    "attrs": {
+      "source": [
+        {
+          "method": "value",
+          "arg": "mce"
+        }
+      ],
+      "urls": [
+        {
+          "method": "css",
+          "arg": "th:nth-child(1) >a::attr(\"href\")"
+        }
+      ]
+
+    }
+  }
+}

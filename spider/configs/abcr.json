@@ -1,0 +1,59 @@
+{
+  "spider": "rediscurrency",
+  "type": "abcr网站",
+  "name":"abc",
+  "home": "https://abcr.com/",
+  "settings": {
+    "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.64 Safari/537.36",
+    "SCHEDULER": "scrapy_redis.scheduler.Scheduler",
+    "DUPEFILTER_CLASS": "scrapy_redis.dupefilter.RFPDupeFilter",
+    "SCHEDULER_PERSIST": true,
+    "REDIS_START_URLS_AS_ZSET": true,
+    "REDIS_START_URLS_KEY": "abcs:start_urls",
+    "STATS_CLASS": "scrapy_redis.stats.RedisStatsCollector",
+    "SCHEDULER_DUPEFILTER_KEY": "currency:abc:dupefilter",
+    "SCHEDULER_QUEUE_KEY": "currency:abc:requests"
+  },
+  "start_urls": ["https://abcr.com/"],
+  "allowed_domains": ["abcr.com"],
+  "srules": "abcr_rules",
+
+  "rules": [
+    {
+      "link_extractor": {
+        "allow": "/de_en/products/.*?",
+        "restrict_css": "ul.level0.submenu:nth-child(2) li"
+      },
+      "follow": true
+    },
+     {
+      "link_extractor": {
+        "restrict_css":"div.category-cms"
+      },
+      "follow": true,
+      "callback": "parse_item"
+    }
+
+  ],
+  "item": {
+    "class": "QuoteItem",
+    "loader": "ItemLoader",
+    "nextpage": true,
+    "next_rule": "ul.items.pages-items li.pages-item-next a.next::attr('href')",
+    "attrs": {
+      "source": [
+        {
+          "method": "value",
+          "arg": "abc"
+        }
+      ],
+      "urls": [
+        {
+          "method": "css",
+          "arg": ".product.name.product-item-name a::attr(\"href\")"
+        }
+      ]
+
+    }
+  }
+}

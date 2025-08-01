@@ -1,0 +1,58 @@
+{
+  "id": "3664926",
+  "name": "爬虫空间站",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "21760566",
+      "name": "数据统计",
+      "font_class": "tubiaozhizuomoban-27",
+      "unicode": "e61a",
+      "unicode_decimal": 58906
+    },
+    {
+      "icon_id": "521097",
+      "name": "节点连接",
+      "font_class": "jiedianlianjie",
+      "unicode": "e640",
+      "unicode_decimal": 58944
+    },
+    {
+      "icon_id": "31975986",
+      "name": "定时任务",
+      "font_class": "dingshirenwu",
+      "unicode": "e6f3",
+      "unicode_decimal": 59123
+    },
+    {
+      "icon_id": "31975835",
+      "name": "任务列表",
+      "font_class": "renwuliebiao",
+      "unicode": "e6ef",
+      "unicode_decimal": 59119
+    },
+    {
+      "icon_id": "31975836",
+      "name": "部署",
+      "font_class": "bushu",
+      "unicode": "e6f0",
+      "unicode_decimal": 59120
+    },
+    {
+      "icon_id": "31975837",
+      "name": "爬虫规则",
+      "font_class": "pachongguize",
+      "unicode": "e6f1",
+      "unicode_decimal": 59121
+    },
+    {
+      "icon_id": "31975838",
+      "name": "主机管理",
+      "font_class": "zhujiguanli",
+      "unicode": "e6f2",
+      "unicode_decimal": 59122
+    }
+  ]
+}

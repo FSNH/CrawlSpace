@@ -1,0 +1,57 @@
+{
+  "spider": "currency",
+  "type": "tci网站",
+  "home": "https://www.tcichemicals.com/CN/zh/",
+  "settings": {
+    "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.0.0 Safari/537.36",
+    "referer": "https://www.tcichemicals.com/CN/zh/c/11399",
+    "SCHEDULER": "scrapy_redis.scheduler.Scheduler",
+    "DUPEFILTER_CLASS": "scrapy_redis.dupefilter.RFPDupeFilter",
+    "SCHEDULER_PERSIST": true,
+    "REDIS_START_URLS_AS_ZSET": true,
+    "REDIS_START_URLS_KEY": "tcis:start_urls",
+    "SCHEDULER_DUPEFILTER_KEY": "currency:tci:dupefilter",
+    "SCHEDULER_QUEUE_KEY": "currency:tci:requests"
+  },
+  "start_urls": ["https://www.tcichemicals.com/CN/zh/"],
+  "allowed_domains": ["tcichemicals.com"],
+  "ssrules": "tci_rules",
+
+  "rules": [
+    {
+      "link_extractor": {
+        "restrict_css": ".nav li:nth-child(1) ul.subNavigation li"
+      },
+      "follow": true
+    },
+     {
+      "link_extractor": {
+        "allow": "/CN/zh/c/\\d+"
+      },
+      "follow": true,
+      "callback": "parse_item"
+    }
+  ],
+  "item": {
+    "class": "TciItem",
+    "loader": "ItemLoader",
+    "next_xpath": false,
+    "nextpage": true,
+    "next_rule": "ul.pagination li.pagination-next a::attr('href')",
+    "attrs": {
+      "source": [
+        {
+          "method": "value",
+          "arg": "tci"
+        }
+      ],
+      "urls": [
+        {
+          "method": "css",
+          "arg": "#product-list-wrap a.product-title::attr(\"href\")"
+        }
+      ]
+
+    }
+  }
+}

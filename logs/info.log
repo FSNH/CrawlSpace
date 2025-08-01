@@ -1,0 +1,1328 @@
+INFO 2025-08-01 16:02:38,808 autoreload 597 Watching for file changes with StatReloader
+INFO 2025-08-01 16:02:59,996 basehttp 154 "GET / HTTP/1.1" 200 1144
+INFO 2025-08-01 16:03:00,512 basehttp 154 "GET /static/bootstrap/js/bootstrap.min.js HTTP/1.1" 200 28631
+INFO 2025-08-01 16:03:00,513 basehttp 154 "GET /static/bootstrap/css/bootstrap.min.css HTTP/1.1" 200 106006
+INFO 2025-08-01 16:03:00,514 basehttp 154 "GET /static/jquery-3.2.1.min.js HTTP/1.1" 200 86659
+WARNING 2025-08-01 16:03:00,770 log 228 Not Found: /favicon.ico
+WARNING 2025-08-01 16:03:00,770 basehttp 154 "GET /favicon.ico HTTP/1.1" 404 1001
+ERROR 2025-08-01 16:03:05,946 log 228 Internal Server Error: /accounts/login/
+Traceback (most recent call last):
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    return self.cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\sqlite3\base.py", line 383, in execute
+    return Database.Cursor.execute(self, query, params)
+sqlite3.OperationalError: no such table: auth_user
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "F:\CrawlSpace爬虫管理系统\CrawlSpace\users\views.py", line 22, in login_view
+    user = authenticate(username=name, password=password)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\contrib\auth\__init__.py", line 73, in authenticate
+    user = backend.authenticate(request, **credentials)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\contrib\auth\backends.py", line 20, in authenticate
+    user = UserModel._default_manager.get_by_natural_key(username)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\contrib\auth\base_user.py", line 44, in get_by_natural_key
+    return self.get(**{self.model.USERNAME_FIELD: username})
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\manager.py", line 82, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\query.py", line 402, in get
+    num = len(clone)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\query.py", line 256, in __len__
+    self._fetch_all()
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\query.py", line 1242, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\query.py", line 55, in __iter__
+    results = compiler.execute_sql(chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\sql\compiler.py", line 1142, in execute_sql
+    cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 99, in execute
+    return super().execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 67, in execute
+    return self._execute_with_wrappers(sql, params, many=False, executor=self._execute)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 76, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    return self.cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\utils.py", line 89, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    return self.cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\sqlite3\base.py", line 383, in execute
+    return Database.Cursor.execute(self, query, params)
+django.db.utils.OperationalError: no such table: auth_user
+ERROR 2025-08-01 16:03:05,953 basehttp 154 "POST /accounts/login/ HTTP/1.1" 500 20869
+INFO 2025-08-01 16:03:26,370 autoreload 217 F:\CrawlSpace爬虫管理系统\CrawlSpace\CrawlSpace\settings.py changed, reloading.
+INFO 2025-08-01 16:03:28,368 autoreload 597 Watching for file changes with StatReloader
+INFO 2025-08-01 16:03:28,990 basehttp 154 "GET / HTTP/1.1" 200 1150
+ERROR 2025-08-01 16:03:33,343 log 228 Internal Server Error: /accounts/login/
+Traceback (most recent call last):
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    return self.cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\sqlite3\base.py", line 383, in execute
+    return Database.Cursor.execute(self, query, params)
+sqlite3.OperationalError: no such table: auth_user
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "F:\CrawlSpace爬虫管理系统\CrawlSpace\users\views.py", line 22, in login_view
+    user = authenticate(username=name, password=password)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\contrib\auth\__init__.py", line 73, in authenticate
+    user = backend.authenticate(request, **credentials)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\contrib\auth\backends.py", line 20, in authenticate
+    user = UserModel._default_manager.get_by_natural_key(username)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\contrib\auth\base_user.py", line 44, in get_by_natural_key
+    return self.get(**{self.model.USERNAME_FIELD: username})
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\manager.py", line 82, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\query.py", line 402, in get
+    num = len(clone)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\query.py", line 256, in __len__
+    self._fetch_all()
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\query.py", line 1242, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\query.py", line 55, in __iter__
+    results = compiler.execute_sql(chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\sql\compiler.py", line 1142, in execute_sql
+    cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 67, in execute
+    return self._execute_with_wrappers(sql, params, many=False, executor=self._execute)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 76, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    return self.cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\utils.py", line 89, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    return self.cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\sqlite3\base.py", line 383, in execute
+    return Database.Cursor.execute(self, query, params)
+django.db.utils.OperationalError: no such table: auth_user
+ERROR 2025-08-01 16:03:33,347 basehttp 154 "POST /accounts/login/ HTTP/1.1" 500 27
+INFO 2025-08-01 16:10:22,244 autoreload 597 Watching for file changes with StatReloader
+INFO 2025-08-01 16:10:29,916 basehttp 154 "POST /accounts/login/ HTTP/1.1" 200 27
+WARNING 2025-08-01 16:10:36,253 log 228 Not Found: /
+WARNING 2025-08-01 16:10:36,253 basehttp 154 "GET / HTTP/1.1" 404 77
+WARNING 2025-08-01 16:10:41,300 log 228 Not Found: /
+WARNING 2025-08-01 16:10:41,301 basehttp 154 "GET / HTTP/1.1" 404 77
+WARNING 2025-08-01 16:10:45,529 log 228 Not Found: /index.html
+WARNING 2025-08-01 16:10:45,530 basehttp 154 "GET /index.html HTTP/1.1" 404 77
+WARNING 2025-08-01 16:10:47,956 log 228 Not Found: /bot/index.html
+WARNING 2025-08-01 16:10:47,957 basehttp 154 "GET /bot/index.html HTTP/1.1" 404 77
+WARNING 2025-08-01 16:10:49,282 log 228 Not Found: /bot/index.html
+WARNING 2025-08-01 16:10:49,283 basehttp 154 "GET /bot/index.html HTTP/1.1" 404 77
+WARNING 2025-08-01 16:10:51,433 log 228 Not Found: /
+WARNING 2025-08-01 16:10:51,433 basehttp 154 "GET / HTTP/1.1" 404 77
+WARNING 2025-08-01 16:11:01,501 log 228 Not Found: /
+WARNING 2025-08-01 16:11:01,502 basehttp 154 "GET / HTTP/1.1" 404 77
+INFO 2025-08-01 16:11:17,002 basehttp 154 "GET /accounts HTTP/1.1" 301 0
+INFO 2025-08-01 16:11:17,043 basehttp 154 "GET /accounts/ HTTP/1.1" 200 1150
+INFO 2025-08-01 16:11:34,006 basehttp 154 "POST /accounts/login/ HTTP/1.1" 302 0
+INFO 2025-08-01 16:11:34,026 basehttp 154 "GET /spider/states.html HTTP/1.1" 200 9566
+WARNING 2025-08-01 16:11:34,041 log 228 Not Found: /static/bootstrap/css/bootstrap-responsive.min.css
+WARNING 2025-08-01 16:11:34,042 log 228 Not Found: /static/assets/styles.css
+WARNING 2025-08-01 16:11:34,044 log 228 Not Found: /static/fonts/iconfont.css
+WARNING 2025-08-01 16:11:34,045 basehttp 154 "GET /static/bootstrap/css/bootstrap-responsive.min.css HTTP/1.1" 404 77
+WARNING 2025-08-01 16:11:34,045 basehttp 154 "GET /static/assets/styles.css HTTP/1.1" 404 77
+WARNING 2025-08-01 16:11:34,047 log 228 Not Found: /static/css/toastr.min.css
+WARNING 2025-08-01 16:11:34,047 basehttp 154 "GET /static/fonts/iconfont.css HTTP/1.1" 404 77
+WARNING 2025-08-01 16:11:34,048 log 228 Not Found: /static/js/toastr.min.js
+WARNING 2025-08-01 16:11:34,049 log 228 Not Found: /static/assets/scripts.js
+WARNING 2025-08-01 16:11:34,049 basehttp 154 "GET /static/css/toastr.min.css HTTP/1.1" 404 77
+WARNING 2025-08-01 16:11:34,049 basehttp 154 "GET /static/js/toastr.min.js HTTP/1.1" 404 77
+WARNING 2025-08-01 16:11:34,049 basehttp 154 "GET /static/assets/scripts.js HTTP/1.1" 404 77
+WARNING 2025-08-01 16:11:34,088 log 228 Not Found: /static/bootstrap/img/glyphicons-halflings.png
+WARNING 2025-08-01 16:11:34,089 basehttp 154 "GET /static/bootstrap/img/glyphicons-halflings.png HTTP/1.1" 404 77
+ERROR 2025-08-01 16:11:38,140 log 228 Internal Server Error: /spider/tasks/
+Traceback (most recent call last):
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    return self.cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\sqlite3\base.py", line 383, in execute
+    return Database.Cursor.execute(self, query, params)
+sqlite3.OperationalError: no such table: spider_taskstatuslist
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\contrib\auth\decorators.py", line 21, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "F:\CrawlSpace爬虫管理系统\CrawlSpace\spider\views.py", line 860, in get_finished_task
+    if results:
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\query.py", line 278, in __bool__
+    self._fetch_all()
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\query.py", line 1242, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\query.py", line 144, in __iter__
+    return compiler.results_iter(tuple_expected=True, chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\sql\compiler.py", line 1094, in results_iter
+    results = self.execute_sql(MULTI, chunked_fetch=chunked_fetch, chunk_size=chunk_size)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\sql\compiler.py", line 1142, in execute_sql
+    cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 67, in execute
+    return self._execute_with_wrappers(sql, params, many=False, executor=self._execute)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 76, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    return self.cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\utils.py", line 89, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    return self.cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\sqlite3\base.py", line 383, in execute
+    return Database.Cursor.execute(self, query, params)
+django.db.utils.OperationalError: no such table: spider_taskstatuslist
+ERROR 2025-08-01 16:11:38,146 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 500 27
+ERROR 2025-08-01 16:11:40,130 log 228 Internal Server Error: /spider/tasks/
+Traceback (most recent call last):
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    return self.cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\sqlite3\base.py", line 383, in execute
+    return Database.Cursor.execute(self, query, params)
+sqlite3.OperationalError: no such table: spider_taskstatuslist
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\contrib\auth\decorators.py", line 21, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "F:\CrawlSpace爬虫管理系统\CrawlSpace\spider\views.py", line 860, in get_finished_task
+    if results:
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\query.py", line 278, in __bool__
+    self._fetch_all()
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\query.py", line 1242, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\query.py", line 144, in __iter__
+    return compiler.results_iter(tuple_expected=True, chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\sql\compiler.py", line 1094, in results_iter
+    results = self.execute_sql(MULTI, chunked_fetch=chunked_fetch, chunk_size=chunk_size)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\sql\compiler.py", line 1142, in execute_sql
+    cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 67, in execute
+    return self._execute_with_wrappers(sql, params, many=False, executor=self._execute)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 76, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    return self.cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\utils.py", line 89, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    return self.cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\sqlite3\base.py", line 383, in execute
+    return Database.Cursor.execute(self, query, params)
+django.db.utils.OperationalError: no such table: spider_taskstatuslist
+ERROR 2025-08-01 16:11:40,132 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 500 27
+ERROR 2025-08-01 16:11:42,139 log 228 Internal Server Error: /spider/tasks/
+Traceback (most recent call last):
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    return self.cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\sqlite3\base.py", line 383, in execute
+    return Database.Cursor.execute(self, query, params)
+sqlite3.OperationalError: no such table: spider_taskstatuslist
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\contrib\auth\decorators.py", line 21, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "F:\CrawlSpace爬虫管理系统\CrawlSpace\spider\views.py", line 860, in get_finished_task
+    if results:
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\query.py", line 278, in __bool__
+    self._fetch_all()
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\query.py", line 1242, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\query.py", line 144, in __iter__
+    return compiler.results_iter(tuple_expected=True, chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\sql\compiler.py", line 1094, in results_iter
+    results = self.execute_sql(MULTI, chunked_fetch=chunked_fetch, chunk_size=chunk_size)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\sql\compiler.py", line 1142, in execute_sql
+    cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 67, in execute
+    return self._execute_with_wrappers(sql, params, many=False, executor=self._execute)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 76, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    return self.cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\utils.py", line 89, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    return self.cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\sqlite3\base.py", line 383, in execute
+    return Database.Cursor.execute(self, query, params)
+django.db.utils.OperationalError: no such table: spider_taskstatuslist
+ERROR 2025-08-01 16:11:42,146 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 500 27
+ERROR 2025-08-01 16:11:44,139 log 228 Internal Server Error: /spider/tasks/
+Traceback (most recent call last):
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    return self.cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\sqlite3\base.py", line 383, in execute
+    return Database.Cursor.execute(self, query, params)
+sqlite3.OperationalError: no such table: spider_taskstatuslist
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\contrib\auth\decorators.py", line 21, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "F:\CrawlSpace爬虫管理系统\CrawlSpace\spider\views.py", line 860, in get_finished_task
+    if results:
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\query.py", line 278, in __bool__
+    self._fetch_all()
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\query.py", line 1242, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\query.py", line 144, in __iter__
+    return compiler.results_iter(tuple_expected=True, chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\sql\compiler.py", line 1094, in results_iter
+    results = self.execute_sql(MULTI, chunked_fetch=chunked_fetch, chunk_size=chunk_size)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\sql\compiler.py", line 1142, in execute_sql
+    cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 67, in execute
+    return self._execute_with_wrappers(sql, params, many=False, executor=self._execute)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 76, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    return self.cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\utils.py", line 89, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    return self.cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\sqlite3\base.py", line 383, in execute
+    return Database.Cursor.execute(self, query, params)
+django.db.utils.OperationalError: no such table: spider_taskstatuslist
+ERROR 2025-08-01 16:11:44,142 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 500 27
+ERROR 2025-08-01 16:11:46,146 log 228 Internal Server Error: /spider/tasks/
+Traceback (most recent call last):
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    return self.cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\sqlite3\base.py", line 383, in execute
+    return Database.Cursor.execute(self, query, params)
+sqlite3.OperationalError: no such table: spider_taskstatuslist
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\contrib\auth\decorators.py", line 21, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "F:\CrawlSpace爬虫管理系统\CrawlSpace\spider\views.py", line 860, in get_finished_task
+    if results:
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\query.py", line 278, in __bool__
+    self._fetch_all()
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\query.py", line 1242, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\query.py", line 144, in __iter__
+    return compiler.results_iter(tuple_expected=True, chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\sql\compiler.py", line 1094, in results_iter
+    results = self.execute_sql(MULTI, chunked_fetch=chunked_fetch, chunk_size=chunk_size)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\sql\compiler.py", line 1142, in execute_sql
+    cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 67, in execute
+    return self._execute_with_wrappers(sql, params, many=False, executor=self._execute)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 76, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    return self.cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\utils.py", line 89, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    return self.cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\sqlite3\base.py", line 383, in execute
+    return Database.Cursor.execute(self, query, params)
+django.db.utils.OperationalError: no such table: spider_taskstatuslist
+ERROR 2025-08-01 16:11:46,149 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 500 27
+ERROR 2025-08-01 16:11:48,128 log 228 Internal Server Error: /spider/tasks/
+Traceback (most recent call last):
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    return self.cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\sqlite3\base.py", line 383, in execute
+    return Database.Cursor.execute(self, query, params)
+sqlite3.OperationalError: no such table: spider_taskstatuslist
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\contrib\auth\decorators.py", line 21, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "F:\CrawlSpace爬虫管理系统\CrawlSpace\spider\views.py", line 860, in get_finished_task
+    if results:
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\query.py", line 278, in __bool__
+    self._fetch_all()
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\query.py", line 1242, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\query.py", line 144, in __iter__
+    return compiler.results_iter(tuple_expected=True, chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\sql\compiler.py", line 1094, in results_iter
+    results = self.execute_sql(MULTI, chunked_fetch=chunked_fetch, chunk_size=chunk_size)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\sql\compiler.py", line 1142, in execute_sql
+    cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 67, in execute
+    return self._execute_with_wrappers(sql, params, many=False, executor=self._execute)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 76, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    return self.cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\utils.py", line 89, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    return self.cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\sqlite3\base.py", line 383, in execute
+    return Database.Cursor.execute(self, query, params)
+django.db.utils.OperationalError: no such table: spider_taskstatuslist
+ERROR 2025-08-01 16:11:48,133 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 500 27
+INFO 2025-08-01 16:11:49,943 basehttp 154 "GET /spider/states.html HTTP/1.1" 200 9566
+WARNING 2025-08-01 16:11:49,970 log 228 Not Found: /static/bootstrap/css/bootstrap-responsive.min.css
+WARNING 2025-08-01 16:11:49,973 log 228 Not Found: /static/fonts/iconfont.css
+WARNING 2025-08-01 16:11:49,974 log 228 Not Found: /static/css/toastr.min.css
+WARNING 2025-08-01 16:11:49,975 log 228 Not Found: /static/assets/styles.css
+WARNING 2025-08-01 16:11:49,976 log 228 Not Found: /static/js/toastr.min.js
+WARNING 2025-08-01 16:11:49,977 log 228 Not Found: /static/assets/scripts.js
+WARNING 2025-08-01 16:11:49,979 basehttp 154 "GET /static/css/toastr.min.css HTTP/1.1" 404 77
+WARNING 2025-08-01 16:11:49,979 basehttp 154 "GET /static/fonts/iconfont.css HTTP/1.1" 404 77
+WARNING 2025-08-01 16:11:49,980 basehttp 154 "GET /static/bootstrap/css/bootstrap-responsive.min.css HTTP/1.1" 404 77
+WARNING 2025-08-01 16:11:49,981 basehttp 154 "GET /static/assets/scripts.js HTTP/1.1" 404 77
+WARNING 2025-08-01 16:11:49,981 basehttp 154 "GET /static/js/toastr.min.js HTTP/1.1" 404 77
+WARNING 2025-08-01 16:11:49,981 basehttp 154 "GET /static/assets/styles.css HTTP/1.1" 404 77
+ERROR 2025-08-01 16:11:52,052 log 228 Internal Server Error: /spider/tasks/
+Traceback (most recent call last):
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    return self.cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\sqlite3\base.py", line 383, in execute
+    return Database.Cursor.execute(self, query, params)
+sqlite3.OperationalError: no such table: spider_taskstatuslist
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\contrib\auth\decorators.py", line 21, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "F:\CrawlSpace爬虫管理系统\CrawlSpace\spider\views.py", line 860, in get_finished_task
+    if results:
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\query.py", line 278, in __bool__
+    self._fetch_all()
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\query.py", line 1242, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\query.py", line 144, in __iter__
+    return compiler.results_iter(tuple_expected=True, chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\sql\compiler.py", line 1094, in results_iter
+    results = self.execute_sql(MULTI, chunked_fetch=chunked_fetch, chunk_size=chunk_size)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\sql\compiler.py", line 1142, in execute_sql
+    cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 67, in execute
+    return self._execute_with_wrappers(sql, params, many=False, executor=self._execute)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 76, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    return self.cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\utils.py", line 89, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    return self.cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\sqlite3\base.py", line 383, in execute
+    return Database.Cursor.execute(self, query, params)
+django.db.utils.OperationalError: no such table: spider_taskstatuslist
+ERROR 2025-08-01 16:11:52,058 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 500 27
+ERROR 2025-08-01 16:11:54,050 log 228 Internal Server Error: /spider/tasks/
+Traceback (most recent call last):
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    return self.cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\sqlite3\base.py", line 383, in execute
+    return Database.Cursor.execute(self, query, params)
+sqlite3.OperationalError: no such table: spider_taskstatuslist
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\contrib\auth\decorators.py", line 21, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "F:\CrawlSpace爬虫管理系统\CrawlSpace\spider\views.py", line 860, in get_finished_task
+    if results:
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\query.py", line 278, in __bool__
+    self._fetch_all()
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\query.py", line 1242, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\query.py", line 144, in __iter__
+    return compiler.results_iter(tuple_expected=True, chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\sql\compiler.py", line 1094, in results_iter
+    results = self.execute_sql(MULTI, chunked_fetch=chunked_fetch, chunk_size=chunk_size)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\sql\compiler.py", line 1142, in execute_sql
+    cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 67, in execute
+    return self._execute_with_wrappers(sql, params, many=False, executor=self._execute)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 76, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    return self.cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\utils.py", line 89, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    return self.cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\sqlite3\base.py", line 383, in execute
+    return Database.Cursor.execute(self, query, params)
+django.db.utils.OperationalError: no such table: spider_taskstatuslist
+ERROR 2025-08-01 16:11:54,057 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 500 27
+INFO 2025-08-01 16:11:54,428 basehttp 154 "GET /spider/editor.html HTTP/1.1" 200 10837
+WARNING 2025-08-01 16:11:54,448 log 228 Not Found: /static/bootstrap/css/bootstrap-responsive.min.css
+WARNING 2025-08-01 16:11:54,449 log 228 Not Found: /static/assets/styles.css
+WARNING 2025-08-01 16:11:54,450 log 228 Not Found: /static/fonts/iconfont.css
+WARNING 2025-08-01 16:11:54,452 log 228 Not Found: /static/js/toastr.min.js
+WARNING 2025-08-01 16:11:54,453 log 228 Not Found: /static/assets/scripts.js
+WARNING 2025-08-01 16:11:54,454 log 228 Not Found: /static/css/toastr.min.css
+WARNING 2025-08-01 16:11:54,455 basehttp 154 "GET /static/bootstrap/css/bootstrap-responsive.min.css HTTP/1.1" 404 77
+WARNING 2025-08-01 16:11:54,455 basehttp 154 "GET /static/fonts/iconfont.css HTTP/1.1" 404 77
+WARNING 2025-08-01 16:11:54,456 basehttp 154 "GET /static/assets/styles.css HTTP/1.1" 404 77
+WARNING 2025-08-01 16:11:54,456 basehttp 154 "GET /static/js/toastr.min.js HTTP/1.1" 404 77
+WARNING 2025-08-01 16:11:54,457 basehttp 154 "GET /static/assets/scripts.js HTTP/1.1" 404 77
+WARNING 2025-08-01 16:11:54,457 basehttp 154 "GET /static/css/toastr.min.css HTTP/1.1" 404 77
+WARNING 2025-08-01 16:11:58,022 log 228 Not Found: /static/bootstrap/css/bootstrap-responsive.min.css
+WARNING 2025-08-01 16:11:58,023 log 228 Not Found: /static/assets/styles.css
+WARNING 2025-08-01 16:11:58,024 log 228 Not Found: /static/fonts/iconfont.css
+WARNING 2025-08-01 16:11:58,025 log 228 Not Found: /static/css/toastr.min.css
+WARNING 2025-08-01 16:11:58,026 log 228 Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-08-01 16:11:58,027 basehttp 154 "GET /static/bootstrap/css/bootstrap-responsive.min.css HTTP/1.1" 404 77
+WARNING 2025-08-01 16:11:58,028 basehttp 154 "GET /static/fonts/iconfont.css HTTP/1.1" 404 77
+WARNING 2025-08-01 16:11:58,028 basehttp 154 "GET /static/css/toastr.min.css HTTP/1.1" 404 77
+WARNING 2025-08-01 16:11:58,028 basehttp 154 "GET /static/assets/styles.css HTTP/1.1" 404 77
+WARNING 2025-08-01 16:11:58,028 basehttp 154 "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 77
+ERROR 2025-08-01 16:11:58,633 log 228 Internal Server Error: /spider/tasks/
+Traceback (most recent call last):
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    return self.cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\sqlite3\base.py", line 383, in execute
+    return Database.Cursor.execute(self, query, params)
+sqlite3.OperationalError: no such table: spider_taskstatuslist
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\contrib\auth\decorators.py", line 21, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "F:\CrawlSpace爬虫管理系统\CrawlSpace\spider\views.py", line 860, in get_finished_task
+    if results:
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\query.py", line 278, in __bool__
+    self._fetch_all()
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\query.py", line 1242, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\query.py", line 144, in __iter__
+    return compiler.results_iter(tuple_expected=True, chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\sql\compiler.py", line 1094, in results_iter
+    results = self.execute_sql(MULTI, chunked_fetch=chunked_fetch, chunk_size=chunk_size)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\sql\compiler.py", line 1142, in execute_sql
+    cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 67, in execute
+    return self._execute_with_wrappers(sql, params, many=False, executor=self._execute)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 76, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    return self.cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\utils.py", line 89, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    return self.cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\sqlite3\base.py", line 383, in execute
+    return Database.Cursor.execute(self, query, params)
+django.db.utils.OperationalError: no such table: spider_taskstatuslist
+ERROR 2025-08-01 16:11:58,637 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 500 27
+ERROR 2025-08-01 16:12:00,639 log 228 Internal Server Error: /spider/tasks/
+Traceback (most recent call last):
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    return self.cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\sqlite3\base.py", line 383, in execute
+    return Database.Cursor.execute(self, query, params)
+sqlite3.OperationalError: no such table: spider_taskstatuslist
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\contrib\auth\decorators.py", line 21, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "F:\CrawlSpace爬虫管理系统\CrawlSpace\spider\views.py", line 860, in get_finished_task
+    if results:
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\query.py", line 278, in __bool__
+    self._fetch_all()
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\query.py", line 1242, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\query.py", line 144, in __iter__
+    return compiler.results_iter(tuple_expected=True, chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\sql\compiler.py", line 1094, in results_iter
+    results = self.execute_sql(MULTI, chunked_fetch=chunked_fetch, chunk_size=chunk_size)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\sql\compiler.py", line 1142, in execute_sql
+    cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 67, in execute
+    return self._execute_with_wrappers(sql, params, many=False, executor=self._execute)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 76, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    return self.cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\utils.py", line 89, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    return self.cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\sqlite3\base.py", line 383, in execute
+    return Database.Cursor.execute(self, query, params)
+django.db.utils.OperationalError: no such table: spider_taskstatuslist
+ERROR 2025-08-01 16:12:00,644 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 500 27
+ERROR 2025-08-01 16:12:02,627 log 228 Internal Server Error: /spider/tasks/
+Traceback (most recent call last):
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    return self.cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\sqlite3\base.py", line 383, in execute
+    return Database.Cursor.execute(self, query, params)
+sqlite3.OperationalError: no such table: spider_taskstatuslist
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\contrib\auth\decorators.py", line 21, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "F:\CrawlSpace爬虫管理系统\CrawlSpace\spider\views.py", line 860, in get_finished_task
+    if results:
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\query.py", line 278, in __bool__
+    self._fetch_all()
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\query.py", line 1242, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\query.py", line 144, in __iter__
+    return compiler.results_iter(tuple_expected=True, chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\sql\compiler.py", line 1094, in results_iter
+    results = self.execute_sql(MULTI, chunked_fetch=chunked_fetch, chunk_size=chunk_size)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\sql\compiler.py", line 1142, in execute_sql
+    cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 67, in execute
+    return self._execute_with_wrappers(sql, params, many=False, executor=self._execute)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 76, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    return self.cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\utils.py", line 89, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    return self.cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\sqlite3\base.py", line 383, in execute
+    return Database.Cursor.execute(self, query, params)
+django.db.utils.OperationalError: no such table: spider_taskstatuslist
+ERROR 2025-08-01 16:12:02,630 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 500 27
+ERROR 2025-08-01 16:12:03,876 log 228 Internal Server Error: /spider/deploy.html
+Traceback (most recent call last):
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    return self.cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\sqlite3\base.py", line 383, in execute
+    return Database.Cursor.execute(self, query, params)
+sqlite3.OperationalError: no such table: spider_packagepath
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\contrib\auth\decorators.py", line 21, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "F:\CrawlSpace爬虫管理系统\CrawlSpace\spider\views.py", line 174, in deploy
+    for pack in PackagePath.objects.all():
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\query.py", line 274, in __iter__
+    self._fetch_all()
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\query.py", line 1242, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\query.py", line 55, in __iter__
+    results = compiler.execute_sql(chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\sql\compiler.py", line 1142, in execute_sql
+    cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 67, in execute
+    return self._execute_with_wrappers(sql, params, many=False, executor=self._execute)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 76, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    return self.cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\utils.py", line 89, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    return self.cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\sqlite3\base.py", line 383, in execute
+    return Database.Cursor.execute(self, query, params)
+django.db.utils.OperationalError: no such table: spider_packagepath
+ERROR 2025-08-01 16:12:03,881 basehttp 154 "GET /spider/deploy.html HTTP/1.1" 500 27
+WARNING 2025-08-01 16:12:03,920 log 228 Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-08-01 16:12:03,921 basehttp 154 "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 77
+ERROR 2025-08-01 16:12:14,766 log 228 Internal Server Error: /spider/deploy.html
+Traceback (most recent call last):
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    return self.cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\sqlite3\base.py", line 383, in execute
+    return Database.Cursor.execute(self, query, params)
+sqlite3.OperationalError: no such table: spider_packagepath
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\contrib\auth\decorators.py", line 21, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "F:\CrawlSpace爬虫管理系统\CrawlSpace\spider\views.py", line 174, in deploy
+    for pack in PackagePath.objects.all():
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\query.py", line 274, in __iter__
+    self._fetch_all()
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\query.py", line 1242, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\query.py", line 55, in __iter__
+    results = compiler.execute_sql(chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\sql\compiler.py", line 1142, in execute_sql
+    cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 67, in execute
+    return self._execute_with_wrappers(sql, params, many=False, executor=self._execute)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 76, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    return self.cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\utils.py", line 89, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    return self.cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\sqlite3\base.py", line 383, in execute
+    return Database.Cursor.execute(self, query, params)
+django.db.utils.OperationalError: no such table: spider_packagepath
+ERROR 2025-08-01 16:12:14,768 basehttp 154 "GET /spider/deploy.html HTTP/1.1" 500 27
+WARNING 2025-08-01 16:12:14,784 log 228 Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-08-01 16:12:14,784 basehttp 154 "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 77
+WARNING 2025-08-01 16:12:15,729 log 228 Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-08-01 16:12:15,730 basehttp 154 "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 77
+ERROR 2025-08-01 16:12:15,737 log 228 Internal Server Error: /spider/tasks/
+Traceback (most recent call last):
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    return self.cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\sqlite3\base.py", line 383, in execute
+    return Database.Cursor.execute(self, query, params)
+sqlite3.OperationalError: no such table: spider_taskstatuslist
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\contrib\auth\decorators.py", line 21, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "F:\CrawlSpace爬虫管理系统\CrawlSpace\spider\views.py", line 860, in get_finished_task
+    if results:
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\query.py", line 278, in __bool__
+    self._fetch_all()
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\query.py", line 1242, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\query.py", line 144, in __iter__
+    return compiler.results_iter(tuple_expected=True, chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\sql\compiler.py", line 1094, in results_iter
+    results = self.execute_sql(MULTI, chunked_fetch=chunked_fetch, chunk_size=chunk_size)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\sql\compiler.py", line 1142, in execute_sql
+    cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 67, in execute
+    return self._execute_with_wrappers(sql, params, many=False, executor=self._execute)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 76, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    return self.cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\utils.py", line 89, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    return self.cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\sqlite3\base.py", line 383, in execute
+    return Database.Cursor.execute(self, query, params)
+django.db.utils.OperationalError: no such table: spider_taskstatuslist
+ERROR 2025-08-01 16:12:15,738 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 500 27
+WARNING 2025-08-01 16:12:15,748 log 228 Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-08-01 16:12:15,749 basehttp 154 "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 77
+ERROR 2025-08-01 16:12:16,632 log 228 Internal Server Error: /spider/tasks/
+Traceback (most recent call last):
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    return self.cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\sqlite3\base.py", line 383, in execute
+    return Database.Cursor.execute(self, query, params)
+sqlite3.OperationalError: no such table: spider_taskstatuslist
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\contrib\auth\decorators.py", line 21, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "F:\CrawlSpace爬虫管理系统\CrawlSpace\spider\views.py", line 860, in get_finished_task
+    if results:
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\query.py", line 278, in __bool__
+    self._fetch_all()
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\query.py", line 1242, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\query.py", line 144, in __iter__
+    return compiler.results_iter(tuple_expected=True, chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\sql\compiler.py", line 1094, in results_iter
+    results = self.execute_sql(MULTI, chunked_fetch=chunked_fetch, chunk_size=chunk_size)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\sql\compiler.py", line 1142, in execute_sql
+    cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 67, in execute
+    return self._execute_with_wrappers(sql, params, many=False, executor=self._execute)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 76, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    return self.cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\utils.py", line 89, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    return self.cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\sqlite3\base.py", line 383, in execute
+    return Database.Cursor.execute(self, query, params)
+django.db.utils.OperationalError: no such table: spider_taskstatuslist
+ERROR 2025-08-01 16:12:16,635 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 500 27
+ERROR 2025-08-01 16:12:16,879 log 228 Internal Server Error: /spider/list.html
+Traceback (most recent call last):
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    return self.cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\sqlite3\base.py", line 383, in execute
+    return Database.Cursor.execute(self, query, params)
+sqlite3.OperationalError: no such table: spider_client
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\contrib\auth\decorators.py", line 21, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "F:\CrawlSpace爬虫管理系统\CrawlSpace\spider\views.py", line 703, in task_list
+    for client in clients:
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\query.py", line 274, in __iter__
+    self._fetch_all()
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\query.py", line 1242, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\query.py", line 55, in __iter__
+    results = compiler.execute_sql(chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\sql\compiler.py", line 1142, in execute_sql
+    cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 67, in execute
+    return self._execute_with_wrappers(sql, params, many=False, executor=self._execute)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 76, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    return self.cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\utils.py", line 89, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    return self.cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\sqlite3\base.py", line 383, in execute
+    return Database.Cursor.execute(self, query, params)
+django.db.utils.OperationalError: no such table: spider_client
+ERROR 2025-08-01 16:12:16,880 basehttp 154 "GET /spider/list.html HTTP/1.1" 500 27
+WARNING 2025-08-01 16:12:16,914 log 228 Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-08-01 16:12:16,916 basehttp 154 "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 77
+WARNING 2025-08-01 16:12:18,410 log 228 Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-08-01 16:12:18,410 basehttp 154 "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 77
+WARNING 2025-08-01 16:12:18,431 log 228 Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-08-01 16:12:18,431 basehttp 154 "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 77
+ERROR 2025-08-01 16:12:18,638 log 228 Internal Server Error: /spider/tasks/
+Traceback (most recent call last):
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    return self.cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\sqlite3\base.py", line 383, in execute
+    return Database.Cursor.execute(self, query, params)
+sqlite3.OperationalError: no such table: spider_taskstatuslist
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\contrib\auth\decorators.py", line 21, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "F:\CrawlSpace爬虫管理系统\CrawlSpace\spider\views.py", line 860, in get_finished_task
+    if results:
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\query.py", line 278, in __bool__
+    self._fetch_all()
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\query.py", line 1242, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\query.py", line 144, in __iter__
+    return compiler.results_iter(tuple_expected=True, chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\sql\compiler.py", line 1094, in results_iter
+    results = self.execute_sql(MULTI, chunked_fetch=chunked_fetch, chunk_size=chunk_size)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\models\sql\compiler.py", line 1142, in execute_sql
+    cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 67, in execute
+    return self._execute_with_wrappers(sql, params, many=False, executor=self._execute)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 76, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    return self.cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\utils.py", line 89, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    return self.cursor.execute(sql, params)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\db\backends\sqlite3\base.py", line 383, in execute
+    return Database.Cursor.execute(self, query, params)
+django.db.utils.OperationalError: no such table: spider_taskstatuslist
+ERROR 2025-08-01 16:12:18,642 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 500 27
+INFO 2025-08-01 16:18:39,725 autoreload 597 Watching for file changes with StatReloader
+INFO 2025-08-01 16:18:43,887 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:18:44,637 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:18:45,148 basehttp 154 "GET /spider/editor.html HTTP/1.1" 200 10837
+WARNING 2025-08-01 16:18:45,194 log 228 Not Found: /static/bootstrap/css/bootstrap.min.css
+WARNING 2025-08-01 16:18:45,195 log 228 Not Found: /static/bootstrap/css/bootstrap-responsive.min.css
+WARNING 2025-08-01 16:18:45,195 basehttp 154 "GET /static/bootstrap/css/bootstrap.min.css HTTP/1.1" 404 77
+WARNING 2025-08-01 16:18:45,195 basehttp 154 "GET /static/bootstrap/css/bootstrap-responsive.min.css HTTP/1.1" 404 77
+WARNING 2025-08-01 16:18:45,198 log 228 Not Found: /static/assets/styles.css
+WARNING 2025-08-01 16:18:45,198 log 228 Not Found: /static/fonts/iconfont.css
+WARNING 2025-08-01 16:18:45,199 log 228 Not Found: /static/css/toastr.min.css
+WARNING 2025-08-01 16:18:45,199 log 228 Not Found: /static/jquery-3.2.1.min.js
+WARNING 2025-08-01 16:18:45,200 basehttp 154 "GET /static/assets/styles.css HTTP/1.1" 404 77
+WARNING 2025-08-01 16:18:45,200 basehttp 154 "GET /static/fonts/iconfont.css HTTP/1.1" 404 77
+WARNING 2025-08-01 16:18:45,200 basehttp 154 "GET /static/jquery-3.2.1.min.js HTTP/1.1" 404 77
+WARNING 2025-08-01 16:18:45,200 basehttp 154 "GET /static/css/toastr.min.css HTTP/1.1" 404 77
+WARNING 2025-08-01 16:18:45,205 log 228 Not Found: /static/js/toastr.min.js
+WARNING 2025-08-01 16:18:45,205 basehttp 154 "GET /static/js/toastr.min.js HTTP/1.1" 404 77
+WARNING 2025-08-01 16:18:45,206 log 228 Not Found: /static/bootstrap/js/bootstrap.min.js
+WARNING 2025-08-01 16:18:45,207 log 228 Not Found: /static/assets/scripts.js
+WARNING 2025-08-01 16:18:45,209 log 228 Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-08-01 16:18:45,209 basehttp 154 "GET /static/bootstrap/js/bootstrap.min.js HTTP/1.1" 404 77
+WARNING 2025-08-01 16:18:45,210 basehttp 154 "GET /static/assets/scripts.js HTTP/1.1" 404 77
+WARNING 2025-08-01 16:18:45,211 basehttp 154 "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 77
+INFO 2025-08-01 16:18:50,382 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:18:52,383 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:18:54,390 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:18:56,399 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:18:56,905 basehttp 154 "GET /spider/editor.html HTTP/1.1" 200 10837
+WARNING 2025-08-01 16:18:56,923 log 228 Not Found: /static/bootstrap/css/bootstrap.min.css
+WARNING 2025-08-01 16:18:56,924 log 228 Not Found: /static/bootstrap/css/bootstrap-responsive.min.css
+WARNING 2025-08-01 16:18:56,924 log 228 Not Found: /static/assets/styles.css
+WARNING 2025-08-01 16:18:56,925 log 228 Not Found: /static/fonts/iconfont.css
+WARNING 2025-08-01 16:18:56,926 log 228 Not Found: /static/css/toastr.min.css
+WARNING 2025-08-01 16:18:56,928 log 228 Not Found: /static/jquery-3.2.1.min.js
+WARNING 2025-08-01 16:18:56,929 basehttp 154 "GET /static/bootstrap/css/bootstrap-responsive.min.css HTTP/1.1" 404 77
+WARNING 2025-08-01 16:18:56,931 basehttp 154 "GET /static/fonts/iconfont.css HTTP/1.1" 404 77
+WARNING 2025-08-01 16:18:56,931 basehttp 154 "GET /static/assets/styles.css HTTP/1.1" 404 77
+WARNING 2025-08-01 16:18:56,931 basehttp 154 "GET /static/bootstrap/css/bootstrap.min.css HTTP/1.1" 404 77
+WARNING 2025-08-01 16:18:56,931 basehttp 154 "GET /static/css/toastr.min.css HTTP/1.1" 404 77
+WARNING 2025-08-01 16:18:56,933 log 228 Not Found: /static/js/toastr.min.js
+WARNING 2025-08-01 16:18:56,933 basehttp 154 "GET /static/jquery-3.2.1.min.js HTTP/1.1" 404 77
+WARNING 2025-08-01 16:18:56,935 log 228 Not Found: /static/assets/scripts.js
+WARNING 2025-08-01 16:18:56,936 log 228 Not Found: /static/bootstrap/js/bootstrap.min.js
+WARNING 2025-08-01 16:18:56,937 basehttp 154 "GET /static/bootstrap/js/bootstrap.min.js HTTP/1.1" 404 77
+WARNING 2025-08-01 16:18:56,937 basehttp 154 "GET /static/assets/scripts.js HTTP/1.1" 404 77
+WARNING 2025-08-01 16:18:56,937 basehttp 154 "GET /static/js/toastr.min.js HTTP/1.1" 404 77
+INFO 2025-08-01 16:18:59,158 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:19:01,155 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+WARNING 2025-08-01 16:19:02,918 log 228 Not Found: /
+WARNING 2025-08-01 16:19:02,919 basehttp 154 "GET / HTTP/1.1" 404 77
+WARNING 2025-08-01 16:19:09,266 log 228 Not Found: /
+WARNING 2025-08-01 16:19:09,267 basehttp 154 "GET / HTTP/1.1" 404 77
+INFO 2025-08-01 16:19:31,793 autoreload 217 F:\CrawlSpace爬虫管理系统\CrawlSpace\CrawlSpace\urls.py changed, reloading.
+INFO 2025-08-01 16:19:33,519 autoreload 597 Watching for file changes with StatReloader
+INFO 2025-08-01 16:19:34,079 basehttp 154 "GET / HTTP/1.1" 200 1149
+WARNING 2025-08-01 16:19:34,098 log 228 Not Found: /static/bootstrap/css/bootstrap.min.css
+WARNING 2025-08-01 16:19:34,099 basehttp 154 "GET /static/bootstrap/css/bootstrap.min.css HTTP/1.1" 404 77
+WARNING 2025-08-01 16:19:34,099 log 228 Not Found: /static/jquery-3.2.1.min.js
+WARNING 2025-08-01 16:19:34,100 log 228 Not Found: /static/bootstrap/js/bootstrap.min.js
+WARNING 2025-08-01 16:19:34,100 basehttp 154 "GET /static/jquery-3.2.1.min.js HTTP/1.1" 404 77
+WARNING 2025-08-01 16:19:34,101 basehttp 154 "GET /static/bootstrap/js/bootstrap.min.js HTTP/1.1" 404 77
+INFO 2025-08-01 16:19:35,990 basehttp 154 "POST /accounts/login/ HTTP/1.1" 302 0
+INFO 2025-08-01 16:19:36,005 basehttp 154 "GET /spider/states.html HTTP/1.1" 200 9566
+WARNING 2025-08-01 16:19:36,021 log 228 Not Found: /static/bootstrap/css/bootstrap.min.css
+WARNING 2025-08-01 16:19:36,023 log 228 Not Found: /static/bootstrap/css/bootstrap-responsive.min.css
+WARNING 2025-08-01 16:19:36,023 log 228 Not Found: /static/assets/styles.css
+WARNING 2025-08-01 16:19:36,024 basehttp 154 "GET /static/bootstrap/css/bootstrap.min.css HTTP/1.1" 404 77
+WARNING 2025-08-01 16:19:36,025 log 228 Not Found: /static/fonts/iconfont.css
+WARNING 2025-08-01 16:19:36,028 log 228 Not Found: /static/bootstrap/js/bootstrap.min.js
+WARNING 2025-08-01 16:19:36,028 basehttp 154 "GET /static/bootstrap/css/bootstrap-responsive.min.css HTTP/1.1" 404 77
+WARNING 2025-08-01 16:19:36,029 basehttp 154 "GET /static/assets/styles.css HTTP/1.1" 404 77
+WARNING 2025-08-01 16:19:36,030 log 228 Not Found: /static/assets/scripts.js
+WARNING 2025-08-01 16:19:36,030 basehttp 154 "GET /static/bootstrap/js/bootstrap.min.js HTTP/1.1" 404 77
+WARNING 2025-08-01 16:19:36,031 log 228 Not Found: /static/js/toastr.min.js
+WARNING 2025-08-01 16:19:36,032 basehttp 154 "GET /static/fonts/iconfont.css HTTP/1.1" 404 77
+WARNING 2025-08-01 16:19:36,033 log 228 Not Found: /static/css/toastr.min.css
+WARNING 2025-08-01 16:19:36,033 basehttp 154 "GET /static/assets/scripts.js HTTP/1.1" 404 77
+WARNING 2025-08-01 16:19:36,034 basehttp 154 "GET /static/js/toastr.min.js HTTP/1.1" 404 77
+WARNING 2025-08-01 16:19:36,034 basehttp 154 "GET /static/css/toastr.min.css HTTP/1.1" 404 77
+INFO 2025-08-01 16:19:38,079 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:19:40,087 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:19:41,928 basehttp 154 "GET /spider/states.html HTTP/1.1" 200 9566
+WARNING 2025-08-01 16:19:41,944 log 228 Not Found: /static/bootstrap/css/bootstrap.min.css
+WARNING 2025-08-01 16:19:41,946 log 228 Not Found: /static/assets/styles.css
+WARNING 2025-08-01 16:19:41,947 log 228 Not Found: /static/fonts/iconfont.css
+WARNING 2025-08-01 16:19:41,948 log 228 Not Found: /static/bootstrap/css/bootstrap-responsive.min.css
+WARNING 2025-08-01 16:19:41,949 log 228 Not Found: /static/css/toastr.min.css
+WARNING 2025-08-01 16:19:41,950 log 228 Not Found: /static/js/toastr.min.js
+WARNING 2025-08-01 16:19:41,951 basehttp 154 "GET /static/assets/styles.css HTTP/1.1" 404 77
+WARNING 2025-08-01 16:19:41,952 basehttp 154 "GET /static/bootstrap/css/bootstrap.min.css HTTP/1.1" 404 77
+WARNING 2025-08-01 16:19:41,952 basehttp 154 "GET /static/fonts/iconfont.css HTTP/1.1" 404 77
+WARNING 2025-08-01 16:19:41,952 basehttp 154 "GET /static/bootstrap/css/bootstrap-responsive.min.css HTTP/1.1" 404 77
+WARNING 2025-08-01 16:19:41,954 log 228 Not Found: /static/bootstrap/js/bootstrap.min.js
+WARNING 2025-08-01 16:19:41,954 basehttp 154 "GET /static/css/toastr.min.css HTTP/1.1" 404 77
+WARNING 2025-08-01 16:19:41,955 log 228 Not Found: /static/assets/scripts.js
+WARNING 2025-08-01 16:19:41,955 basehttp 154 "GET /static/js/toastr.min.js HTTP/1.1" 404 77
+WARNING 2025-08-01 16:19:41,957 basehttp 154 "GET /static/bootstrap/js/bootstrap.min.js HTTP/1.1" 404 77
+WARNING 2025-08-01 16:19:41,957 basehttp 154 "GET /static/assets/scripts.js HTTP/1.1" 404 77
+INFO 2025-08-01 16:19:43,998 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:19:46,004 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:19:48,003 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:19:50,008 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:19:50,367 basehttp 154 "GET /spider/states.html HTTP/1.1" 200 9566
+WARNING 2025-08-01 16:19:50,388 log 228 Not Found: /static/bootstrap/css/bootstrap.min.css
+WARNING 2025-08-01 16:19:50,390 log 228 Not Found: /static/bootstrap/css/bootstrap-responsive.min.css
+WARNING 2025-08-01 16:19:50,392 log 228 Not Found: /static/assets/styles.css
+WARNING 2025-08-01 16:19:50,392 log 228 Not Found: /static/fonts/iconfont.css
+WARNING 2025-08-01 16:19:50,394 log 228 Not Found: /static/css/toastr.min.css
+WARNING 2025-08-01 16:19:50,396 log 228 Not Found: /static/js/toastr.min.js
+WARNING 2025-08-01 16:19:50,396 basehttp 154 "GET /static/bootstrap/css/bootstrap.min.css HTTP/1.1" 404 77
+WARNING 2025-08-01 16:19:50,397 basehttp 154 "GET /static/bootstrap/css/bootstrap-responsive.min.css HTTP/1.1" 404 77
+WARNING 2025-08-01 16:19:50,398 basehttp 154 "GET /static/assets/styles.css HTTP/1.1" 404 77
+WARNING 2025-08-01 16:19:50,398 basehttp 154 "GET /static/fonts/iconfont.css HTTP/1.1" 404 77
+WARNING 2025-08-01 16:19:50,403 log 228 Not Found: /static/assets/scripts.js
+WARNING 2025-08-01 16:19:50,403 basehttp 154 "GET /static/css/toastr.min.css HTTP/1.1" 404 77
+WARNING 2025-08-01 16:19:50,405 log 228 Not Found: /static/bootstrap/js/bootstrap.min.js
+WARNING 2025-08-01 16:19:50,406 basehttp 154 "GET /static/js/toastr.min.js HTTP/1.1" 404 77
+WARNING 2025-08-01 16:19:50,408 basehttp 154 "GET /static/assets/scripts.js HTTP/1.1" 404 77
+WARNING 2025-08-01 16:19:50,409 basehttp 154 "GET /static/bootstrap/js/bootstrap.min.js HTTP/1.1" 404 77
+INFO 2025-08-01 16:19:52,459 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:19:54,117 views 715 
+INFO 2025-08-01 16:19:54,117 views 716 1
+INFO 2025-08-01 16:19:54,117 views 717 <QuerySet []>
+INFO 2025-08-01 16:19:54,138 basehttp 154 "GET /spider/list.html HTTP/1.1" 200 11404
+WARNING 2025-08-01 16:19:54,154 log 228 Not Found: /static/bootstrap/css/bootstrap.min.css
+WARNING 2025-08-01 16:19:54,156 log 228 Not Found: /static/assets/styles.css
+WARNING 2025-08-01 16:19:54,157 log 228 Not Found: /static/fonts/iconfont.css
+WARNING 2025-08-01 16:19:54,158 log 228 Not Found: /static/css/toastr.min.css
+WARNING 2025-08-01 16:19:54,159 log 228 Not Found: /static/jquery-3.2.1.min.js
+WARNING 2025-08-01 16:19:54,160 log 228 Not Found: /static/bootstrap/css/bootstrap-responsive.min.css
+WARNING 2025-08-01 16:19:54,161 basehttp 154 "GET /static/bootstrap/css/bootstrap.min.css HTTP/1.1" 404 77
+WARNING 2025-08-01 16:19:54,161 basehttp 154 "GET /static/fonts/iconfont.css HTTP/1.1" 404 77
+WARNING 2025-08-01 16:19:54,162 basehttp 154 "GET /static/assets/styles.css HTTP/1.1" 404 77
+WARNING 2025-08-01 16:19:54,162 basehttp 154 "GET /static/css/toastr.min.css HTTP/1.1" 404 77
+WARNING 2025-08-01 16:19:54,162 basehttp 154 "GET /static/jquery-3.2.1.min.js HTTP/1.1" 404 77
+WARNING 2025-08-01 16:19:54,162 basehttp 154 "GET /static/bootstrap/css/bootstrap-responsive.min.css HTTP/1.1" 404 77
+WARNING 2025-08-01 16:19:54,164 log 228 Not Found: /static/js/toastr.min.js
+WARNING 2025-08-01 16:19:54,165 log 228 Not Found: /static/assets/scripts.js
+WARNING 2025-08-01 16:19:54,167 log 228 Not Found: /static/bootstrap/js/bootstrap.min.js
+WARNING 2025-08-01 16:19:54,167 basehttp 154 "GET /static/js/toastr.min.js HTTP/1.1" 404 77
+WARNING 2025-08-01 16:19:54,168 basehttp 154 "GET /static/assets/scripts.js HTTP/1.1" 404 77
+WARNING 2025-08-01 16:19:54,168 basehttp 154 "GET /static/bootstrap/js/bootstrap.min.js HTTP/1.1" 404 77
+INFO 2025-08-01 16:19:56,216 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+WARNING 2025-08-01 16:19:57,054 log 228 Not Found: /static/bootstrap/css/bootstrap.min.css
+WARNING 2025-08-01 16:19:57,056 log 228 Not Found: /static/css/toastr.min.css
+WARNING 2025-08-01 16:19:57,057 log 228 Not Found: /static/fonts/iconfont.css
+WARNING 2025-08-01 16:19:57,058 log 228 Not Found: /static/assets/styles.css
+WARNING 2025-08-01 16:19:57,059 log 228 Not Found: /static/bootstrap/css/bootstrap-responsive.min.css
+WARNING 2025-08-01 16:19:57,059 basehttp 154 "GET /static/bootstrap/css/bootstrap.min.css HTTP/1.1" 404 77
+WARNING 2025-08-01 16:19:57,060 basehttp 154 "GET /static/css/toastr.min.css HTTP/1.1" 404 77
+WARNING 2025-08-01 16:19:57,061 basehttp 154 "GET /static/fonts/iconfont.css HTTP/1.1" 404 77
+WARNING 2025-08-01 16:19:57,061 basehttp 154 "GET /static/assets/styles.css HTTP/1.1" 404 77
+WARNING 2025-08-01 16:19:57,062 basehttp 154 "GET /static/bootstrap/css/bootstrap-responsive.min.css HTTP/1.1" 404 77
+WARNING 2025-08-01 16:19:57,068 log 228 Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-08-01 16:19:57,068 basehttp 154 "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 77
+INFO 2025-08-01 16:19:58,238 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:20:00,217 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:20:02,231 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:20:04,231 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:20:06,213 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:20:08,225 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:20:09,323 views 715 
+INFO 2025-08-01 16:20:09,324 views 716 1
+INFO 2025-08-01 16:20:09,324 views 717 <QuerySet []>
+INFO 2025-08-01 16:20:09,333 basehttp 154 "GET /spider/list.html HTTP/1.1" 200 11404
+WARNING 2025-08-01 16:20:09,354 log 228 Not Found: /static/bootstrap/css/bootstrap.min.css
+WARNING 2025-08-01 16:20:09,355 basehttp 154 "GET /static/bootstrap/css/bootstrap.min.css HTTP/1.1" 404 77
+WARNING 2025-08-01 16:20:09,357 log 228 Not Found: /static/bootstrap/css/bootstrap-responsive.min.css
+WARNING 2025-08-01 16:20:09,358 log 228 Not Found: /static/assets/styles.css
+WARNING 2025-08-01 16:20:09,359 log 228 Not Found: /static/fonts/iconfont.css
+WARNING 2025-08-01 16:20:09,360 log 228 Not Found: /static/jquery-3.2.1.min.js
+WARNING 2025-08-01 16:20:09,362 log 228 Not Found: /static/js/toastr.min.js
+WARNING 2025-08-01 16:20:09,363 log 228 Not Found: /static/css/toastr.min.css
+WARNING 2025-08-01 16:20:09,364 basehttp 154 "GET /static/fonts/iconfont.css HTTP/1.1" 404 77
+WARNING 2025-08-01 16:20:09,364 basehttp 154 "GET /static/bootstrap/css/bootstrap-responsive.min.css HTTP/1.1" 404 77
+WARNING 2025-08-01 16:20:09,365 basehttp 154 "GET /static/assets/styles.css HTTP/1.1" 404 77
+WARNING 2025-08-01 16:20:09,365 basehttp 154 "GET /static/jquery-3.2.1.min.js HTTP/1.1" 404 77
+WARNING 2025-08-01 16:20:09,365 basehttp 154 "GET /static/js/toastr.min.js HTTP/1.1" 404 77
+WARNING 2025-08-01 16:20:09,366 basehttp 154 "GET /static/css/toastr.min.css HTTP/1.1" 404 77
+WARNING 2025-08-01 16:20:09,368 log 228 Not Found: /static/bootstrap/js/bootstrap.min.js
+WARNING 2025-08-01 16:20:09,370 log 228 Not Found: /static/assets/scripts.js
+WARNING 2025-08-01 16:20:09,371 log 228 Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-08-01 16:20:09,372 basehttp 154 "GET /static/bootstrap/js/bootstrap.min.js HTTP/1.1" 404 77
+WARNING 2025-08-01 16:20:09,373 basehttp 154 "GET /static/assets/scripts.js HTTP/1.1" 404 77
+WARNING 2025-08-01 16:20:09,373 basehttp 154 "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 77
+INFO 2025-08-01 16:20:20,300 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:20:22,292 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:20:24,310 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+WARNING 2025-08-01 16:20:27,873 log 228 Not Found: /bot/index.html
+WARNING 2025-08-01 16:20:27,874 basehttp 154 "GET /bot/index.html HTTP/1.1" 404 77
+INFO 2025-08-01 16:20:32,875 basehttp 154 "GET / HTTP/1.1" 200 1150
+WARNING 2025-08-01 16:20:32,887 log 228 Not Found: /static/bootstrap/css/bootstrap.min.css
+WARNING 2025-08-01 16:20:32,888 log 228 Not Found: /static/jquery-3.2.1.min.js
+WARNING 2025-08-01 16:20:32,889 log 228 Not Found: /static/bootstrap/js/bootstrap.min.js
+WARNING 2025-08-01 16:20:32,890 basehttp 154 "GET /static/jquery-3.2.1.min.js HTTP/1.1" 404 77
+WARNING 2025-08-01 16:20:32,892 basehttp 154 "GET /static/bootstrap/css/bootstrap.min.css HTTP/1.1" 404 77
+WARNING 2025-08-01 16:20:32,893 basehttp 154 "GET /static/bootstrap/js/bootstrap.min.js HTTP/1.1" 404 77
+INFO 2025-08-01 16:20:36,057 basehttp 154 "GET / HTTP/1.1" 200 1149
+WARNING 2025-08-01 16:20:36,070 log 228 Not Found: /static/bootstrap/css/bootstrap.min.css
+WARNING 2025-08-01 16:20:36,071 log 228 Not Found: /static/jquery-3.2.1.min.js
+WARNING 2025-08-01 16:20:36,072 log 228 Not Found: /static/bootstrap/js/bootstrap.min.js
+WARNING 2025-08-01 16:20:36,073 basehttp 154 "GET /static/bootstrap/css/bootstrap.min.css HTTP/1.1" 404 77
+WARNING 2025-08-01 16:20:36,073 basehttp 154 "GET /static/jquery-3.2.1.min.js HTTP/1.1" 404 77
+WARNING 2025-08-01 16:20:36,074 basehttp 154 "GET /static/bootstrap/js/bootstrap.min.js HTTP/1.1" 404 77
+WARNING 2025-08-01 16:20:38,275 log 228 Not Found: /static/bootstrap/css/bootstrap.min.css
+WARNING 2025-08-01 16:20:38,276 basehttp 154 "GET /static/bootstrap/css/bootstrap.min.css HTTP/1.1" 404 77
+WARNING 2025-08-01 16:20:38,285 log 228 Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-08-01 16:20:38,285 basehttp 154 "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 77
+INFO 2025-08-01 16:20:41,906 basehttp 154 "GET / HTTP/1.1" 200 1149
+WARNING 2025-08-01 16:20:41,927 log 228 Not Found: /static/bootstrap/css/bootstrap.min.css
+WARNING 2025-08-01 16:20:41,929 log 228 Not Found: /static/jquery-3.2.1.min.js
+WARNING 2025-08-01 16:20:41,930 log 228 Not Found: /static/bootstrap/js/bootstrap.min.js
+WARNING 2025-08-01 16:20:41,931 basehttp 154 "GET /static/bootstrap/css/bootstrap.min.css HTTP/1.1" 404 77
+WARNING 2025-08-01 16:20:41,933 log 228 Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-08-01 16:20:41,933 basehttp 154 "GET /static/jquery-3.2.1.min.js HTTP/1.1" 404 77
+WARNING 2025-08-01 16:20:41,934 basehttp 154 "GET /static/bootstrap/js/bootstrap.min.js HTTP/1.1" 404 77
+WARNING 2025-08-01 16:20:41,935 basehttp 154 "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 77
+INFO 2025-08-01 16:21:06,829 autoreload 217 F:\CrawlSpace爬虫管理系统\CrawlSpace\CrawlSpace\settings.py changed, reloading.
+INFO 2025-08-01 16:21:08,532 autoreload 597 Watching for file changes with StatReloader
+INFO 2025-08-01 16:21:09,194 basehttp 154 "GET / HTTP/1.1" 200 1147
+WARNING 2025-08-01 16:21:09,216 log 228 Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-08-01 16:21:09,217 basehttp 154 "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 1032
+INFO 2025-08-01 16:21:09,223 basehttp 154 "GET /static/bootstrap/js/bootstrap.min.js HTTP/1.1" 200 28631
+INFO 2025-08-01 16:21:09,224 basehttp 154 "GET /static/bootstrap/css/bootstrap.min.css HTTP/1.1" 200 106006
+INFO 2025-08-01 16:21:09,226 basehttp 154 "GET /static/jquery-3.2.1.min.js HTTP/1.1" 200 86659
+INFO 2025-08-01 16:21:30,008 basehttp 154 "POST /accounts/login/ HTTP/1.1" 302 0
+INFO 2025-08-01 16:21:30,026 basehttp 154 "GET /spider/states.html HTTP/1.1" 200 9566
+WARNING 2025-08-01 16:21:30,063 log 228 Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-08-01 16:21:30,064 basehttp 154 "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 1032
+INFO 2025-08-01 16:21:30,078 basehttp 154 "GET /static/bootstrap/css/bootstrap.min.css HTTP/1.1" 200 106006
+INFO 2025-08-01 16:21:30,080 basehttp 154 "GET /static/bootstrap/css/bootstrap-responsive.min.css HTTP/1.1" 200 16840
+INFO 2025-08-01 16:21:30,081 basehttp 154 "GET /static/assets/styles.css HTTP/1.1" 200 4270
+INFO 2025-08-01 16:21:30,083 basehttp 154 "GET /static/fonts/iconfont.css HTTP/1.1" 200 996
+INFO 2025-08-01 16:21:30,083 basehttp 154 "GET /static/css/toastr.min.css HTTP/1.1" 200 6454
+INFO 2025-08-01 16:21:30,084 basehttp 154 "GET /static/js/toastr.min.js HTTP/1.1" 200 5251
+INFO 2025-08-01 16:21:30,085 basehttp 154 "GET /static/bootstrap/js/bootstrap.min.js HTTP/1.1" 200 28631
+INFO 2025-08-01 16:21:30,086 basehttp 154 "GET /static/assets/scripts.js HTTP/1.1" 200 496
+INFO 2025-08-01 16:21:30,259 basehttp 154 "GET /static/fonts/iconfont.woff2?t=1666924960822 HTTP/1.1" 200 2416
+INFO 2025-08-01 16:21:30,259 basehttp 154 "GET /static/bootstrap/img/glyphicons-halflings.png HTTP/1.1" 200 12799
+INFO 2025-08-01 16:21:32,336 views 660 主机节点状态信息:[]
+INFO 2025-08-01 16:21:32,337 basehttp 154 "GET /spider/node/ HTTP/1.1" 200 2
+INFO 2025-08-01 16:21:34,341 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:21:36,329 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:21:37,429 views 715 
+INFO 2025-08-01 16:21:37,430 views 716 1
+INFO 2025-08-01 16:21:37,430 views 717 <QuerySet []>
+INFO 2025-08-01 16:21:37,446 basehttp 154 "GET /spider/list.html HTTP/1.1" 200 11404
+INFO 2025-08-01 16:21:38,829 basehttp 154 "GET /task/list.html HTTP/1.1" 200 10223
+INFO 2025-08-01 16:21:40,225 basehttp 154 "GET /analysis/index.html HTTP/1.1" 200 11098
+INFO 2025-08-01 16:21:40,246 basehttp 154 "GET /static/slidjs/jquery.SuperSlide.2.1.3.js HTTP/1.1" 200 11949
+INFO 2025-08-01 16:22:02,307 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:22:02,584 views 715 
+INFO 2025-08-01 16:22:02,585 views 716 1
+INFO 2025-08-01 16:22:02,587 views 717 <QuerySet []>
+INFO 2025-08-01 16:22:02,607 basehttp 154 "GET /spider/list.html HTTP/1.1" 200 11404
+INFO 2025-08-01 16:22:03,664 basehttp 154 "GET /task/list.html HTTP/1.1" 200 10223
+INFO 2025-08-01 16:22:05,359 basehttp 154 "GET /spider/server.html HTTP/1.1" 200 11012
+INFO 2025-08-01 16:22:07,435 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:22:09,437 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+ERROR 2025-08-01 16:22:10,672 log 228 Internal Server Error: /analysis/pie_increase/
+Traceback (most recent call last):
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    "returned None instead." % (callback.__module__, view_name)
+ValueError: The view analysis.views.get_source_increase_pie_data didn't return an HttpResponse object. It returned None instead.
+ERROR 2025-08-01 16:22:10,681 log 228 Internal Server Error: /analysis/pie_update/
+Traceback (most recent call last):
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    "returned None instead." % (callback.__module__, view_name)
+ValueError: The view analysis.views.get_source_update_pie_data didn't return an HttpResponse object. It returned None instead.
+ERROR 2025-08-01 16:22:10,688 log 228 Internal Server Error: /analysis/sum_increase_update/
+Traceback (most recent call last):
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    "returned None instead." % (callback.__module__, view_name)
+ValueError: The view analysis.views.get_data didn't return an HttpResponse object. It returned None instead.
+ERROR 2025-08-01 16:22:10,695 log 228 Internal Server Error: /analysis/bar_sum/
+Traceback (most recent call last):
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    "returned None instead." % (callback.__module__, view_name)
+ValueError: The view analysis.views.get_source_bar_data didn't return an HttpResponse object. It returned None instead.
+ERROR 2025-08-01 16:22:10,708 log 228 Internal Server Error: /analysis/pie_sum/
+Traceback (most recent call last):
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    "returned None instead." % (callback.__module__, view_name)
+ValueError: The view analysis.views.get_source_pie_data didn't return an HttpResponse object. It returned None instead.
+ERROR 2025-08-01 16:22:10,717 log 228 Internal Server Error: /analysis/source/
+Traceback (most recent call last):
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "D:\conda_envs\crawlspace\lib\site-packages\django\core\handlers\base.py", line 126, in _get_response
+    "returned None instead." % (callback.__module__, view_name)
+ValueError: The view analysis.views.get_source_per_data didn't return an HttpResponse object. It returned None instead.
+INFO 2025-08-01 16:22:11,441 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:22:13,438 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:22:15,440 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:22:16,904 basehttp 154 "GET /spider/deploy.html HTTP/1.1" 200 11280
+INFO 2025-08-01 16:22:19,000 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:22:20,993 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:22:21,374 basehttp 154 "GET /spider/upload.html HTTP/1.1" 200 8677
+INFO 2025-08-01 16:22:21,400 basehttp 154 "GET /static/dist/styles.imageuploader.css HTTP/1.1" 200 12026
+INFO 2025-08-01 16:22:21,400 basehttp 154 "GET /static/dist/jquery.imageuploader.js HTTP/1.1" 200 12118
+INFO 2025-08-01 16:22:21,400 basehttp 154 "GET /static/js/jquery-1.11.0.min.js HTTP/1.1" 200 96383
+INFO 2025-08-01 16:22:23,492 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:22:25,465 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:22:27,475 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:22:29,468 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:22:31,461 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:22:32,020 basehttp 154 "GET /spider/states.html HTTP/1.1" 200 9566
+INFO 2025-08-01 16:22:32,110 views 660 主机节点状态信息:[]
+INFO 2025-08-01 16:22:32,111 basehttp 154 "GET /spider/node/ HTTP/1.1" 200 2
+INFO 2025-08-01 16:22:33,521 basehttp 154 "GET /monitor/index.html HTTP/1.1" 200 10852
+INFO 2025-08-01 16:22:33,564 basehttp 154 "GET /static/ace-editor/js/ext-beautify.js HTTP/1.1" 200 4503
+INFO 2025-08-01 16:22:33,568 basehttp 154 "GET /static/ace-editor/js/ext-searchbox.js HTTP/1.1" 200 13599
+INFO 2025-08-01 16:22:33,568 basehttp 154 "GET /static/ace-editor/js/theme-monokai.js HTTP/1.1" 200 3359
+INFO 2025-08-01 16:22:33,568 basehttp 154 "GET /static/ace-editor/js/mode-python.js HTTP/1.1" 200 8303
+INFO 2025-08-01 16:22:33,568 basehttp 154 "GET /static/ace-editor/js/ext-language_tools.js HTTP/1.1" 200 55381
+INFO 2025-08-01 16:22:33,579 basehttp 154 "GET /static/ace-editor/js/mode-json.js HTTP/1.1" 200 5561
+INFO 2025-08-01 16:22:33,580 basehttp 154 "GET /static/ace-editor/js/snippets/python.js HTTP/1.1" 200 4158
+INFO 2025-08-01 16:22:33,581 basehttp 154 "GET /static/ace-editor/js/theme-xcode.js HTTP/1.1" 200 3159
+INFO 2025-08-01 16:22:33,582 basehttp 154 "GET /static/ace-editor/js/worker-json.js HTTP/1.1" 200 52462
+INFO 2025-08-01 16:22:33,583 basehttp 154 "GET /static/ace-editor/js/ace.js HTTP/1.1" 200 449252
+INFO 2025-08-01 16:22:33,706 basehttp 154 "GET /monitor/configs/ HTTP/1.1" 200 15
+INFO 2025-08-01 16:22:35,637 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:22:37,292 basehttp 154 "GET /spider/package.html HTTP/1.1" 200 9973
+INFO 2025-08-01 16:22:39,368 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:22:41,375 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:22:43,378 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:22:45,377 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:22:47,373 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:22:49,365 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:22:51,371 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:22:53,633 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:22:55,638 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:22:57,637 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:22:59,636 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:23:01,632 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:23:03,627 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:23:05,640 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:23:07,632 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:23:09,627 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:23:11,635 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:23:13,629 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:23:15,642 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:23:17,643 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:23:19,642 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:23:21,641 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:23:23,642 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:23:25,639 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:23:27,631 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:23:29,633 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:23:31,640 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:23:33,637 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:23:35,629 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:23:37,644 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:23:39,627 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:23:41,629 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:23:43,640 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:23:45,633 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:23:47,627 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:23:49,635 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46
+INFO 2025-08-01 16:24:05,637 basehttp 154 "GET /spider/tasks/ HTTP/1.1" 200 46

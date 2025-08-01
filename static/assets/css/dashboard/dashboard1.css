@@ -1,0 +1,15 @@
+.fa-twitter, .twitter {color:#2CAAE1;}
+.fa-instagram, .instagram {color:#D71EA6;}
+.fa-facebook, .facebook {color:#3b5998;}
+.fa-linkedin, .linkedin {color:#0274B3;}
+.bg-insta{background-color:#D71EA6;}
+.bg-twitter{background-color:#2CAAE1;}
+.bg-facebook{background-color:#3b5998;}
+.bg-linkedin{background-color:#0274B3;}
+.table-striped tbody tr:nth-of-type(2n+1){background-color: rgba(8, 27, 243, 0.1);}
+.skin-green .table-striped tbody tr:nth-of-type(2n+1){background-color: rgba(0, 166, 90, 0.1);}
+.skin-red .table-striped tbody tr:nth-of-type(2n+1){background-color: rgba(221, 75, 57, 0.1);}
+.skin-purple .table-striped tbody tr:nth-of-type(2n+1){background-color: rgba(111, 104, 231, 0.1);}
+.skin-yellow .table-striped tbody tr:nth-of-type(2n+1){background-color: rgba(243, 156, 18, 0.1);}
+.skin-magenta .table-striped tbody tr:nth-of-type(2n+1){background-color: rgba(215, 30, 166, 0.1);}
+.skin-orange .table-striped tbody tr:nth-of-type(2n+1){background-color: rgba(255, 69, 0, 0.1);}

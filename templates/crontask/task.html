@@ -1,0 +1,380 @@
+<!--定时任务页面-->
+{% extends "base.html" %}
+{% load static %}
+{% block style%}
+<!--        toastr消息通知-->
+<link rel="stylesheet" href='{% static "css/toastr.min.css"%}'>
+<script src='{% static "/jquery-3.2.1.min.js"%}'></script>
+<script src='{% static "js/toastr.min.js" %}'></script>
+<style>
+    .row-fluid .span12 {
+        width: 100%;
+        margin-left: 0;
+    }
+</style>
+{% endblock %}
+
+
+{% block info %}
+<div class="span12">
+    <div class="page-header">
+        <h4>
+            爬虫定时任务<small> 支持多个任务</small>
+<!--            任务搜索-->
+            <form action="{% url 'cron:cronindex'%}" method="get" style="float:right;">
+                <input class="el-button--text" placeholder="爬虫名称" name="spidername" style="height: 25px">
+               <button type="submit" id= "search" class="el-btn btn-danger" style="border-radius: 5px;height: 30px">搜索</button>
+            </form>
+        </h4>
+    </div>
+</div>
+
+<table class="table table-striped table-hover">
+    <thead>
+    <tr>
+        <th>编号</th>
+        <th>项目名</th>
+        <th>爬虫名</th>
+        <th>运行规则</th>
+        <th>开始时间</th>
+        <th>完成时间</th>
+        <th>下次运行时间</th>
+        <th>运行状态</th>
+        <th>成功次数</th>
+        <th>失败次数</th>
+        <th>操作</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for s in page %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td class="project" _id="{{ forloop.counter0}}">{{s.project}}</td>
+            <td class="spidername" _id="{{ forloop.counter0}}">{{s.spidername}}</td>
+            {% if s.rulefile %}
+                <td class="rulefile" _id="{{ forloop.counter0}}">{{ s.rulefile }}</td>
+            {% else %}
+                <td class="rulefile" _id="{{ forloop.counter0}}">{{ s.spidername }}</td>
+            {% endif %}
+            <td class="start" _id="{{ forloop.counter0}}">{{s.job.local_run_time}}</td>
+            <td class="end" _id="{{ forloop.counter0}}"></td>
+            <td class="next" _id="{{ forloop.counter0}}">{{s.job.next_run_time}}</td>
+            <td class="status" _id="{{ forloop.counter0}}"></td>
+            <td class="success" _id="{{ forloop.counter0}}"></td>
+            <td class="failure" _id="{{ forloop.counter0}}"></td>
+            <td>
+                {% if s.rulefile %}
+                    <button type="button" class="btn-sm btn-warning"  value="{{ s.rulefile }}:rulefile" onclick="pause_info(this)" style="border: none;border-radius:3px">暂停</button>
+                    <button type="button" class="btn-sm btn-info"  value="{{ s.rulefile }}:rulefile" onclick="resume_info(this)" style="border: none;border-radius:3px">重启</button>
+                    <button type="button" class="btn-sm btn-primary" id="rescheduler" value="{{ s.rulefile }}:rulefile" onclick="rescheduler(this)" style="border: none;border-radius:3px">调度</button>
+                    <button type="button" class="btn-sm btn-success"  value="{{ s.rulefile }}:rulefile" onclick="croninfo(this)" style="border: none;border-radius:3px">配置</button>
+                    <button type="button" class="btn-sm btn-danger" id="del_one" value="{{ s.rulefile }}:rulefile" onclick="del_one(this)" style="border: none;border-radius:3px">删除</button>
+
+                {% else %}
+                    <button type="button" class="btn-sm btn-warning"  value="{{ s.spidername }}:spider" onclick="pause_info(this)" style="border: none;border-radius:3px">暂停</button>
+                    <button type="button" class="btn-sm btn-info"  value="{{ s.spidername }}:spider" onclick="resume_info(this)" style="border: none;border-radius:3px">重启</button>
+                    <button type="button" class="btn-sm btn-primary" id="rescheduler" value="{{ s.spidername }}:spider" onclick="rescheduler(this)" style="border: none;border-radius:3px">调度</button>
+                    <button type="button" class="btn-sm btn-success"  value="{{ s.spidername }}:spider" onclick="croninfo(this)" style="border: none;border-radius:3px">配置</button>
+                    <button type="button" class="btn-sm btn-danger" id="del_one" value="{{ s.spidername }}:spider" onclick="del_one(this)" style="border: none;border-radius:3px">删除</button>
+
+                {% endif %}
+            </td>
+            <td>
+                <div class="checkbox" style="height: 0px">
+                    {% if s.rulefile %}
+                    <label><input type="checkbox" value="{{ s.rulefile }}:rulefile" name="subbox" style="margin: -6px 6px 6px -5px"></label>
+                    {% else %}
+                    <label><input type="checkbox" value="{{ s.spidername }}:spider" name="subbox" style="margin: -6px 6px 6px -5px"></label>
+                    {% endif %}
+                  </div>
+            </td>
+        </tr>
+    {% endfor %}
+    <tr>
+        {% if page %}
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td class="link" _id="{{ forloop.counter0}}">
+                <button type="button" class="btn-danger btn-sm" id="del" style="border: none;border-radius:3px">删除</button>
+                <button class="btn-sm" style="border: none;border-radius:3px"><input type="checkbox"  value="" id="select" onchange="selectAll1()">全选</button>
+        </td>
+        <td></td>
+        {% endif %}
+    </tr>
+    </tbody>
+</table>
+   <!--模态框设置定时任务-->
+<div class="modal fade hide" id="myModal_corninfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+             <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">任务配置信息</h4>
+              </div>
+             <div class="modal-body">
+                 <form method="post">
+                    <div id="croninfo">
+                        <div class="info">
+                            <table class="table">
+                                <tr>
+                                    <td>触发方式：</td>
+                                    <td>CRON</td>
+                                </tr>
+                                <tr>
+                                    <td>主机号：</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>年:</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>月:</td>
+                                    <td></td>
+                                </tr>
+                                 <tr>
+                                    <td>日:</td>
+                                    <td></td>
+                                </tr>
+                                 <tr>
+                                    <td>周:</td>
+                                    <td></td>
+                                </tr>
+                                 <tr>
+                                    <td>每周几:</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>时:</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>分:</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>秒:</td>
+                                    <td></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </form>
+             </div>
+        </div><!-- /.modal-content -->
+     </div><!-- /.modal -->
+</div>
+<span style="float: left">
+    {% if page.has_previous %}
+    <!--//判断当前页是否有上一页-->
+    <button class="btn btn-info btn-sm">
+        <a href="/task/list.html?page={{page.previous_page_number}}" aria-label="Previous"><span aria-hidden="true" id="pre" style="color: white">上一页</span></a>
+    </button>
+    {% endif %}
+    </span>
+<span style="float: right">
+    {% if page.has_next %}
+    <!-- // 判断当前页是否有下一页-->
+         <button class="btn btn-info btn-sm">
+         <a href="/task/list.html?page={{page.next_page_number}}" aria-label="Next"><span aria-hidden="true" style="color: white">下一页</span></a>
+         </button>
+      {% endif %}
+</span>
+{% endblock %}
+
+{% block script %}
+ var toastr;
+ toastr.options = {
+    closeButton: true,//显示关闭按钮
+    debug: false,
+    progressBar: true,//显示进度条
+    positionClass: "toast-top-center",//位置
+    onclick: null,//点击消息框自定义事件
+    showDuration: "300",//显示动作时间
+    hideDuration: "1000",//隐藏动作时间
+    timeOut: "2000",//显示时间,0为永久显示
+    extendedTimeOut: "1000",//鼠标移动过后显示显示时间
+    showEasing: "swing",
+    hideEasing: "linear",
+    showMethod: "fadeIn",//显示方式
+    hideMethod: "fadeOut"//隐藏方式
+ };
+
+<!--    获取状态所需的参数并组合成需要的格式-->
+function getparam(){
+    rulefiles=[]
+    $('.rulefile').each(function(){
+        rulefiles.push($(this).text())
+        })
+    console.log(rulefiles)
+    return rulefiles
+}
+
+<!--    定时2秒获取状态并更新任务-->
+function status(){
+    setInterval(function(){
+        if(getparam()!=[]){
+            getparam()
+            $.post("/task/info/",{"data":JSON.stringify(getparam())},function(result){
+                console.log(result.state,result.status)
+                if(result.status==200){
+                    status_list=result.results
+                    console.log(status_list)
+                    for(var j=0;j<status_list.length;j++){
+                        console.log(status_list[j])
+                        $(".start[_id="+j+"]").html(status_list[j]["run_time"])
+                        $(".end[_id="+j+"]").html(status_list[j]["finished_time"])
+                        if(status_list[j]["state"]==null){
+                                $(".status[_id="+j+"]").html('<button type="button" class="btn-success btn-sm" style="color: white;border: none;">已完成</button>')
+                        }else{
+                            $(".status[_id="+j+"]").html('<button type="button" class="btn-warning btn-sm" style="color: white;border: none;">'+status_list[j]["state"]+'</button>')
+                        }
+                        $(".success[_id="+j+"]").html(status_list[j]["success_count"])
+                        $(".failure[_id="+j+"]").html(status_list[j]["failure_count"])
+                    }
+                }
+            })
+        }
+    },2000);
+}
+status();
+<!--    批量选中-->
+function selectAll1() {
+    var isCheck=$("#select").is(':checked');//获得全选复选框是否选中
+        $("input[type='checkbox']").each(function(){
+        this.checked=isCheck; //循环赋值给每个复选框是否选中
+    });
+}
+
+$(document).ready(function(){
+<!--    批量删除任务-->
+    $("button#del").click(function(){
+        var tasks=[];
+        $("input:checkbox[name='subbox']:checked").each(function(){
+            console.log($(this).val())
+            tasks.push($(this).val());
+        });
+        console.log(tasks)
+         if(tasks.length!=0){
+                var b = confirm("确定提交");
+                if(b==true){
+                    $.post("/task/del/",{"data":JSON.stringify(tasks)},function(result){
+                        if(result.status==200){
+                            toastr.info("任务删除成功数:"+result.count)
+                            setTimeout(() => {
+                              window.location.reload();
+                            }, 1000);
+                        }else{
+                            toastr.error(result.msg)
+                        }
+                    })
+                }
+            }else{
+                toastr.warning("请至少选择一个要处理的任务")
+            }
+    });
+})
+
+<!--    删除单个任务-->
+function del_one(value){
+    value = $(value).attr('value')
+<!--    console.log(value)-->
+    $.get("/task/del/",{"data":value},function(result){
+        if(result.status==200){
+<!--            alert("取消成功")-->
+            toastr.info("删除成功!")
+<!--            等待1秒执行刷新-->
+            setTimeout(() => {
+              window.location.href="{% url 'cron:cronindex' %}";
+            }, 500);
+
+        }else{
+            toastr.info(result.msg)
+        }
+    })
+}
+
+<!--获取定时任务的配置信息-->
+function croninfo(value){
+    value = $(value).attr('value')
+<!--配置信息的字段-->
+    var arg_map=['client_id','year', 'month', 'day', 'week', 'day_of_week', 'hour', 'minute', 'second']
+    $.get("/task/info/"+value,function(result){
+        if(result.status==200){
+            config = result.configuation
+            console.log(config)
+            $("#croninfo .info tr:gt(0)").each(function(i){
+              console.log(i);
+                if(config[arg_map[i]]!=undefined){
+                    $("td:nth-child(2)",this).html(config[arg_map[i]])
+                }else{
+                    $("td:nth-child(2)",this).html("")
+                }
+            })
+            $("#myModal_corninfo").modal("show");
+        }else{
+        }
+    })
+}
+
+<!--    暂停单个任务-->
+function pause_info(value){
+    value = $(value).attr('value')
+    $.get("/task/pause/"+value,function(result){
+        if(result.status==200){
+<!--            alert("取消成功")-->
+            toastr.info("暂停成功!")
+<!--            等待1秒执行刷新-->
+            setTimeout(() => {
+              window.location.href="{% url 'cron:cronindex' %}";
+            }, 500);
+        }else{
+            toastr.info(result.msg)
+        }
+    })
+}
+
+<!--    重启单个任务-->
+function resume_info(value){
+    value = $(value).attr('value')
+    $.get("/task/resume/"+value,function(result){
+        if(result.status==200){
+<!--            alert("取消成功")-->
+            toastr.info("重启成功!")
+<!--            等待1秒执行刷新-->
+            setTimeout(() => {
+              window.location.href="{% url 'cron:cronindex' %}";
+            }, 500);
+        }else{
+            toastr.info(result.msg)
+        }
+    })
+}
+
+<!--    重启调度单个任务，在系统重启之后-->
+function rescheduler(value){
+    value = $(value).attr('value')
+    console.log(value)
+    $.get("/task/re_sche/"+value,function(result){
+        if(result.status==200){
+<!--            alert("取消成功")-->
+            toastr.info("重新调度成功!")
+<!--            等待1秒执行刷新-->
+            setTimeout(() => {
+              window.location.href="{% url 'cron:cronindex' %}";
+            }, 500);
+        }else{
+            toastr.info(result.msg)
+        }
+    })
+}
+{% endblock %}
+

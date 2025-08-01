@@ -1,0 +1,469 @@
+<!--爬虫任务列表页面-->
+{% extends "base.html" %}
+{% load static %}
+{% block style%}
+<!--        toastr消息通知-->
+<link rel="stylesheet" href='{% static "css/toastr.min.css"%}'>
+<script src='{% static "/jquery-3.2.1.min.js"%}'></script>
+<script src='{% static "js/toastr.min.js" %}'></script>
+<style>
+    .row-fluid .span12 {
+        width: 100%;
+        margin-left: 0;
+    }
+
+</style>
+{% endblock %}
+
+
+{% block info %}
+<div class="span12">
+<!--    主机筛选任务-->
+    <div class="page-header">
+        <select name="select" style="margin-bottom: 0;"  currenthostid="{{host_id}}">
+            <option value="">主机筛选</option>
+             {% for client in clients %}
+             <option value={{client.id}} >{{client.host}}</option>
+            {% endfor %}
+        </select>
+
+         <form action="{% url 'spider:tasklist'%}" method="get" style="float: right">
+<!--             搜索-->
+            <input name="host_id" value="{{host_id}}" style="display: none;">
+            <input class="el-button--text" placeholder="爬虫名" name="spidername" style="height: 25px">
+           <button type="submit" id= "search" class="el-btn btn-danger" style="border-radius: 5px;height: 30px">搜索</button>
+        </form>
+    </div>
+</div>
+
+<table class="table table-striped table-hover">
+    <thead>
+    <tr>
+        <th>编号</th>
+        <th>项目库</th>
+        <th>项目名</th>
+        <th>爬虫名</th>
+        <th>运行规则</th>
+        <th>任务运行ID</th>
+        <th>运行状态</th>
+        <th>开始时间</th>
+        <th>结束时间</th>
+        <th>日志</th>
+        <th>操作</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for s in page %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td class="jobid" _id="{{ forloop.counter0}}"><button type="button" disabled="disabled" class="btn-danger btn-sm" style="color: white;border: none;border-radius:3px;">{{ s.package }}</button></td>
+            <td class="project">{{ s.project }}</td>
+            <td class="spidername" _id="{{ forloop.counter0}}">{{ s.spidername }}</td>
+            <td class="rulefile" _id="{{ forloop.counter0}}">{{ s.rulefile }}</td>
+            <td class="jobid" _id="{{ forloop.counter0}}"><div>{{ s.jobid }}</div></td>
+
+            {% if s.status == "已完成" %}
+                <td class="status" _id="{{ forloop.counter0}}"><button type="button" disabled="disabled" class="btn-success btn-sm" style="color: white;display:none;border: none;border-radius:3px;display:none;">{{s.status}}</button></td>
+            {% else %}
+                <td class="status" _id="{{ forloop.counter0}}"><button type="button" disabled="disabled" class="btn-info btn-sm" style="color: white;display:none;border: none;border-radius:3px;display:none;">{{s.status}}</button></td>
+            {% endif %}
+            <td class="start" _id="{{ forloop.counter0}}">{{s.start_time}}</td>
+            <td class="end" _id="{{ forloop.counter0}}">{{s.end_time}}</td>
+            <td class="link" _id="{{ forloop.counter0}}">
+                <div style="display:flex;align-items:center;">
+                    <button type="button" class="btn-success btn-sm" value="{{s.project}}:{{s.spidername}}:{{ s.jobid }}" onclick="view_last_log(this)" style="width:50px;border: none;border-radius:3px;margin-right:5px;">日志</button>
+                    <button type="button" class="btn-info btn-sm" value="{{s.project}}:{{s.spidername}}:{{ s.jobid }}" onclick="view_log(this)" style="width:50px;border: none;border-radius:3px;margin-right:5px;">详情</button>
+                    <button type="button" class="btn-warning btn-sm" id="cancel_one" value="{{s.project}}:{{ s.jobid }}" onclick="cancel_one(this)" style="width:50px;border: none;border-radius:3px;margin-right:5px;">取消</button>
+                    <button type="button" class="btn-danger btn-sm" id="state" value="{{s.project}}:{{s.spidername}}:{{ s.jobid }}" onclick="states(this)" style="width:50px;border: none;border-radius:3px">结果</button>
+                </div>
+            </td>
+            <td>
+                <div class="checkbox" style="height: 0px">
+                    <label><input type="checkbox" value="{{s.project}}:{{ s.jobid }}" name="subbox" style="margin: -6px 6px 6px -5px"></label>
+                  </div>
+            </td>
+            <td></td>
+        </tr>
+    {% endfor %}
+    <tr>
+        {% if page %}
+        <td class="link" _id="{{ forloop.counter0}}" colspan="10">
+            <div style="display:flex;align-items:center;justify-content: flex-end;">
+                <button type="button" class="btn-warning btn-sm" id="cancel" style="border: none;border-radius:3px">取消</button>
+                <button type="button" class="btn-danger" id="del" style="border: none;border-radius:3px;margin:0 5px;">删除</button>
+                <button type="button" class="btn-success btn-sm" id="sche" onclick="scheduler()" style="width:50px;border: none;border-radius:3px;margin-right:5px">调度</button>
+                <button class="btn-info" style="border: none;border-radius:3px;margin-right:5px;"><input type="checkbox"  value="" id="select" onchange="selectAll1()" style="vertical-align: middle;margin:0;margin-bottom:2px">全选</button>
+
+            </div>
+        </td>
+        <td colspan="2"></td>
+        {% endif %}
+    </tr>
+    </tbody>
+</table>
+<!--post请求跳转到新的页面-->
+<form action="" id="formbox" target="_blank" method="post">
+ <input type="hidden" name="formdata" id="formdata" value="">
+</form>
+<span style="float: left;">
+    {% if page.has_previous %}
+    <!--//判断当前页是否有上一页-->
+    <button class="btn btn-sm">
+        <a href="/spider/list.html?page={{page.previous_page_number}}&host_id={{host_id}}" aria-label="Previous"><span aria-hidden="true" id="pre" style="color: white">上一页</span></a>
+    </button>
+    {% endif %}
+    </span>
+    <span style="float: right;">
+    {% if page.has_next %}
+    <!-- // 判断当前页是否有下一页-->
+         <button class="btn btn-sm">
+            <a href="/spider/list.html?page={{page.next_page_number}}&host_id={{host_id}}" aria-label="Next"><span aria-hidden="true" style="color: white">下一页</span></a>
+         </button>
+      {% endif %}
+</span>
+{% endblock %}
+
+{% block script %}
+ var toastr;
+ toastr.options = {
+    closeButton: true,//显示关闭按钮
+    debug: false,
+    progressBar: true,//显示进度条
+    positionClass: "toast-top-center",//位置
+    onclick: null,//点击消息框自定义事件
+    showDuration: "300",//显示动作时间
+    hideDuration: "1000",//隐藏动作时间
+    timeOut: "2000",//显示时间,0为永久显示
+    extendedTimeOut: "1000",//鼠标移动过后显示显示时间
+    showEasing: "swing",
+    hideEasing: "linear",
+    showMethod: "fadeIn",//显示方式
+    hideMethod: "fadeOut"//隐藏方式
+ };
+
+<!--    获取状态所需的参数并组合成需要的格式-->
+function getparam(){
+    project=[]
+    jobids=[]
+    $('.project').each(function(){
+            project.push($(this).text())
+        })
+    $('.jobid').each(function(){
+            jobids.push($(this).text())
+        })
+    list=[]
+    for(var i=0;i<jobids.length;i++){
+<!--        console.log(project[i])-->
+        p_j={project:project[i],jobid:jobids[i]}
+        list.push(p_j)
+    }
+    return list
+}
+
+<!--    定时2秒获取状态并更新任务-->
+function status(){
+    client_id = $("select[name='select']").attr('currenthostid')
+    console.log(client_id)
+<!--未选中主机就不获取状态信息-->
+    if(client_id!=''){
+        setInterval(function(){
+        if(getparam()!=[]){
+<!--            console.log(getparam())-->
+            $.post("/spider/status/",{"data":JSON.stringify(getparam()),"client_id":client_id},function(result){
+<!--                console.log(result.state,result.status)-->
+                if(result.status==200){
+                    status_list=result.state
+                    if(status_list.length>0){
+                        for(var j=0;j<status_list.length;j++){
+                            if(status_list[j]!="finished"){
+            <!--                    console.log(status_list[j])-->
+                                $(".status[_id="+j+"] button").attr({"style":" display:block;border: none;border-radius:3px;"})
+                                if(status_list[j]=="pending"){
+                                    $(".status[_id="+j+"] button").html("准备中")
+                                }else if(status_list[j]=="running"){
+                                    $(".status[_id="+j+"] button").html("运行中")
+                                }else{
+                                    $(".status[_id="+j+"] button").attr({'class':'btn-warning btn-sm'})
+                                    $(".status[_id="+j+"] button").html("已失效")
+                                }
+                            }else{
+                                $(".status[_id="+j+"] button").attr({"style":" display:block; border: none;border-radius:3px;"})
+                                $(".status[_id="+j+"] button").html("已完成")
+                            }
+                        }
+                    }
+                }
+            })
+        }
+        },2000);
+    }
+}
+status();
+<!--    批量选中-->
+function selectAll1() {
+    var isCheck=$("#select").is(':checked');//获得全选复选框是否选中
+        $("input[type='checkbox']").each(function(){
+        this.checked=isCheck; //循环赋值给每个复选框是否选中
+    });
+}
+
+$(document).ready(function(){
+<!--获取选中的主机并获取主机的任务信息-->
+    $("select[name='select']").val($("select[name='select']").attr("currenthostid"));
+    $("select[name='select']").change(function(){
+        host_id=$(this).val();
+        name = $("select[name='select'] option:selected").text()
+        console.log(name)
+        if(name!="" && name!="主机筛选"){
+            href = window.location.href
+<!--翻页显示状态信息-->
+            if(href.indexOf("page")!=-1){
+                page = href.split('?')[href.split('?').length-1].match(/page=\d+/)[0]
+                location.href='/spider/list.html'+"?host_id="+host_id+"&"+page
+            }else{
+                location.href='/spider/list.html'+"?host_id="+host_id
+            }
+        }else{
+            toastr.warning("请选择有效的项目名称！");
+        }
+    })
+<!--    批量删除任务-->
+    $("button#del").click(function(){
+        client_id = $("select[name='select']").attr('currenthostid')
+        var tasks=[];
+        $("input:checkbox[name='subbox']:checked").each(function(){
+<!--            console.log($(this).val())-->
+            tasks.push($(this).val());
+        });
+        console.log(tasks)
+         if(tasks.length!=0){
+                var b = confirm("确定提交");
+                if(b==true){
+                    $.post("/spider/del/",{"data":JSON.stringify(tasks),"client_id":client_id},function(result){
+                        if(result.status==200){
+                            toastr.info("任务删除成功数:"+result.count)
+                            setTimeout(() => {
+                              window.location.reload();
+                            }, 1000);
+                        }
+                    })
+                }
+
+            }else{
+                toastr.warning("请至少选择一个要处理的任务")
+            }
+    });
+
+<!--    批量取消任务-->
+    $("button#cancel").click(function(){
+            var tasks=[];
+            client_id = $("select[name='select']").attr('currenthostid')
+            $("input:checkbox[name='subbox']:checked").each(function(){
+<!--                console.log($(this).val())-->
+                tasks.push($(this).val());
+            });
+<!--            console.log(tasks)-->
+             if(tasks.length!=0){
+                 var b = confirm("确定提交");
+                 if(b==true){
+                    $.post("/spider/cancel/",{"data":JSON.stringify(tasks),"client_id":client_id},function(result){
+                        if(result.status==200){
+                            toastr.info("任务取消成功")
+<!--取消成功后500ms刷新页面-->
+<!--                            setTimeout(() => {-->
+<!--                              window.location.href="{% url 'spider:tasklist' %}"-->
+<!--                            }, 500);-->
+                        }
+                    })
+                }
+            }else{
+                toastr.warning("请至少选择一个要处理的任务")
+            }
+    })
+});
+
+<!--    取消单个任务-->
+function cancel_one(value){
+    value = $(value).attr('value')
+    client_id = $("select[name='select']").attr('currenthostid')
+    $.get("/spider/cancel/"+value.split(":")[0]+"/"+value.split(":")[1]+"/"+client_id+"/",function(result){
+        if(result.status==200){
+<!--            alert("取消成功")-->
+            toastr.info("取消成功!")
+        }else{
+            toastr.info(result.msg)
+        }
+    })
+}
+<!--    查看任务日志-->
+function view_log(value){
+    value = $(value).attr('value')
+    client_id = $("select[name='select']").attr('currenthostid')
+    if(client_id!=""){
+        $.get("/spider/viewlogs/"+value.split(":")[0]+"/"+value.split(":")[1]+"/"+value.split(":")[2]+"/",{"client_id":client_id},function(result){
+            if(result.status==200){
+    <!--            alert("确认查看")-->
+                toastr.info("正在加载日志......")
+    <!--            等待1秒执行刷新-->
+                setTimeout(() => {
+    <!--跳转新的页面-->
+                  window.open(result.view_log_url);
+                }, 1000);
+            }else{
+                toastr.error(result.msg)
+            }
+        })
+    }else{
+        toastr.warning('请选择需要查看的主机！')
+    }
+
+}
+
+<!--查看实时日志-->
+setInterval_flag=""  //setInterval()函数返回的值，作为clearInterval(setInterval_flag)的参数，清楚这个定时任务
+function view_last_log(value){
+    value = $(value).attr('value')
+    client_id = $("select[name='select']").attr('currenthostid')
+    if(client_id!=""){
+<!--模态框显示出来-->
+        $("#myModal_log").modal("show");
+        modalResize();  //模态框居中
+        setInterval_flag = setInterval(function(){
+            $.get("/spider/client/"+client_id+"/project/"+value.split(":")[0]+"/spider/"+value.split(":")[1]+"/job/"+value.split(":")[2]+"/log/",function(result){
+               console.log(result)
+                $("#crawl_log>.info>pre").html(result)
+            })
+        },1000);
+    }else{
+        toastr.warning('请选择需要查看的主机！')
+    }
+}
+
+<!--查看日志的解析结果-->
+function states(value){
+    value = $(value).attr('value')
+    client_id = $("select[name='select']").attr('currenthostid')
+    if(client_id!=""){
+        toastr.info("正在加载结果......")
+        $.get("/spider/states/"+value.split(":")[0]+"/"+value.split(":")[1]+"/"+value.split(":")[2]+"/",{"client_id":client_id},function(result){
+            args_map = result.args_map
+    <!--        console.log(args_map)-->
+            if(result.status==200 && args_map.length>0){
+                $("#myModal_corninfo").modal("show");
+    <!--            console.log(result.result_log)-->
+                kwargs=result.result_log
+                args_map = result.args_map
+                trs_list=[]
+                for(var i=0;i<args_map.length;i++){
+                    tr='<tr><td>'+args_map[i]+'</td><td>'+kwargs[0][args_map[i]]+'</td></tr>'
+                    trs_list.push(tr)
+                }
+    <!--            console.log(trs_list)-->
+                $("#crawl_state>.info>table.table").html(trs_list.join())
+
+            }else{
+                toastr.error(result.msg)
+            }
+        })
+    }else{
+        toastr.warning('请选择需要查看的主机！')
+    }
+
+}
+
+<!--跳转到项目调度页面-->
+function scheduler(){
+    client_id = $("select[name='select']").attr('currenthostid')
+    if(client_id!=""){
+        var projects=[];
+        $("input:checkbox[name='subbox']:checked").each(function(){
+<!--            console.log($(this).val())-->
+            name = $(this).val().split(':')[0]
+            if(projects.indexOf(name)==-1){
+                projects.push(name);
+            }
+        });
+<!--        console.log(projects)-->
+        if(projects.length>0){
+            $("#formbox").attr("action",'/spider/scheduler.html'+'?client_id='+client_id);
+            $("#formdata").val(JSON.stringify(projects));
+            $("#formbox").eq(0).submit();
+        }else{
+            $("#formbox").attr("action",'/spider/scheduler.html'+'?client_id='+client_id);
+            $("#formbox").eq(0).submit();
+        }
+    }else{
+        toastr.warning('请选择项目的主机！')
+    }
+}
+<!--刷新页面-->
+function reload(){
+    location.reload();
+}
+{% endblock %}
+
+{% block footer%}
+  <!--模态框设置定时任务-->
+<div class="modal fade hide" id="myModal_corninfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+             <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">日志统计信息</h4>
+              </div>
+             <div class="modal-body">
+                 <form method="post">
+                    <div id="crawl_state">
+                        <div class="info">
+                            <table class="table">
+<!--                                ajax加载-->
+                            </table>
+                        </div>
+                    </div>
+                </form>
+             </div>
+        </div><!-- /.modal-content -->
+     </div><!-- /.modal -->
+</div>
+
+<!--日志模态框-->
+<div class="modal fade hide" id="myModal_log" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+             <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">实时日志信息</h4>
+              </div>
+             <div class="modal-body" id="log_body">
+                    <div id="crawl_log">
+                        <div class="info">
+                            <pre id="code">
+                            </pre>
+                        </div>
+                    </div>
+             </div>
+        </div><!-- /.modal-content -->
+     </div><!-- /.modal -->
+</div>
+<script>
+<!--模态框关闭的时候触发的事件，清除定时任务-->
+$('#myModal_log').on('hidden', function () {
+  clearInterval(setInterval_flag);
+})
+
+<!--modal框随窗口自动居中-->
+function modalResize(){
+    var winWidth = $(document.body).width();
+    console.log(winWidth)
+    var modalWidth = $("#myModal_log").width();
+    console.log(modalWidth)
+    var width = (winWidth-modalWidth)/2 + "px"
+    console.log(width)
+    $("#myModal_log").css({
+      "margin-left":0,
+        left:width
+     });
+}
+</script>
+{% endblock %}

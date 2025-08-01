@@ -1,0 +1,303 @@
+<!--任务调度页面-->
+{% extends "base.html" %}
+{% load static %}
+{% block style%}
+<!--        toastr消息通知-->
+<link rel="stylesheet" href='{% static "css/toastr.min.css"%}'>
+<script src='{% static "/jquery-3.2.1.min.js"%}'></script>
+<script src='{% static "js/toastr.min.js" %}'></script>
+<style>
+    article{background-color: white; padding:5px;margin-bottom:10px;border-radius: 5px;border-top: solid 2px #03b5c3;}
+    .row-fluid .span12 {
+        width: 100%;
+        margin-left: 0;
+    }
+
+</style>
+{% endblock %}
+
+
+{% block info %}
+
+<!--    页面表头-->
+    <div class="page-header">
+        <h4>调度爬虫任务<small> 支持批量运行多个任务</small>
+            <button class="btn btn-warning" type="button" style="float:right">
+    <!--            信息提示-->
+                当前项目数 <span class="badge" id="project_count"></span>
+            </button>
+        </h4>
+    </div>
+
+<div class="span12" style="margin-left: 0;">
+<!--    项目区-->
+    <div class="sche" style="margin:10px 0 10px 0;">
+    {% for s in data %}
+        <article>
+            <header client_id="{{s.client_id}}" cpath="{{s.package}}">
+                  <h5>
+                      <a style="font-size: large;">{{s.name}}</a>
+                      <button class="btn-info btn-sm"  style="border-radius:5px;line-height: 14px;">{{s.cname}}</button>
+                      <button class="btn-danger btn-sm"  style="border-radius:5px;line-height: 14px;" value="{{s.package}}/{{s.name}}" onclick="sourcecode(this)">查看源码</button>
+                      <hr>
+                  </h5>
+            </header>
+            <div class="post-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>编号</th>
+                                <th>爬虫名</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            <!--                异步加载爬虫项目爬虫名称-->
+                        </tbody>
+                    </table>
+            </div>
+        </article>
+    {% endfor %}
+
+        <div class="btn-group" role="group" aria-label="..." style="float:right">
+            <button class="btn btn-info" id="cron" style="background-image:linear-gradient(to bottom,#b5a51b,#f9b507);background-color:#f9b507;color:white;">设置定时任务</button>
+            <button class="btn btn-danger" id="crawls">批量运行爬虫</button>
+            <button class="btn btn-warning" id="remove">批量删除项目</button>
+            <button class="btn btn-info" ><input type="checkbox"  value="" id="select" onchange="selectAll1()">全选</button>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+ var toastr;
+ toastr.options = {
+    closeButton: true,//显示关闭按钮
+    debug: false,
+    progressBar: true,//显示进度条
+    positionClass: "toast-top-center",//位置
+    onclick: null,//点击消息框自定义事件
+    showDuration: "300",//显示动作时间
+    hideDuration: "1000",//隐藏动作时间
+    timeOut: "2000",//显示时间,0为永久显示
+    extendedTimeOut: "1000",//鼠标移动过后显示显示时间
+    showEasing: "swing",
+    hideEasing: "linear",
+    showMethod: "fadeIn",//显示方式
+    hideMethod: "fadeOut"//隐藏方式
+ };
+
+
+<!--    批量选中-->
+function selectAll1() {
+    var isCheck=$("#select").is(':checked');//获得全选复选框是否选中
+        $("input[type='checkbox']").each(function(){
+        this.checked=isCheck; //循环赋值给每个复选框是否选中
+    });
+}
+
+$(document).ready(function(){
+<!--删除元素属性class-->
+$('.block>div').removeAttr('class')
+<!--    批量启动任务-->
+    $("button#crawls").click(function(){
+        var spiders=[];
+        $("input:checkbox[name='subbox']:checked").each(function(){
+            console.log($(this).val())
+            value = $(this).val()
+            spiders.push({"project_name":value.split(":")[0],"spider_name":value.split(":")[1]});
+        });
+        console.log(spiders)
+        client_id = $('header').attr("client_id")
+        console.log(client_id)
+        cpath = $('header').attr("cpath")
+        console.log(cpath)
+
+        if(spiders.length!=0){
+            var b = confirm("确定提交");
+            if(b==true){
+                $.post("/spider/crawls/"+client_id+"/"+cpath+"/",{"data":JSON.stringify(spiders)},function(result){
+                    if(result.status==200){
+                        toastr.info("任务启动成功数:"+result.count+'\n'+"启动任务ID:"+(result.jobs).join('\t'))
+                    }else{
+                    toastr.error(result.msg)
+                    }
+                })
+            }
+        }else{
+            toastr.warning("请至少选择一个要启动的任务")
+        }
+    });
+<!--创建定时任务-->
+    $("#task").click(function(){
+        args=[]
+        $("form input").each(function(){
+            args.push($(this).val())
+        })
+        console.log(args)
+        if(args[1]!='' && args[2]!=''){
+            client_id = args[0]
+            project= args[1]
+            spider = args[2]
+            $.post("/task/create/",{"data":JSON.stringify(args),"reluefile":"",'taskfun':'excute_spider','cron_kwargs':JSON.stringify({"name":spider,"project":project,'client_id':client_id}),"prj":JSON.stringify({"project":project,"spidername":spider})},function(result){
+                if(result.status==200){
+                    toastr.success("创建成功！")
+                }else{
+                      toastr.error("创建失败！:"+result.message);
+                }
+            })
+        }else{
+            toastr.warning("请选择一个有效的运行规则！")
+        }
+    })
+<!--弹出定时任务设置窗口-->
+    $("#cron").click(function(){
+        $('#myModal').modal('show');
+<!--设置模态框的默认值-->
+        client_id = window.location.href.split('?')[1].split('=')[1]
+        $('input[name="host_id"]').val(client_id)
+    })
+<!--    批量删除项目-->
+    $("button#remove").click(function(){
+        var project_list=[];
+        $("input:checkbox[name='subbox']:checked").each(function(){
+<!--            console.log($(this).val())-->
+            value = $(this).val()
+            project_list.push({"project_name":value.split(":")[0]});
+        });
+<!--        console.log(project_list)-->
+        client_id = $('header').attr("client_id")
+<!--        console.log(client_id)-->
+        cpath = $('header').attr("cpath")
+<!--        console.log(cpath)-->
+        if(project_list.length!=0){
+            var b = confirm("确定提交");
+            if(b==true){
+                $.get("/spider/project/"+client_id+"/"+cpath+"/"+"del/",{"project_list":JSON.stringify(project_list)},function(result){
+                    if(result.status==200){
+                        toastr.info("删除项目数:"+result.count+'\n')
+                        reload();
+                    }else{
+                        toastr.error(result.msg)
+                    }
+                })
+            }
+        }else{
+            toastr.warning("请至少选择一个要启动的任务")
+        }
+    });
+});
+
+<!--    异步加载爬虫信息-->
+function spiderinfo(){
+    projects = []
+    $('h5>a').each(function(){
+          projects.push($(this).text())
+        })
+
+    client_id = $('header').attr("client_id")
+    $.post("/spider/spiders/"+client_id+"/",{"data":JSON.stringify(projects)},function(result){
+        console.log(result.spiders)
+<!--        赋值当前的项目数-->
+        $('#project_count').html(result.count)
+        results = result.spiders
+        list=[]
+        if(results!=undefined){
+            for(var j=0;j<results.length;j++){
+                tr_list=[]
+                info = results[j]
+    <!--            console.log(info)-->
+                for(k=0;k<info.length;k++){
+                    tr = '<tr><td class="sid">'+(k+1)+'</td><td class="name">'+info[k].name+'</td><td><div class="checkbox" style="height: 0px"><label><input type="checkbox" value="'+info[k].project_name+':'+info[k].name+'"name="subbox"  style="margin: -6px 6px 6px -5px"></label></div></td></tr>'
+    <!--                    console.log(tr)-->
+                    tr_list.push(tr)
+                }
+                list.push(tr_list)
+            }
+    <!--        console.log(list)-->
+            $('table.table tbody').each(function(i){
+                $(this).html(list[i])
+            })
+        }
+    })
+}
+spiderinfo()
+<!--刷新页面-->
+function reload(){
+    location.reload();
+}
+<!--查看项目的源码-->
+function sourcecode(arg){
+    name = $(arg).val()
+    window.location.href="/spider/edit/tree/"+name+"/"
+}
+{% endblock %}
+
+{% block footer %}
+ <!--模态框设置定时任务-->
+<div class="modal fade hide" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">定时任务设置</h4>
+        </div>
+        <div class="modal-body">
+            <form method="post">
+                <table class="table">
+                    <tr>
+                        <td>主机号:</td>
+                        <td><input type="text" name="host_id" required></td>
+                    </tr>
+                    <tr>
+                        <td>项目名:</td>
+                        <td><input type="text" name="project" required></td>
+                    </tr>
+                    <tr>
+                        <td>爬虫名:</td>
+                        <td><input type="text" name="spidername" required></td>
+                    </tr>
+                    <tr>
+                        <td>年:</td>
+                        <td><input type="text" name="year"></td>
+                    </tr>
+                    <tr>
+                        <td>月:</td>
+                        <td><input type="text" name="month"></td>
+                    </tr>
+                     <tr>
+                        <td>日:</td>
+                        <td><input type="text" name="day"></td>
+                    </tr>
+                     <tr>
+                        <td>周:</td>
+                        <td><input type="text" name="week"></td>
+                    </tr>
+                     <tr>
+                        <td>每周几:</td>
+                        <td><input type="text" name="dayofweek"></td>
+                    </tr>
+                    <tr>
+                        <td>时:</td>
+                        <td><input type="text" name="hour"></td>
+                    </tr>
+                    <tr>
+                        <td>分:</td>
+                        <td><input type="text" name="minutes"></td>
+                    </tr>
+                    <tr>
+                        <td>秒:</td>
+                        <td><input type="text" name="second"></td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            <button type="button" class="btn btn-danger" id="task">创建任务</button>
+        </div>
+    </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+{% endblock  %}

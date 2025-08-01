@@ -1,0 +1,51 @@
+{
+  "spider": "rediscurrency",
+  "type": "南京试剂网站",
+  "name":"regent",
+  "home": "http://www.nj-reagent.com/",
+  "settings": {
+    "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.64 Safari/537.36",
+    "SCHEDULER": "scrapy_redis.scheduler.Scheduler",
+    "DUPEFILTER_CLASS": "scrapy_redis.dupefilter.RFPDupeFilter",
+    "SCHEDULER_PERSIST": true,
+    "REDIS_START_URLS_AS_ZSET": true,
+    "REDIS_START_URLS_KEY": "regents:start_urls",
+    "STATS_CLASS": "scrapy_redis.stats.RedisStatsCollector",
+    "SCHEDULER_DUPEFILTER_KEY": "currency:regent:dupefilter",
+    "SCHEDULER_QUEUE_KEY": "currency:regent:requests"
+  },
+  "start_urls": ["http://www.nj-reagent.com/category/NS01/item-list.htm"],
+  "allowed_domains": ["nj-reagent.com"],
+  "srules": "resgent_rules",
+
+  "rules": [
+    {
+      "link_extractor": {
+        "restrict_css":".my_left_cat_list"
+      },
+      "follow": true,
+      "callback": "parse_item"
+    }
+  ],
+  "item": {
+    "class": "ReagentItem",
+    "loader": "ItemLoader",
+    "nextpage": true,
+    "next_rule": ".meneame a:last-child::attr('href')",
+    "attrs": {
+      "source": [
+        {
+          "method": "value",
+          "arg": "regent"
+        }
+      ],
+      "urls": [
+        {
+          "method": "css",
+          "arg": ".pro_list_1 tr td:nth-child(1) a:nth-child(1)::attr(\"href\")"
+        }
+      ]
+
+    }
+  }
+}

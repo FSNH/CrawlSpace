@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+{% block style %}
+
+<link rel="stylesheet" href='{% static "css/toastr.min.css"%}'>
+<style>
+    .row-fluid .span12 {
+        width: 100%;
+        margin-left: 0;
+    }
+    .row-fluid .span4 {
+        width: 33.3333333333333%;
+        margin: 0;
+    }
+    .span4>.span12{margin-top:10px;}
+    div.span4{padding:0 15px;}
+    #visul div.span2,.span3{text-align:center;background-color:#e1c271;height:35px;line-height:35px;color:#fff;border-radius:3px;}
+    #visul div.span2,.span3>span{text-align:center;font-size:14px}
+</style>
+{% endblock %}
+{% block info %}
+<!--    提示信息-->
+<div class="page-header">
+    <h4>
+        节点可视化监控 <small>支持自动检测多节点状态</small>
+        <button class="btn btn-info" type="button" style="float:right">
+            <span class="badge" id="error">0</span>主机异常
+             <span class="badge" id="ok">0</span>主机正常
+        </button>
+    </h4>
+</div>
+<!--<script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>-->
+<!--<script src="http://cdn.highcharts.com.cn/highcharts/10.0.0/highcharts.js"></script>-->
+<div class="span12" id="visul"></div>
+<script src='{% static "js/toastr.min.js" %}'></script>
+<script>
+<!--toastr设置-->
+ var toastr;
+ toastr.options = {
+    closeButton: true,//显示关闭按钮
+    debug: false,
+    progressBar: true,//显示进度条
+    positionClass: "toast-top-center",//位置
+    onclick: null,//点击消息框自定义事件
+    showDuration: "300",//显示动作时间
+    hideDuration: "1000",//隐藏动作时间
+    timeOut: "2000",//显示时间,0为永久显示
+    extendedTimeOut: "1000",//鼠标移动过后显示显示时间
+    showEasing: "swing",
+    hideEasing: "linear",
+    showMethod: "fadeIn",//显示方式
+    hideMethod: "fadeOut"//隐藏方式
+ };
+<!-- 主机异常检测-->
+function check_message(results){
+    for(var j=0;j<results.length;j++){
+        if(results[j]["status"]!='ok'){
+        console.log(results[j]["client_id"]+"-主机异常！")
+            toastr.error(results[j]["client_id"]+"-主机异常！")
+        }
+    }
+}
+<!--图表设置-->
+$(document).ready(function() {
+       var chart = {
+           plotBackgroundColor: null,
+           plotBorderWidth: null,
+           plotShadow: false
+       };
+
+       var tooltip = {
+          pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+       };
+       var plotOptions = {
+          pie: {
+             allowPointSelect: true,
+             cursor: 'pointer',
+             dataLabels: {
+                enabled: true,
+                format: '<b>{point.name}%</b>: {point.percentage:.1f} %',
+                style: {
+                   color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                }
+             }
+          }
+       };
+<!--获取主机的节点信息-->
+        result=""
+        client_ok=0
+        client_error=0
+       $.get('node/',function(results){
+           result = results
+<!--           html填充-->
+            html_list=[]
+            for(var i=0;i<results.length;i++){
+                status=""
+                if(results[i]['status']!=400){
+                    status="正常"
+                    client_ok++;
+                }else{
+                    status="异常"
+                    client_error++;
+                }
+                html_info='<div class="span4"><div class="span12"><div class="span2" style="background: #00acd1;">状态：<span>'+status+'</span></div><div class="span2" style="background: #cd68c9;">项目数：<span>'+results[i]["projects_count"]+'</span></div><div class="span2" style="background: #ff2200;">待运行：<span>'+results[i]["pending"]+'</span></div><div class="span3" style="background: #ff9900;">运行结束：<span>'+results[i]["finished"]+'</span></div><div class="span3" style="background: #28a900;">正在运行：<span>'+results[i]["running"]+'</span></div></div><div id="container'+i+'"'+' style="width: 300px; height: 300px; margin: 0 auto"></div></div>'
+                html_list.push(html_info)
+                $("#visul").html(html_list.join(""))
+            }
+<!--主机基本信息-->
+            $('#error').html(client_error)
+            $('#ok').html(client_ok)
+            for(var i=0;i<results.length;i++){
+<!--                组织数据赋值-->
+                var series= [{
+                  type: 'pie',
+                  name: 'Browser share',
+                  data: [
+                     ['pending',   results[i]["pending"]],
+<!--                      // 突出显示某个扇区，表示强调-->
+                     {
+                        name: 'finished',
+                        y: results[i]["finished"],
+                        sliced: true,
+                        selected: true
+                     },
+                     ['running',results[i]["running"]],
+                  ]
+               }];
+
+<!--                   标题-->
+               var title = {
+                  text: results[i]["client_id"]
+               };
+<!--               子标题-->
+               var subtitle= {
+                    text:results[i]["update_time"]
+
+                };
+<!--给图表赋值-->
+               var json = {};
+               json.chart = chart;
+               json.title = title;
+               json.subtitle = subtitle;
+               json.tooltip = tooltip;
+               json.series = series;
+               json.plotOptions = plotOptions;
+               $('#container'+i).highcharts(json);
+            }
+        })
+<!--        定时检测节点的状态-->
+    function node_status(){
+        setInterval(function(){check_message(result)},4000);
+    }
+    node_status();
+});
+</script>
+
+{% endblock %}
