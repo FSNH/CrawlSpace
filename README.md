@@ -37,7 +37,7 @@ scrapy项目在线编辑
 ![image](http://zhaomeng.net/media/images/2024/06/06/1717667809510.png)
 
 以上就是crawlspace的功能，相比其他的部署，这个部署框架更加的便于维护爬虫项目，操作更加灵活方便，交互更加便捷舒适，功能更加完善，信息的显示更加清晰，同时支持手机端在线操作！
-![image](http://zhaomeng.net/media/images/2024/06/20/ujjzxu.png)
+![扫码_搜索联合传播样式-白色版](https://github.com/user-attachments/assets/3d824ba7-89b3-407b-ae74-a3822f670b85)
 
 ## Docker项目部署
 
