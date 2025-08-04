@@ -1,6 +1,7 @@
 # CrawlSpace
 CrawlSpace爬虫管理系统(博客介绍)
 http://zhaomeng.net.cn/articles/s45.html
+qq开源交流群：667547093
 ## 本地调试运行
 
 ```
@@ -51,7 +52,10 @@ scrapy项目在线编辑
 ![image](http://zhaomeng.net/media/images/2024/06/06/1717667809510.png)
 
 以上就是crawlspace的功能，相比其他的部署，这个部署框架更加的便于维护爬虫项目，操作更加灵活方便，交互更加便捷舒适，功能更加完善，信息的显示更加清晰，同时支持手机端在线操作！
-![扫码_搜索联合传播样式-白色版](https://github.com/user-attachments/assets/3d824ba7-89b3-407b-ae74-a3822f670b85)
+
+![点击联系作者](https://github.com/user-attachments/assets/3d824ba7-89b3-407b-ae74-a3822f670b85)
+
+![点击加入CrawlSpace交流群](https://github.com/user-attachments/assets/921aa816-412e-41ba-bee7-f5d71bf3fafa)
 
 ## Docker项目部署
 
